@@ -160,7 +160,7 @@ const MapCenter = () => {
     const radius = 1; // bán kính
     try {
       const response = await fetch(
-        `${API_URL}/restaurants-in-circle?latitude=${latitude}&longitude=${longitude}&radius=${radius}`
+        `${process.env.API_URL}/restaurants-in-circle?latitude=${latitude}&longitude=${longitude}&radius=${radius}`
       );
       const data = await response.json();
       const restaurantsWithDistance = data.map((restaurant) => {
@@ -250,7 +250,7 @@ const MapCenter = () => {
       setSelectedAddress(address);
     }
   };
-  console.log(API_URL, "mapcenter");
+  
 
   return (
     <View style={styles.container}>

@@ -9,8 +9,7 @@ const ResHor = ({ route }) => {
   const [restaurantData, setRestaurantData] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState("");
   
-  // console.log(API_URL)
-  console.log(API_URL,"a")
+
   
   useEffect(() => {
     const fetchData = async () => {
@@ -20,7 +19,7 @@ const ResHor = ({ route }) => {
 
         if (selectedCategory) {
           const response = await fetch(
-            `${API_URL}/restaurants/categories/${selectedCategory}`
+            `${process.env.API_URL}/restaurants/categories/${selectedCategory}`
           );
           const data = await response.json();
           console.log(data)

@@ -73,7 +73,7 @@ const SearchScreen = ({ route }) => {
       }
 
       if (userLocation) {
-        const response = await axios.get(`${API_URL}/nearby-restaurants`, {
+        const response = await axios.get(`${process.env.API_URL}/nearby-restaurants`, {
           // const response = await axios.get(`http://localhost:8000/nearby-restaurants`, {
           params: {
             latitude: userLocation.latitude,
@@ -126,7 +126,7 @@ const SearchScreen = ({ route }) => {
     try {
       if (searchKeyword.trim() !== "") {
         const response = await fetch(
-          `${API_URL}/restaurants/search/${searchKeyword}`
+          `${process.env.API_URL}/restaurants/search/${searchKeyword}`
         );
 
         if (response.ok) {
@@ -214,9 +214,7 @@ const SearchScreen = ({ route }) => {
 
   const { user } = useContext(UserType);
 
-  console.log("Nearby Results:", nearbyRestaurants);
 
-  console.log(API_URL, "h")
 
   return (
     <ScrollView style={{ padding: 10, }}>

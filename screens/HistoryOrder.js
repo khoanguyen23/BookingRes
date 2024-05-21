@@ -35,14 +35,13 @@ const HistoryOrder = () => {
   const [filteredOrders, setFilteredOrders] = useState([]);
 
   const userId = user._id;
-  // console.log(userId);
-  console.log(API_URL)
+
   
 
   useEffect(() => {
     const fetchUserOrders = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/orders/${userId}`);
+        const response = await fetch(`${process.env.API_URL}/api/orders/${userId}`);
         const data = await response.json();
 
         if (response.ok) {
@@ -55,7 +54,7 @@ const HistoryOrder = () => {
 
           const restaurantPromises = restaurantIds.map(async (restaurantId) => {
             const restaurantResponse = await fetch(
-              `${API_URL}/restaurants/${restaurantId}`
+              `${process.env.API_URL}/restaurants/${restaurantId}`
             );
             const restaurantData = await restaurantResponse.json();
 
@@ -84,8 +83,7 @@ const HistoryOrder = () => {
     fetchUserOrders();
   }, [userId]);
 
-  console.log("hi")
-  console.log(orders);
+
 
   // console.log(restaurants, "fetch thanh cong");
   const formatDate = (dateString) => {
