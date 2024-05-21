@@ -44,7 +44,7 @@ const ResHor = ({ route }) => {
           }
         } else if (usedSearchKeyword) {
           const response = await fetch(
-            `${API_URL}/restaurants-in-city?cityName=${usedSearchKeyword}`
+            `${process.env.API_URL}/restaurants-in-city?cityName=${usedSearchKeyword}`
             // `http://localhost:8000/restaurants-in-city?cityName=${usedSearchKeyword}`
           );
 

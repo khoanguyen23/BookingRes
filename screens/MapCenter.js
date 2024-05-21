@@ -250,7 +250,7 @@ const MapCenter = () => {
       setSelectedAddress(address);
     }
   };
-  
+
 
   return (
     <View style={styles.container}>

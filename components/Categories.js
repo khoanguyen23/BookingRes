@@ -26,8 +26,7 @@ export default function Categories() {
     // Call the function to fetch categories when the component mounts
     fetchCategories();
   }, []); // Empty dependency array to ensure the effect runs only once when the component mounts
-  console.log(categories);
-  console.log(API_URL, "aa");
+
   return (
     <View className="mt-4">
       <ScrollView
