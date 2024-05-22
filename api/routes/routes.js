@@ -62,7 +62,8 @@ router.delete("/admin/restaurants/:restaurantId", AdminController.deleteRestaura
 router.put('/admin/restaurants/:restaurantId', AdminController.updateRestaurant);
 
 // chat routes 
-router.get('/api/chat', ChatController.getChatMessages);
+router.get('/api/chat', ChatController.getAllChats);
 router.post('/api/chat', ChatController.postChatMessage)
+router.get('/api/chat/:userId', ChatController.getUserChats)
 
 module.exports = router;
