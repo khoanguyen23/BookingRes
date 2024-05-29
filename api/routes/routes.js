@@ -13,15 +13,35 @@ const ChatController = require("../controllers/chatController");
 // routes.js admin
 const AdminController = require("../controllers/adminController");
 
-// User Routes
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User management
+ */
+
 /**
  * @swagger
  * /register:
  *   post:
  *     summary: Register a new user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
  *     responses:
  *       200:
  *         description: User registered successfully
+ *       400:
+ *         description: Bad request
  */
 router.post("/register", UserController.register);
 
