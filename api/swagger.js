@@ -1,6 +1,5 @@
-// swagger.js
-const swaggerUi = require("swagger-ui-express");
-const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 const {
   SwaggerUIBundle,
   SwaggerUIStandalonePreset,
@@ -16,18 +15,14 @@ const options = {
     },
     servers: [
       {
-        url: 'https://booking-res.vercel.app/', // URL của server đã triển khai lên Vercel
+        url: 'https://booking-res.vercel.app', // URL của server đã triển khai lên Vercel
       },
     ],
   },
   apis: ['./routes/routes.js'], // Đường dẫn tới file chứa các comment swagger
 };
 
-
-
-
 const swaggerSpec = swaggerJsDoc(options);
-
 
 const swaggerDocs = (app) => {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

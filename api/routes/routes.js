@@ -14,7 +14,17 @@ const ChatController = require("../controllers/chatController");
 const AdminController = require("../controllers/adminController");
 
 // User Routes
+/**
+ * @swagger
+ * /register:
+ *   post:
+ *     summary: Register a new user
+ *     responses:
+ *       200:
+ *         description: User registered successfully
+ */
 router.post("/register", UserController.register);
+
 router.get("/verify/:token", UserController.verifyEmail);
 router.post("/login", UserController.login);
 router.put("/address/:userId", UserController.updateAddress);
