@@ -40,6 +40,15 @@ router.post("/api/featured", FeatureController.createFeatured);
 
 // Category Routes
 router.post("/categories", CategoryController.createCategory);
+/**
+ * @swagger
+ * /categories:
+ *   get:
+ *     summary: Get all categories
+ *     responses:
+ *       200:
+ *         description: A list of categories
+ */
 router.get("/categories", CategoryController.getAllCategories);
 
 // Map 

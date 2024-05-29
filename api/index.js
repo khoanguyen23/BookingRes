@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const routes = require("./routes/routes");
+const swaggerDocs = require('./swagger'); // Import Swagger configuration
 
 const app = express();
 const port = 8000;
@@ -23,6 +24,9 @@ mongoose.connect(
 }).catch((err) => {
   console.log("Error connecting to MongoDb", err);
 });
+
+// Swagger setup
+swaggerDocs(app);
 
 app.use("/", routes);
 
