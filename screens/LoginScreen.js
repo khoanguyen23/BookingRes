@@ -61,7 +61,7 @@ const LoginPage = ({ navigation }) => {
         password: values.password,
       };
 
-      const response = await axios.post(`${API_URL}/login`, user);
+      const response = await axios.post(`${process.env.API_URL}/login`, user);
       // const response = await axios.post("http://192.168.1.2:8000/login", user);
 
       if (response.status === 200) {

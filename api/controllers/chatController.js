@@ -19,7 +19,7 @@ const getUserChats = async (req, res) => {
         { userId },
         { recipientId: userId }
       ]
-    }).sort({ createdAt: -1 }).populate('userId', 'name email').populate('recipientId', 'name email');
+    }).sort({ createdAt: 1 }).populate('userId', 'name email').populate('recipientId', 'name email');
     res.json(messages);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch chat messages" });
@@ -44,6 +44,12 @@ const postChatMessage = async (req, res) => {
     res.status(500).json({ error: "Failed to send chat message" });
   }
 };
+
+
+
+
+
+
 
 module.exports = {
   getAllChats,

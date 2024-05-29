@@ -214,7 +214,7 @@ const SearchScreen = ({ route }) => {
 
   const { user } = useContext(UserType);
 
-
+  // console.log("User hahahaa:", user);
 
   return (
     <ScrollView style={{ padding: 10, }}>
