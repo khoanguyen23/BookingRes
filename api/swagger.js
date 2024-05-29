@@ -1,5 +1,4 @@
 // swagger.js
-const express = require("express");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
 const {
@@ -7,9 +6,7 @@ const {
   SwaggerUIStandalonePreset,
 } = require("swagger-ui-dist");
 
-const CSS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css';
 const options = {
-  customCssUrl: CSS_URL,
   definition: {
     openapi: '3.0.0',
     info: {
