@@ -33,11 +33,7 @@ const swaggerSpec = swaggerJsDoc(options);
 
 
 const swaggerDocs = (app) => {
-  app.use('/api-docs', swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec, {
-    customCssUrl:
-      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css",
-  }));
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };
 
 module.exports = swaggerDocs;
