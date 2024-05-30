@@ -1,39 +1,15 @@
-import {
-  View,
-  Text,
-  Modal,
-  Button,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
-import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState } from "react";
 import { CheckBox, Icon } from "react-native-elements";
-import { Picker } from "@react-native-picker/picker";
 import { Divider } from "react-native-elements";
 import { Shadow } from "react-native-shadow-2";
 
 const CityScreen = ({ navigation, route }) => {
-  // const { selectedCity: initialSelectedCity } = route.params;
-  // const [selectedCity, setLocalSelectedCity] = useState(initialSelectedCity);
-
   const { selectedCity: initialSelectedCity, setSelectedCity } = route.params;
   const [selectedCity, setLocalSelectedCity] = useState(initialSelectedCity);
-
-
   const cities = ["Hà Nội", "TPHCM", "Đà Nẵng", "Khánh Hòa"];
-  
-  // const isButtonVisible = selectedCity !== initialSelectedCity && selectedCity !== null;
-
   const isButtonVisible =
-  selectedCity !== initialSelectedCity && selectedCity !== null;
-
-  // const handleCitySelection = (city) => {
-  //   if (selectedCity === city) {
-  //     setLocalSelectedCity(null);
-  //   } else {
-  //     setLocalSelectedCity(city);
-  //   }
-  // };
+    selectedCity !== initialSelectedCity && selectedCity !== null;
 
   const handleCitySelection = (city) => {
     if (selectedCity === city) {
@@ -43,19 +19,10 @@ const CityScreen = ({ navigation, route }) => {
     }
   };
 
-  // const handleApplyButton = () => {
-    
-  //   // Pass the selected city back to the Home screen
-  //   navigation.navigate('Home', { selectedCity });
-  // };
-
   const handleApplyButton = () => {
-    // Pass the selected city back to the Home screen
     setSelectedCity(selectedCity);
     navigation.navigate("Home", { selectedCity });
   };
-
-  
 
   return (
     <View style={styles.container}>
@@ -103,17 +70,17 @@ const CityScreen = ({ navigation, route }) => {
         ))}
       </View>
       {isButtonVisible && (
-      <Shadow style={styles.popupContainer}>
-        <View>
-          <TouchableOpacity
-            style={styles.applyButton}
-            onPress={handleApplyButton}
-          >
-            <Text style={styles.applyButtonText}>Áp dụng</Text>
-          </TouchableOpacity>
-        </View>
-      </Shadow>
-       )}
+        <Shadow style={styles.popupContainer}>
+          <View>
+            <TouchableOpacity
+              style={styles.applyButton}
+              onPress={handleApplyButton}
+            >
+              <Text style={styles.applyButtonText}>Áp dụng</Text>
+            </TouchableOpacity>
+          </View>
+        </Shadow>
+      )}
     </View>
   );
 };

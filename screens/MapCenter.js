@@ -55,9 +55,9 @@ const MapCenter = () => {
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
   const [searchAddress, setSearchAddress] = useState("");
   const [showRedView, setShowRedView] = useState(false);
- 
-  const scaleAnimationRef = useRef(new Animated.Value(0)).current
-  const opacityAnimationRef = useRef(new Animated.Value(1)).current
+
+  const scaleAnimationRef = useRef(new Animated.Value(0)).current;
+  const opacityAnimationRef = useRef(new Animated.Value(1)).current;
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
@@ -109,8 +109,6 @@ const MapCenter = () => {
   const bottomSheetRef = useRef(null);
 
   const [refresh, setRefresh] = useState(0);
-  
-
 
   const onShowMap = () => {
     bottomSheetRef.current?.collapse();
@@ -119,26 +117,28 @@ const MapCenter = () => {
 
   // variables
   //   const snapPoints = useMemo(() => ["55%", "20%"], []);
-  const snapPoints = useMemo(() => ["20%","40%","60%","85%","100%"], []);
+  const snapPoints = useMemo(() => ["20%", "40%", "60%", "85%", "100%"], []);
 
   // callbacks
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
     setShowRedView(index === snapPoints.length - 1);
-    
   }, []);
 
   async function requestLocationPermissions() {
     const { status } = await requestForegroundPermissionsAsync();
-  
-    if (status === 'granted') {
+
+    if (status === "granted") {
       const currentPosition = await getCurrentPositionAsync();
       setLocation(currentPosition);
       setMarkerCoordinate({
         latitude: currentPosition.coords.latitude,
         longitude: currentPosition.coords.longitude,
       });
-      fetchDataFromServer(currentPosition.coords.latitude, currentPosition.coords.longitude);
+      fetchDataFromServer(
+        currentPosition.coords.latitude,
+        currentPosition.coords.longitude
+      );
     } else {
       console.error("Location permission not granted");
     }
@@ -153,9 +153,11 @@ const MapCenter = () => {
       // Fetch data from the server using the new coordinates
       fetchDataFromServer(region.latitude, region.longitude);
 
-      const address = await getAddressFromCoords(region.latitude, region.longitude);
+      const address = await getAddressFromCoords(
+        region.latitude,
+        region.longitude
+      );
       setSearchAddress(address);
-      
     }
   };
 
@@ -212,10 +214,10 @@ const MapCenter = () => {
         toValue: 1,
         duration: 2000,
         useNativeDriver: true,
-        easing: Easing.linear
+        easing: Easing.linear,
       })
-    ).start()
-  }, [scaleAnimationRef])
+    ).start();
+  }, [scaleAnimationRef]);
 
   useEffect(() => {
     Animated.loop(
@@ -223,10 +225,10 @@ const MapCenter = () => {
         toValue: 0,
         duration: 2000,
         useNativeDriver: true,
-        easing: Easing.linear
+        easing: Easing.linear,
       })
-    ).start()
-  }, [opacityAnimationRef])
+    ).start();
+  }, [opacityAnimationRef]);
 
   Geocoding.init(GOOGLE_MAPS_API_KEY);
   const getAddressFromCoords = async (latitude, longitude) => {
@@ -254,18 +256,12 @@ const MapCenter = () => {
     }
   };
 
-
   return (
     <View style={styles.container}>
-      
       <View style={styles.searchBox}>
-        {/* <TextInput
-          style={{ marginRight:0 }}
-          placeholder="Nhập địa chỉ"
-          value={searchAddress}
-          onChangeText={(text) => setSearchAddress(text)}
-        /> */}
-       <Text style={{ flex: 1 }} numberOfLines={1} ellipsizeMode='tail'>{searchAddress}</Text>
+        <Text style={{ flex: 1 }} numberOfLines={1} ellipsizeMode="tail">
+          {searchAddress}
+        </Text>
         <Ionicons name="location-sharp" size={24} color="red" />
         {/* <Button title="Tìm kiếm" onPress={handleSearch} /> */}
       </View>
@@ -288,34 +284,18 @@ const MapCenter = () => {
         >
           {markerCoordinate && (
             <>
-              {/* <Circle
-                center={{
-                  latitude: markerCoordinate.latitude,
-                  longitude: markerCoordinate.longitude,
-                }}
-                radius={1000}
-                strokeWidth={1}
-                strokeColor="rgba(255, 0, 0, 0.5)"
-                fillColor="rgba(255, 0, 0, 0.2)"
-              /> */}
-              <Marker
-                coordinate={markerCoordinate}
-
-              >
-                 <Animated.View style={styles.markerWrap}>
-                <Animated.View
-                  style={[
-                    styles.ring,
-                    { opacity: opacityAnimationRef },
-                    { transform: [{ scale: scaleAnimationRef }] }
-                  ]}
-                />
-                <View style={styles.marker} />
-        {/* <Ionicons  name="location-sharp" size={24} color="red" /> */}
-
-              </Animated.View>
+              <Marker coordinate={markerCoordinate}>
+                <Animated.View style={styles.markerWrap}>
+                  <Animated.View
+                    style={[
+                      styles.ring,
+                      { opacity: opacityAnimationRef },
+                      { transform: [{ scale: scaleAnimationRef }] },
+                    ]}
+                  />
+                  <View style={styles.marker} />
+                </Animated.View>
               </Marker>
-
               {nearbyRestaurants.map((restaurant) => (
                 <Marker
                   key={restaurant._id}
@@ -324,7 +304,6 @@ const MapCenter = () => {
                     longitude: restaurant.location.coordinates[0],
                   }}
                   title={restaurant.name}
-                  // onPress={() => setSelectedRestaurant(restaurant)}
                 >
                   <Image
                     source={require("../assets/img/restaurant.png")}
@@ -337,7 +316,6 @@ const MapCenter = () => {
           )}
         </MapView>
       )}
-
       <Modal
         animationType="slide"
         transparent={true}
@@ -376,14 +354,9 @@ const MapCenter = () => {
             navigation={navigation}
             refresh={refresh}
           />
-
-          {/* <View style={styles.absoluteView}>
-           
-          </View> */}
         </View>
       </BottomSheet>
       <View style={[styles.redView, showRedView && styles.showRedView]} />
-
     </View>
   );
 };
@@ -403,16 +376,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#EA1D0A",
     width: "100%",
     height: "10%",
-    top : 0,
-    zIndex: 0, // Đảm bảo view này nằm trên BottomSheet
-    opacity: 0, // Ban đầu ẩn đi
+    top: 0,
+    zIndex: 0,
+    opacity: 0,
   },
   showRedView: {
-    opacity: 1, // Hiển thị khi showRedView là true
+    opacity: 1,
   },
   contentContainer: {
     flex: 1,
-    // alignItems: "center",
   },
   searchBox: {
     position: "absolute",
@@ -420,7 +392,6 @@ const styles = StyleSheet.create({
     left: 10,
     right: 10,
     flexDirection: "row-reverse",
-    // justifyContent: "center",
     alignItems: "center",
     padding: 5,
     backgroundColor: "white",
@@ -431,10 +402,8 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 4,
     zIndex: 1,
-    // maxWidth: "100%",
   },
   map: {
-    // position: "relative",
     flex: 1,
     width: "100%",
   },
@@ -443,7 +412,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end", // Hiển thị modal ở phía dưới của màn hình
+    justifyContent: "flex-end",
     alignItems: "center",
   },
   modalContent: {
@@ -458,10 +427,8 @@ const styles = StyleSheet.create({
   },
   absoluteView: {
     position: "absolute",
-    // bottom: 30,
     top: 50,
     width: "100%",
-    // alignItems: "center",
   },
   btn: {
     position: "absolute",
@@ -470,8 +437,6 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 30,
     flexDirection: "row",
-    // marginHorizontal: "auto",
-    // alignItems: "center",
   },
   sheetContainer: {
     backgroundColor: "#fff",
@@ -491,23 +456,23 @@ const styles = StyleSheet.create({
     width: 40,
   },
   markerWrap: {
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
   marker: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: 'red',
-    position: 'absolute'
+    backgroundColor: "red",
+    position: "absolute",
   },
   ring: {
     width: 200,
     height: 200,
     borderRadius: 100,
-    backgroundColor: 'rgba(222, 27, 62, 0.3)',
+    backgroundColor: "rgba(222, 27, 62, 0.3)",
     borderWidth: 1,
-    borderColor: 'rgba(222, 27, 62, 0.86)',
-    opacity: 1
-  }
+    borderColor: "rgba(222, 27, 62, 0.86)",
+    opacity: 1,
+  },
 });

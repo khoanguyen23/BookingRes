@@ -15,7 +15,6 @@ const FirstRoute = ({ item }) => (
     <View style={{ flex: 1, backgroundColor: "#FFFFFF", padding: 15 }}>
       <Text></Text>
       <Text className="font-bold text-2xl mb-4">{`Thông tin đặt chỗ nhà hàng ${item.name}`}</Text>
-
       <Text className="mt-2" style={styles.header}>
         I. Đặt chỗ PasGo : Tư vấn - Giữ chỗ
       </Text>

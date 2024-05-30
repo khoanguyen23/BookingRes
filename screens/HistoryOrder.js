@@ -2,7 +2,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Button,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
@@ -17,8 +16,6 @@ import React, {
 import { UserType } from "../UserContext";
 import { API_URL } from "@env";
 import { Image } from "react-native";
-// import { BottomSheet } from "react-native-btr";
-import { MaterialIcons } from "@expo/vector-icons";
 import BottomSheet, {
   BottomSheetFlatList,
   BottomSheetBackdrop,
@@ -33,31 +30,35 @@ const HistoryOrder = () => {
   const [restaurants, setRestaurants] = useState({});
   const { user } = useContext(UserType);
   const [filteredOrders, setFilteredOrders] = useState([]);
-
   const userId = user._id;
-
-  
-
+  const [selectedContentType, setSelectedContentType] = useState("status");
+  const [selectedStatus, setSelectedStatus] = useState("Tất cả");
+  const bottomSheetRef = useRef(null);
+  const snapPoints = useMemo(() => ["25%", "55%"], []);
+  const status = [
+    "Tất cả",
+    "Chờ xác nhận",
+    " Đã tiếp nhận",
+    "Hoàn thành",
+    "Đã hủy",
+  ];
+  const services = ["Tất cả", "Đặt chỗ", "Giao hàng", "Tự đến lấy"];
   useEffect(() => {
     const fetchUserOrders = async () => {
       try {
-        const response = await fetch(`${process.env.API_URL}/api/orders/${userId}`);
+        const response = await fetch(`${API_URL}/api/orders/${userId}`);
         const data = await response.json();
-
         if (response.ok) {
           setOrders(data.orders);
           setFilteredOrders(data.orders);
-
           const restaurantIds = Array.from(
             new Set(data.orders.map((order) => order.restaurant))
           );
-
           const restaurantPromises = restaurantIds.map(async (restaurantId) => {
             const restaurantResponse = await fetch(
               `${process.env.API_URL}/restaurants/${restaurantId}`
             );
             const restaurantData = await restaurantResponse.json();
-
             if (restaurantResponse.ok) {
               setRestaurants((prevRestaurants) => ({
                 ...prevRestaurants,
@@ -83,9 +84,6 @@ const HistoryOrder = () => {
     fetchUserOrders();
   }, [userId]);
 
-
-
-  // console.log(restaurants, "fetch thanh cong");
   const formatDate = (dateString) => {
     const options = {
       day: "2-digit",
@@ -96,13 +94,6 @@ const HistoryOrder = () => {
     return new Date(dateString).toLocaleDateString("vi-VN", options);
   };
 
-  // ref
-  const bottomSheetRef = useRef(null);
-
-  // variables
-  const snapPoints = useMemo(() => ["25%", "55%"], []);
-
-  // callbacks
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
   }, []);
@@ -110,31 +101,10 @@ const HistoryOrder = () => {
   const handleSnapPress = useCallback((index) => {
     bottomSheetRef.current?.snapToIndex(index);
   }, []);
-  const test = () => {
-    console.log("first");
-  };
-  const status = [
-    "Tất cả",
-    "Chờ xác nhận",
-    " Đã tiếp nhận",
-    "Hoàn thành",
-    "Đã hủy",
-  ];
-
-  const services = [
-    "Tất cả",
-    "Đặt chỗ",
-    "Giao hàng",
-    "Tự đến lấy"
-  ]
-
-  const [selectedContentType, setSelectedContentType] = useState("status");
-
-  const [selectedStatus, setSelectedStatus] = useState("Tất cả");
 
   const filterOrdersByStatus = (status) => {
     if (status === "Tất cả") {
-      setFilteredOrders(orders); // Hiển thị tất cả đơn hàng
+      setFilteredOrders(orders);
     } else {
       const filtered = orders.filter((order) => order.status === status);
       setFilteredOrders(filtered);
@@ -143,31 +113,26 @@ const HistoryOrder = () => {
 
   const handleStatusPress = (status) => {
     setSelectedStatus(status);
-    // filterOrdersByStatus(status);
   };
 
   const handleClosePress = useCallback(() => {
     bottomSheetRef.current?.close();
-
-    // Update the status when the "Xác nhận" button is pressed
     if (selectedContentType === "status") {
       filterOrdersByStatus(selectedStatus);
     }
   }, [selectedStatus, selectedContentType]);
 
-
-
   return (
     <View style={styles.container}>
-      <Status 
-        onPress={() => handleSnapPress(1)} 
-        onPress1={() => handleSnapPress(1)} 
+      <Status
+        onPress={() => handleSnapPress(1)}
+        onPress1={() => handleSnapPress(1)}
         setSelectedContentType={setSelectedContentType}
         selectedStatus={selectedStatus}
       />
 
       <ScrollView className="mt-2">
-      {filteredOrders.map((order) => (
+        {filteredOrders.map((order) => (
           <View
             key={order._id}
             style={{
@@ -265,34 +230,35 @@ const HistoryOrder = () => {
           <View className="w-2/4"></View>
         </View>
         <BottomSheetScrollView style={styles.contentContainer}>
-        {selectedContentType === "status" &&
-      status.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={{
-                padding: 16,
-                borderBottomWidth: 1,
-                borderBottomColor: "#ccc",
-                backgroundColor: selectedStatus === item ? "#e0e0e0" : "white",
-              }}
-              onPress={() => handleStatusPress(item)}
-            >
-              <Text>{item}</Text>
-            </TouchableOpacity>
-          ))}
-           {selectedContentType === "services" &&
-      services.map((item, index) => (
-            <View
-              key={index}
-              style={{
-                padding: 16,
-                borderBottomWidth: 1,
-                borderBottomColor: "#ccc",
-              }}
-            >
-              <Text>{item}</Text>
-            </View>
-          ))}
+          {selectedContentType === "status" &&
+            status.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={{
+                  padding: 16,
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#ccc",
+                  backgroundColor:
+                    selectedStatus === item ? "#e0e0e0" : "white",
+                }}
+                onPress={() => handleStatusPress(item)}
+              >
+                <Text>{item}</Text>
+              </TouchableOpacity>
+            ))}
+          {selectedContentType === "services" &&
+            services.map((item, index) => (
+              <View
+                key={index}
+                style={{
+                  padding: 16,
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#ccc",
+                }}
+              >
+                <Text>{item}</Text>
+              </View>
+            ))}
         </BottomSheetScrollView>
         <PopUp buttonText="Xác nhận" onPress={handleClosePress} />
       </BottomSheet>

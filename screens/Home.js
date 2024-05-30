@@ -3,7 +3,6 @@ import {
   Text,
   SafeAreaView,
   StatusBar,
-  Image,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
@@ -38,14 +37,12 @@ export default function HomeScreen({ navigation, route }) {
   const fetchData = async () => {
     try {
       const response = await fetch(`${API_URL}/api/featured`);
-      // const response = await fetch("http://192.168.1.7:8000/api/featured");
       const data = await response.json();
       setFeaturedData(data);
     } catch (error) {
       console.error("Error fetching featured data:", error);
     }
   };
- 
 
   const fetchAddress = async () => {
     try {
@@ -61,7 +58,9 @@ export default function HomeScreen({ navigation, route }) {
 
   const fetchAddressData = async (userId) => {
     try {
-      const response = await axios.get(`${process.env.API_URL}/address/${userId}`);
+      const response = await axios.get(
+        `${process.env.API_URL}/address/${userId}`
+      );
       const addressData = response.data;
       updateUser(addressData);
       console.log(addressData, "user fetch");
@@ -79,7 +78,6 @@ export default function HomeScreen({ navigation, route }) {
   return (
     <SafeAreaView className="bg-white">
       <StatusBar barStyle="dark-content" />
-
       {/* header  */}
       <View className="justify-between p-4 flex-row items-center max-w-full h-14 ju">
         <TouchableOpacity
@@ -96,7 +94,7 @@ export default function HomeScreen({ navigation, route }) {
                 marginLeft: 10,
                 fontWeight: "bold",
                 marginRight: 5,
-				color: "#DA4C40"
+                color: "#DA4C40",
               }}
             >
               {selectedCity}
@@ -108,7 +106,6 @@ export default function HomeScreen({ navigation, route }) {
           <EvilIcons name="bell" size={30} color="black" />
         </TouchableOpacity>
       </View>
-
       {/* search bar */}
       <TouchableOpacity onPress={() => navigation.navigate("Search")}>
         <View className="flex-row items-center space-x-2 px-4 pb-2">
@@ -121,13 +118,23 @@ export default function HomeScreen({ navigation, route }) {
               borderRadius: 5,
               borderWidth: 1,
               borderColor: "gray",
-			  padding: 7,
+              padding: 7,
             }}
             onPress={() => navigation.navigate("Search")}
           >
-            <Icon.Search className="ml-2" height="25" width="25" stroke="gray" />
+            <Icon.Search
+              className="ml-2"
+              height="25"
+              width="25"
+              stroke="gray"
+            />
             <Text
-              style={{ marginLeft: 10, flex: 1, color: "#888888", fontSize: 16, }}
+              style={{
+                marginLeft: 10,
+                flex: 1,
+                color: "#888888",
+                fontSize: 16,
+              }}
             >
               Tìm kiếm địa chỉ, món ăn...
             </Text>
@@ -146,7 +153,6 @@ export default function HomeScreen({ navigation, route }) {
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
-
       {/* main */}
       <ScrollView
         showsVerticalScrollIndicator={false}

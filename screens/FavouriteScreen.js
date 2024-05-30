@@ -22,8 +22,6 @@ const FavouriteScreen = () => {
   const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
   const navigation = useNavigation();
 
-  // console.log(API_URL);
-  console.log(API_URL)
 
   useEffect(() => {
     axios
@@ -45,12 +43,9 @@ const FavouriteScreen = () => {
         });
 
         if (response.status === 200) {
-          // Remove the restaurant from the local state
           setFavoriteRestaurants((prevFavorites) =>
             prevFavorites.filter((r) => r._id !== restaurantId)
           );
-
-          // You can add additional UI feedback here if needed
         } else {
           console.error("Failed to remove from favorites");
         }

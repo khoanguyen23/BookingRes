@@ -3,7 +3,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image,
   TextInput,
   Alert,
 } from "react-native";
@@ -18,7 +17,7 @@ import LottieView from "lottie-react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@env";
-import { decode as base64Decode } from 'base-64';
+import { decode as base64Decode } from "base-64";
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -29,24 +28,20 @@ const validationSchema = Yup.object().shape({
     .required("Yêu cầu"),
 });
 
-// console.log(API_URL, "hello")
 const LoginPage = ({ navigation }) => {
   const animation = useRef(null);
   const [loader, setLoader] = useState(false);
   const [obsecureText, setObsecureText] = useState(true);
-  // const { login, setLogin } = useContext(LoginContext);
-  
-
 
   const inValidForm = () => {
     Alert.alert("Không hợp lệ", "Hãy nhập vào đầy đủ các trường dữ liệu", [
       {
         text: "Cancel",
-        onPress: () => { },
+        onPress: () => {},
       },
       {
         text: "Continue",
-        onPress: () => { },
+        onPress: () => {},
       },
       { defaultIndex: 1 },
     ]);
@@ -54,21 +49,15 @@ const LoginPage = ({ navigation }) => {
 
   const handleLogin = async (values) => {
     setLoader(true);
-
     try {
       const user = {
         email: values.email,
         password: values.password,
       };
-
-      const response = await axios.post(`${process.env.API_URL}/login`, user);
-      // const response = await axios.post("http://192.168.1.2:8000/login", user);
-
+      const response = await axios.post(`${API_URL}/login`, user);
       if (response.status === 200) {
         const token = response.data.token;
-
-        // Decode Payload từ token sử dụng base-64
-        const payloadBase64 = token.split('.')[1];
+        const payloadBase64 = token.split(".")[1];
         const payload = JSON.parse(base64Decode(payloadBase64));
         const isAdmin = payload.admin;
 
@@ -93,12 +82,12 @@ const LoginPage = ({ navigation }) => {
     }
   };
 
-
   return (
     <ScrollView style={{ backgroundColor: COLORS.white }}>
       <View style={{ marginHorizontal: 20, marginTop: 50 }}>
-        {/* <BackBtn onPress={() => navigation.goBack()} /> */}
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
           <LottieView
             autoPlay
             ref={animation}
@@ -115,7 +104,6 @@ const LoginPage = ({ navigation }) => {
         >
           {({
             handleChange,
-            handleBlur,
             touched,
             handleSubmit,
             values,
@@ -171,7 +159,6 @@ const LoginPage = ({ navigation }) => {
                     color={COLORS.gray}
                     style={styles.iconStyle}
                   />
-
                   <TextInput
                     secureTextEntry={obsecureText}
                     placeholder="Nhập mật khẩu"
@@ -187,7 +174,6 @@ const LoginPage = ({ navigation }) => {
                     autoCorrect={false}
                     style={{ flex: 1 }}
                   />
-
                   <TouchableOpacity
                     onPress={() => {
                       setObsecureText(!obsecureText);
@@ -203,7 +189,6 @@ const LoginPage = ({ navigation }) => {
                   <Text style={styles.errorMessage}>{errors.password}</Text>
                 )}
               </View>
-
               <Button
                 loader={loader}
                 title={"ĐĂNG NHẬP"}

@@ -1,11 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import {
   StyleSheet,
-  Text,
   View,
-  ScrollView,
-  TextInput,
-  Pressable,
   TouchableOpacity,
   Alert,
 } from "react-native";
@@ -14,8 +10,6 @@ import jwt_decode from "jwt-decode";
 import { UserType } from "../UserContext";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
-import * as Icon from "react-native-feather";
-import { themeColors } from "../theme";
 import { API_URL } from "@env";
 import ProfileTile from "../components/ProfileTile";
 import NetworkImage from "../components/NetworkImage";
@@ -24,7 +18,6 @@ import { Ionicons } from "@expo/vector-icons";
 const AddressScreen = () => {
   const navigation = useNavigation();
   const { userId, setUserId } = useContext(UserType);
-
   const [name, setName] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [mobileNo, setMobileNo] = useState("");
@@ -34,13 +27,11 @@ const AddressScreen = () => {
   const [gender, setGender] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const { user } = useContext(UserType);
-
   const pickerItems = [
     { label: "Nam", value: "Nam" },
     { label: "Nữ", value: "Nữ" },
     { label: "Khác", value: "Khác" },
   ];
-
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -63,15 +54,13 @@ const AddressScreen = () => {
       const userId = decodedToken.userId;
       setUserId(userId);
     };
-
     fetchUser();
   }, []);
 
   const fetchUserData = async () => {
     try {
       const response = await axios.get(`${API_URL}/address/${userId}`);
-      const userData = response.data; // Adjust this based on your API response structure
-      // Update state with fetched user data
+      const userData = response.data; 
       setName(userData.name);
       setAvatar(userData.avatar);
       setMobileNo(userData.mobileNo);
@@ -84,7 +73,6 @@ const AddressScreen = () => {
       console.error("Error fetching user data:", error);
     }
   };
-
   const handleUpdateAddress = () => {
     const updatedAddress = {
       name,
@@ -120,7 +108,7 @@ const AddressScreen = () => {
 
     return new Date(dateString).toLocaleDateString("vi-VN", options);
   };
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.profile}>

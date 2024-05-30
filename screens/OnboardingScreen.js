@@ -12,14 +12,14 @@ import { Audio } from "expo-av";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { decode as base64Decode } from 'base-64';
+import { decode as base64Decode } from "base-64";
 
 const OnboardingScreen = ({ navigation }) => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [sound, setSound] = useState();
 
   useEffect(() => {
-    let isUnmounted = false; // Thêm biến để kiểm tra xem component có bị unmount không
+    let isUnmounted = false;
 
     const loadSound = async () => {
       const { sound } = await Audio.Sound.createAsync(
@@ -43,13 +43,13 @@ const OnboardingScreen = ({ navigation }) => {
     }
 
     return () => {
-      isUnmounted = true; // Đặt biến isUnmounted thành true khi component unmount
+      isUnmounted = true;
       if (sound) {
         sound.unloadAsync();
       }
     };
   }, [isPlaying]);
-  // Không thêm isPlaying vào dependencies để tránh gọi useEffect khi isPlaying thay đổi
+
   const handleButtonPress = async () => {
     setIsPlaying(false);
     if (sound) {
@@ -58,17 +58,14 @@ const OnboardingScreen = ({ navigation }) => {
 
     const token = await AsyncStorage.getItem("authToken");
 
-    // Check if the token exists
     if (!token) {
       navigation.navigate("Login");
       return;
     }
 
-    // Decode the payload from the token
-    const payloadBase64 = token.split('.')[1];
+    const payloadBase64 = token.split(".")[1];
     const payload = JSON.parse(base64Decode(payloadBase64));
 
-    // Check if the user is an admin
     if (payload.admin) {
       navigation.navigate("Admin");
     } else {
@@ -118,20 +115,7 @@ const OnboardingScreen = ({ navigation }) => {
           color="#fbc4ab"
         />
       </View>
-      {/* <LottieView
-        style={{
-          marginBottom: 60,
-          padding : 12,
-          width: 1,
-          height: 50,
-          justifyContent: "center",
-        }}
-        source={require("../assets/lottie/line.json")}
-      /> */}
-      <TouchableOpacity
-        style={styles.beginButton}
-        onPress={handleButtonPress}
-      >
+      <TouchableOpacity style={styles.beginButton} onPress={handleButtonPress}>
         <Text style={styles.beginButtonText}>Bắt đầu</Text>
         <MaterialIcons name="arrow-forward-ios" size={22} color="#fff" />
       </TouchableOpacity>
@@ -146,7 +130,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: "#FFE8D1",
     backgroundColor: "#FFFFFF",
     position: "relative",
   },
@@ -198,13 +181,7 @@ const styles = StyleSheet.create({
     left: -2,
   },
   beginButton: {
-    // backgroundColor: "#AD40AF",
-    // backgroundColor: "#68C3D4",
-    // backgroundColor: "#ffdab9",
-    // backgroundColor: "#fbc4ab",
-    // backgroundColor: "#f8ad9d",
     backgroundColor: "#f4978e",
-    // backgroundColor: "#4D869C",
     padding: 20,
     width: "90%",
     borderRadius: 10,

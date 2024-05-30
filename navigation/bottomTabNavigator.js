@@ -1,9 +1,6 @@
 import { View, TextInput, TouchableOpacity } from "react-native";
 import React from "react";
 import HomeScreen from "../screens/Home";
-import Map from "../screens/Map";
-import Map2d from "../screens/Map2d";
-import MapDemo from "../screens/MapDemo";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Entypo } from "@expo/vector-icons";
@@ -47,7 +44,6 @@ const HomeStack = () => (
       name="Restaurant"
       component={RestaurantDetail}
       options={{
-        // title: "",
         headerShown: true,
         headerTitleAlign: "center",
         headerTintColor: "white",
@@ -74,17 +70,9 @@ const AccountStack = () => (
         headerShown: true,
         tabBarIcon: ({ focused }) =>
           focused ? (
-            <MaterialCommunityIcons
-              name="account"
-              size={24}
-              color="#D71537"
-            />
+            <MaterialCommunityIcons name="account" size={24} color="#D71537" />
           ) : (
-            <MaterialCommunityIcons
-              name="account"
-              size={24}
-              color="#7E7E80"
-            />
+            <MaterialCommunityIcons name="account" size={24} color="#7E7E80" />
           ),
       }}
     />
@@ -147,7 +135,6 @@ const BottomTabNavigator = () => {
                   justifyContent: "space-around",
                   padding: 10,
                   flexDirection: "row",
-                  // flex: 1,
                 }}
               >
                 <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -175,7 +162,6 @@ const BottomTabNavigator = () => {
                     paddingLeft: 40,
                     marginLeft: 30,
                   }}
-                  // className="text-red-500"
                   keyboardType="default"
                 />
               </View>
