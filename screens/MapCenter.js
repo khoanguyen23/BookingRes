@@ -129,15 +129,18 @@ const MapCenter = () => {
   }, []);
 
   async function requestLocationPermissions() {
-    const { granted } = await requestForegroundPermissionsAsync();
-
-    if (granted) {
+    const { status } = await requestForegroundPermissionsAsync();
+  
+    if (status === 'granted') {
       const currentPosition = await getCurrentPositionAsync();
       setLocation(currentPosition);
       setMarkerCoordinate({
         latitude: currentPosition.coords.latitude,
         longitude: currentPosition.coords.longitude,
       });
+      fetchDataFromServer(currentPosition.coords.latitude, currentPosition.coords.longitude);
+    } else {
+      console.error("Location permission not granted");
     }
   }
 
