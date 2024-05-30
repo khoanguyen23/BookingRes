@@ -14,7 +14,7 @@ export default function Categories() {
     const fetchCategories = async () => {
       try {
         // Replace 'http://your-api-url' with your actual API endpoint
-        const response = await axios.get(`${process.env.API_URL}/categories`);
+        const response = await axios.get(`${API_URL}/categories`);
         // const response = await axios.get("http://192.168.1.7:8000/categories");
         const fetchedCategories = response.data;
         setCategories(fetchedCategories);

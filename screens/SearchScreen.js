@@ -5,13 +5,9 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Button,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { API_URL, GOOGLE_MAPS_API_KEY } from "@env";
-import RestaurantCard from "../components/restaurantCard";
-import ResHor from "../components/ResHor";
+import { API_URL } from "@env";
 import { UserType } from "../UserContext";
 import { Image } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
@@ -25,14 +21,9 @@ const SearchScreen = ({ route }) => {
   const navigation = useNavigation();
   const [keyword, setKeyword] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [nearbyResults, setNearbyResults] = useState([]);
-  const [location, setLocation] = useState("TPHCM");
   const [isSubmitPressed, setIsSubmitPressed] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
-  const [searchAddress, setSearchAddress] = useState("");
-
-  
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
@@ -71,16 +62,16 @@ const SearchScreen = ({ route }) => {
       if (!userLocation) {
         await getUserLocation();
       }
-
       if (userLocation) {
-        const response = await axios.get(`${process.env.API_URL}/nearby-restaurants`, {
-          // const response = await axios.get(`http://localhost:8000/nearby-restaurants`, {
-          params: {
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
-          },
-        });
-
+        const response = await axios.get(
+          `${process.env.API_URL}/nearby-restaurants`,
+          {
+            params: {
+              latitude: userLocation.latitude,
+              longitude: userLocation.longitude,
+            },
+          }
+        );
         const restaurantsWithDistance = response.data.nearbyRestaurants.map(
           (restaurant) => {
             const distance = calculateDistance(
@@ -100,41 +91,16 @@ const SearchScreen = ({ route }) => {
     }
   }, [userLocation, getUserLocation]);
 
-  // const handleSearch = async (searchKeyword) => {
-  //   try {
-  //     if (searchKeyword.trim() !== "") {
-  //       const response = await fetch(
-  //         `${API_URL}/restaurants/search/${searchKeyword}`
-  //       );
-
-  //       if (response.ok) {
-  //         const data = await response.json();
-
-  //         setSearchResults(data);
-  //       } else {
-  //         console.error("Error fetching search results");
-  //       }
-  //     } else {
-  //       setSearchResults([]);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching search results", error);
-  //   }
-  // };
-
   const handleSearch = async (searchKeyword) => {
     try {
       if (searchKeyword.trim() !== "") {
         const response = await fetch(
-          `${process.env.API_URL}/restaurants/search/${searchKeyword}`
+          `${API_URL}/restaurants/search/${searchKeyword}`
         );
 
         if (response.ok) {
           const data = await response.json();
-
           setSearchResults(data);
-
-          // Chỉ chuyển đến trang Result khi bấm Enter
           if (isSubmitPressed) {
             navigation.navigate("Home", { searchResults: data });
           }
@@ -147,50 +113,23 @@ const SearchScreen = ({ route }) => {
     } catch (error) {
       console.error("Error fetching search results", error);
     } finally {
-      // Reset trạng thái của isSubmitPressed sau khi xử lý xong
       setIsSubmitPressed(false);
     }
   };
 
   const handleEnterPress = () => {
-    // Ẩn bàn phím
     Keyboard.dismiss();
-
-    // Lấy giá trị từ ô input
+    // get value from input field
     const searchKeyword = keyword.trim();
-
-    // Chuyển đến trang Result hoặc Success tùy thuộc vào điều kiện
     if (searchKeyword !== "") {
-      // Đối với Success
       navigation.navigate("Result", { searchKeyword });
       setKeyword("");
     } else {
-      // Đối với Result
       handleSearch(searchKeyword);
     }
   };
-
-  // const getNearbyRestaurants = async () => {
-  //   try {
-  //     const nearbyResponse = await fetch(
-  //       `${API_URL}/nearby-restaurants/`
-  //     );
-
-  //     if (nearbyResponse.ok) {
-  //       const nearbyData = await nearbyResponse.json();
-
-  //       setNearbyResults(nearbyData); // Save nearby restaurants data
-  //     } else {
-  //       console.error("Error fetching nearby restaurants");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching nearby restaurants", error);
-  //   }
-  // };
-
   useEffect(() => {
     let isMounted = true;
-
     // Trigger the search when the keyword changes
     handleSearch(keyword);
 
@@ -202,22 +141,15 @@ const SearchScreen = ({ route }) => {
 
   useEffect(() => {
     let isMounted = true;
-
     // Call getNearbyRestaurants when the component mounts
-    // getNearbyRestaurants();
     fetchDataAndCalculateDistances();
-
     return () => {
       isMounted = false;
     };
   }, [fetchDataAndCalculateDistances]);
 
-  const { user } = useContext(UserType);
-
-  // console.log("User hahahaa:", user);
-
   return (
-    <ScrollView style={{ padding: 10, }}>
+    <ScrollView style={{ padding: 10 }}>
       <View
         style={{
           borderWidth: 2,
@@ -283,7 +215,6 @@ const SearchScreen = ({ route }) => {
         {keyword.trim() !== "" ? (
           <ScrollView>
             {searchResults.map((restaurant, index) => (
-              // <RestaurantCard item={restaurant} key={index} />
               <TouchableOpacity
                 key={restaurant?._id}
                 onPress={() =>
@@ -335,9 +266,7 @@ const SearchScreen = ({ route }) => {
                     </View>
 
                     <View className=" mt-2">
-                      <TouchableOpacity
-                       
-                      >
+                      <TouchableOpacity>
                         <Text className="w-1/3 text-center p-1 border-[#A2A2A2] border rounded-sm">
                           Đặt chỗ
                         </Text>
@@ -351,7 +280,6 @@ const SearchScreen = ({ route }) => {
         ) : (
           <ScrollView>
             {nearbyRestaurants.map((restaurant, index) => (
-              // <RestaurantCard item={restaurant} key={index} />
               <TouchableOpacity
                 key={restaurant?._id}
                 onPress={() =>
@@ -405,9 +333,7 @@ const SearchScreen = ({ route }) => {
                     </View>
 
                     <View className=" mt-2">
-                      <TouchableOpacity
-                        
-                      >
+                      <TouchableOpacity>
                         <Text className="w-1/3 text-center p-1 border-[#A2A2A2] border rounded-sm">
                           Đặt chỗ
                         </Text>

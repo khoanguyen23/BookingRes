@@ -37,7 +37,7 @@ export default function HomeScreen({ navigation, route }) {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`${process.env.API_URL}/api/featured`);
+      const response = await fetch(`${API_URL}/api/featured`);
       // const response = await fetch("http://192.168.1.7:8000/api/featured");
       const data = await response.json();
       setFeaturedData(data);
