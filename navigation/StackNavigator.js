@@ -6,9 +6,7 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import HomeScreen from "../screens/Home";
 import RestaurantDetail from "../screens/RestaurantDetail";
-import Map from "../screens/Map";
 import Account from "../screens/Account";
-import MapPrepare from "../screens/MapPrepare";
 import EditAccount from "../screens/EditAccount";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Entypo } from "@expo/vector-icons";
@@ -203,11 +201,6 @@ const StackNavigator = () => {
         <Stack.Screen
           name="Admin"
           component={AdminTabNavigator}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Map"
-          component={Map}
           options={{ headerShown: false }}
         />
         <Stack.Screen

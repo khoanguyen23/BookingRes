@@ -23,7 +23,7 @@ const Stack = createNativeStackNavigator();
 const HomeStack = () => (
   <Stack.Navigator>
     <Stack.Screen
-      name="Home"
+      name="HomeScreen"
       component={HomeScreen}
       options={{ headerShown: false }}
     />
@@ -41,7 +41,7 @@ const HomeStack = () => (
       }}
     />
     <Stack.Screen
-      name="Restaurant"
+      name="RestaurantDetail"
       component={RestaurantDetail}
       options={{
         headerShown: true,
@@ -59,7 +59,7 @@ const HomeStack = () => (
 const AccountStack = () => (
   <Stack.Navigator>
     <Stack.Screen
-      name="Account"
+      name="AccountScreen"
       component={AccountScreen}
       options={{
         title: "Tài khoản",
@@ -97,7 +97,7 @@ const BottomTabNavigator = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Home"
+        name="HomeTab"
         component={HomeStack}
         options={{
           tabBarLabel: "Home",
@@ -185,7 +185,7 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Account"
+        name="AccountTab"
         component={AccountStack}
         options={{
           title: "Tài khoản",
