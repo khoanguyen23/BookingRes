@@ -11,10 +11,13 @@ module.exports = {
     },
 
     createFeatured: async (req, res) => {
-        const { name, description,image, restaurants } = req.body;
+        const { title,subTitle,author, name, description,image, restaurants } = req.body;
 
         try {
             const newFeatured = await Featured.create({
+                title,
+                subTitle,
+                author,
                 name,
                 description,
                 image,
