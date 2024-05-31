@@ -27,6 +27,11 @@ const featuredSchema = new mongoose.Schema(
         ref: "Restaurant",
       },
     ],
+    layout: {
+      type: Number,
+      enum: [1, 2, 3],
+      required: true,
+    },
   },
   { timestamps: true }
 );

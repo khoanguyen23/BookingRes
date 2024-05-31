@@ -7,7 +7,6 @@ const restaurantSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    maxlength: 200
   },
   image: {
     type: String 
@@ -42,6 +41,13 @@ const restaurantSchema = new mongoose.Schema({
     default: 'Đặt bàn giữ chỗ'
   },
   menu: [
+    {
+      image: {
+        type: String 
+      }
+    }
+  ],
+  album: [
     {
       image: {
         type: String 

@@ -11,7 +11,9 @@ module.exports = {
       address,
       rating,
       type,
+      promotions,
       menu,
+      album,
       openingHours,
       bookingHours,
     } = req.body;
@@ -34,7 +36,9 @@ module.exports = {
         address,
         rating,
         type,
+        promotions,
         menu,
+        album,
         openingHours,
         bookingHours,
       });
