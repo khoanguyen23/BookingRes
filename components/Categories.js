@@ -4,25 +4,17 @@ import axios from "axios"; // Import axios
 import { useNavigation } from "@react-navigation/native";
 import { API_URL } from "@env";
 
-export default function Categories() {
+export default function Categories({categories}) {
   const navigation = useNavigation();
-  const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
 
-  useEffect(() => {
-    // Function to fetch categories
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/categories`);
-        const fetchedCategories = response.data;
-        setCategories(fetchedCategories);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
 
-    fetchCategories();
-  }, []);
+  // useEffect(() => {
+  //   // Function to fetch categories
+   
+
+  //   fetchCategories();
+  // }, []);
 
   return (
     <View className="mt-4">

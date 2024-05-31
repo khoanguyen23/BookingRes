@@ -23,6 +23,7 @@ import Banner from "../components/Banner";
 export default function HomeScreen({ navigation, route }) {
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [selectedCity, setSelectedCity] = useState(
     route.params?.selectedCity || "TPHCM"
   );
@@ -68,9 +69,20 @@ export default function HomeScreen({ navigation, route }) {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/categories`);
+      const fetchedCategories = response.data;
+      setCategories(fetchedCategories);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
   useEffect(() => {
     fetchData();
     fetchAddress();
+    fetchCategories();
   }, []);
 
   return (
@@ -159,7 +171,7 @@ export default function HomeScreen({ navigation, route }) {
         }}
       >
         <Text className="font-bold text-xl pl-4 mt-2">Danh mục</Text>
-        <Categories />
+        <Categories categories={categories}/>
         <Banner images={bannerImages} />
         <View className="mt-5">
           {featuredData.map((item, index) => {
