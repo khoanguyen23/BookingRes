@@ -67,6 +67,7 @@ router.put('/api/orders/:orderId', OrderController.updateOrder);
 // Feature Routes
 router.get("/api/featured", FeatureController.getFeatured);
 router.post("/api/featured", FeatureController.createFeatured);
+router.put("/api/featured/:id", FeatureController.updateFeatured);
 
 // Category Routes
 router.post("/categories", CategoryController.createCategory);

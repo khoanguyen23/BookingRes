@@ -36,4 +36,28 @@ module.exports = {
             res.status(400).json({ message: error.message });
         }
     },
+
+    updateFeatured: async (req, res) => {
+        const { id } = req.params;
+        const updates = req.body;
+        
+        console.log("Request body:", updates);
+
+        try {
+            const updatedFeatured = await Featured.findByIdAndUpdate(id, updates, {
+                new: true, // Return the updated document
+                runValidators: true, // Ensure the updates are valid based on the schema
+            });
+
+            if (!updatedFeatured) {
+                return res.status(404).json({ message: "Featured not found" });
+            }
+
+            console.log("Updated featured:", updatedFeatured);
+
+            res.json(updatedFeatured);
+        } catch (error) {
+            res.status(400).json({ message: error.message });
+        }
+    },
 };
