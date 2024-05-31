@@ -5,14 +5,10 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "imagePickerInfo": {
-      "PHOTO_LIBRARY": "jp.co.cyberagent.stf.compat.PhotoLibraryCompat",
-      "PHOTO_LIBRARY_PACKAGE": "jp.co.cyberagent.stf.compat"
-    },
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/loading.gif",
-      "resizeMode": "contain",
+      "image": "./assets/03.jpg",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
@@ -23,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/loading.gif",
+        "foregroundImage": "./assets/03.jpg",
         "backgroundColor": "#ffffff"
       }
     },
