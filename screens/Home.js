@@ -58,9 +58,7 @@ export default function HomeScreen({ navigation, route }) {
 
   const fetchAddressData = async (userId) => {
     try {
-      const response = await axios.get(
-        `${API_URL}/address/${userId}`
-      );
+      const response = await axios.get(`${API_URL}/address/${userId}`);
       const addressData = response.data;
       updateUser(addressData);
       console.log(addressData, "user fetch");
@@ -165,14 +163,16 @@ export default function HomeScreen({ navigation, route }) {
         <Banner images={bannerImages} />
         <View className="mt-5">
           {featuredData.map((item, index) => {
-            return (
-              <FeaturedRow
-                key={index}
-                title={item.name}
-                restaurants={item.restaurants}
-                description={item.description}
-              />
-            );
+            if (item.title) {
+              return (
+                <FeaturedRow
+                  key={index}
+                  title={item.title} 
+                  restaurants={item.restaurants}
+                  subTitle={item.subTitle}
+                />
+              );
+            }
           })}
         </View>
       </ScrollView>

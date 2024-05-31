@@ -1,45 +1,55 @@
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
-import RestaurantCard from './restaurantCard'
-import { themeColors } from '../theme'
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import React from "react";
+import RestaurantCard from "./restaurantCard";
+import { themeColors } from "../theme";
 
-export default function FeatureRow({ title, description, restaurants }) {
-    return (
-        <View>
-            <View className="flex-row justify-between items-center px-4">
-                <View>
-                    <Text className="font-bold text-lg">{title}</Text>
-                    <Text className="text-gray-500 text-xs w-80">
-                        {description}
-                    </Text>
-                </View>
+export default function FeatureRow({ title, subTitle, restaurants }) {
 
-                <TouchableOpacity>
-                    <Text style={{ color: themeColors.text }} className="font-semibold">See All</Text>
-                </TouchableOpacity>
-            </View>
+  const rows =[[],[]];
+  restaurants.forEach((restaurant, index) => {
+    rows[index % 2].push(restaurant);
+  });
 
-            <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{
-                    paddingHorizontal: 15,
-                }}
-                className="overflow-visible py-5"
+  return (
+    <View>
+      <View className="px-3">
+        <View className="flex-row items-center">
+          <View className="w-9/12">
+            <Text className="font-bold text-xl">{title}</Text>
+          </View>
+          <TouchableOpacity className="w-3/12 ml-2">
+            <Text
+              style={{ color: themeColors.text }}
+              className="text-base font-medium"
             >
-                {
-                    restaurants.map((restaurant, index) => {
-                        return (
-                            <RestaurantCard
-                                item={restaurant}
-                                key={index}
-
-                            />
-                        )
-                    })
-                }
-            </ScrollView>
-
+              Xem tất cả
+            </Text>
+          </TouchableOpacity>
         </View>
-    )
+        <Text className="text-[#404040] text-base">{subTitle}</Text>
+      </View>
+
+      <View className="px-3">
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{}}
+          className="overflow-visible py-5"
+        >
+          <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'row' }}>
+              {rows[0].map((restaurant, index) => (
+                <RestaurantCard item={restaurant} key={`row1-${index}`} />
+              ))}
+            </View>
+            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+              {rows[1].map((restaurant, index) => (
+                <RestaurantCard item={restaurant} key={`row2-${index}`} />
+              ))}
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+    </View>
+  );
 }
