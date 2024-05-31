@@ -4,12 +4,21 @@ const featuredSchema = new mongoose.Schema({
   name: {
     type: String,
   },
+  title : {
+    type: String,
+  },
+  author : {
+    type: String,
+  },
+  subTitle : {
+    type: String,
+  },
   description: {
     type: String,
     maxlength: 200,
   },
   image: {
-    type: String // Assuming you store the image URL
+    type: String 
   },
   restaurants: [
     {
@@ -17,7 +26,7 @@ const featuredSchema = new mongoose.Schema({
       ref: 'Restaurant',
     },
   ],
-});
+},{ timestamps: true }); 
 
 const Featured = mongoose.model('Featured', featuredSchema);
 
