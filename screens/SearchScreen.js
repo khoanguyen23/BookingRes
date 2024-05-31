@@ -64,7 +64,7 @@ const SearchScreen = ({ route }) => {
       }
       if (userLocation) {
         const response = await axios.get(
-          `${process.env.API_URL}/nearby-restaurants`,
+          `${API_URL}/nearby-restaurants`,
           {
             params: {
               latitude: userLocation.latitude,

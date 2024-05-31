@@ -19,7 +19,7 @@ const ResHor = ({ route }) => {
 
         if (selectedCategory) {
           const response = await fetch(
-            `${process.env.API_URL}/restaurants/categories/${selectedCategory}`
+            `${API_URL}/restaurants/categories/${selectedCategory}`
           );
           const data = await response.json();
           console.log(data)
@@ -44,7 +44,7 @@ const ResHor = ({ route }) => {
           }
         } else if (usedSearchKeyword) {
           const response = await fetch(
-            `${process.env.API_URL}/restaurants-in-city?cityName=${usedSearchKeyword}`
+            `${API_URL}/restaurants-in-city?cityName=${usedSearchKeyword}`
             // `http://localhost:8000/restaurants-in-city?cityName=${usedSearchKeyword}`
           );
 

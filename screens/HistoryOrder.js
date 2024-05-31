@@ -56,7 +56,7 @@ const HistoryOrder = () => {
           );
           const restaurantPromises = restaurantIds.map(async (restaurantId) => {
             const restaurantResponse = await fetch(
-              `${process.env.API_URL}/restaurants/${restaurantId}`
+              `${API_URL}/restaurants/${restaurantId}`
             );
             const restaurantData = await restaurantResponse.json();
             if (restaurantResponse.ok) {

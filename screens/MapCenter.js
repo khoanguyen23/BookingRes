@@ -165,7 +165,7 @@ const MapCenter = () => {
     const radius = 1; // bán kính
     try {
       const response = await fetch(
-        `${process.env.API_URL}/restaurants-in-circle?latitude=${latitude}&longitude=${longitude}&radius=${radius}`
+        `${API_URL}/restaurants-in-circle?latitude=${latitude}&longitude=${longitude}&radius=${radius}`
       );
       const data = await response.json();
       const restaurantsWithDistance = data.map((restaurant) => {

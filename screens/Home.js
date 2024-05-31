@@ -59,7 +59,7 @@ export default function HomeScreen({ navigation, route }) {
   const fetchAddressData = async (userId) => {
     try {
       const response = await axios.get(
-        `${process.env.API_URL}/address/${userId}`
+        `${API_URL}/address/${userId}`
       );
       const addressData = response.data;
       updateUser(addressData);
