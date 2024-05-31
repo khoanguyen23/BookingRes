@@ -45,7 +45,7 @@ export default function FeatureRow({ title, subTitle, restaurants, layout }) {
             <Text className="font-bold text-xl">{title}</Text>
           </View>
           <TouchableOpacity className="w-3/12 ml-2"
-          onPress={() => navigation.navigate("FeatureScreen") }
+           onPress={() => navigation.navigate('FeatureScreen', { title, subTitle, restaurants, layout })}
           >
             <Text
               style={{ color: themeColors.text }}

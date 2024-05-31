@@ -54,7 +54,7 @@ const HistoryOrder = () => {
           const restaurantIds = Array.from(
             new Set(data.orders.map((order) => order.restaurant))
           );
-          const restaurantPromises = restaurantIds.map(async (restaurantId) => {
+          const restaurantPromises = restaurantIds.map(async(restaurantId) => {
             const restaurantResponse = await fetch(
               `${API_URL}/restaurants/${restaurantId}`
             );
