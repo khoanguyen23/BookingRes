@@ -5,7 +5,7 @@ import * as Icon from "react-native-feather";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 
-export default function RestaurantCard({ item }) {
+export default function RestaurantCard({ item, layout }) {
   const navigation = useNavigation();
   const truncateText = (text, maxLength) => {
     if (text.length > maxLength) {
@@ -17,55 +17,68 @@ export default function RestaurantCard({ item }) {
     navigation.navigate("RestaurantDetail", { ...item });
     navigation.setParams({ headerTitle: item.name });
   };
+  const renderLayout = () => {
+    if (layout === 2) {
+      return (
+        <View className="mr-4">
+          <View className="">
+            <Image
+              className="w-40 h-40 rounded-md"
+              source={{ uri: item.image }}
+            />
+          </View>
+          <View className="w-36">
+            <Text className="text-lg font-bold pt-2">{item.name}</Text>
+          </View>
+        </View>
+      );
+    } else if (layout === 3) {
+      return (
+        <View
+          style={{ shadowColor: themeColors.bgColor(0.2), shadowRadius: 7 }}
+          className="mr-6 bg-white rounded-3xl shadow-lg"
+        >
+          <Image
+            className="h-36 w-64 rounded-t-lg"
+            source={{ uri: item.image }}
+          />
+          <View className="px-3 pb-4 space-y-2">
+            <Text
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              className="text-lg font-bold pt-2"
+            >
+              {truncateText(item.name, 28)}
+            </Text>
+            <View className="flex-row items-center space-x-1">
+              <Image
+                source={require("../assets/img/star.png")}
+                className="h-4 w-4"
+              />
+              <Text className="text-xs">
+                <Text className="text-green-700">{item.rating}</Text>
+                <Text className="text-gray-700"> đánh giá </Text>
+              </Text>
+            </View>
+            <View className="flex-row items-center space-x-1">
+              <Icon.MapPin color="gray" width={15} height={15} />
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                className="text-gray-700 text-xs"
+              >
+                Địa chỉ · {truncateText(item.address, 30)}
+              </Text>
+            </View>
+          </View>
+        </View>
+      );
+    }
+  };
 
   return (
     <TouchableOpacity onPress={handlePress}>
-      <View className="flex flex-row  mr-2 pb-16 border-b-[1px] border-b-[#B7B7B7]">
-        <View className="mr-2">
-          <Image
-            source={{
-              uri: item.image || "default_image_url",
-            }}
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: 8,
-            }}
-          />
-          <View className="mt-2">
-            <View className="flex-row">
-              <AntDesign name="star" size={18} color="#DDBC37" />
-              <Text className="ml-2">
-                {item.rating} |{" "}
-                <Text style={{ color: "#FF7F27", fontWeight: "bold" }}>$$</Text>
-              </Text>
-            </View>
-            <View className="flex-row">
-              <Entypo name="map" size={18} color="#3D9DC3" />
-              <Text className="ml-2"> 4.2 Km</Text>
-            </View>
-          </View>
-        </View>
-        <View className="w-72 h-48">
-          <View className="bg-[#FCECEE] p-1.5 w-28 rounded-md">
-            <Text className="text-sm text-[#C34039] text-center">
-              Được đề xuất
-            </Text>
-          </View>
-          <Text className="text-lg font-bold mt-1.5">{item.name}</Text>
-          <Text className="mt-1.5 text-gray-500">{item.address}</Text>
-          <Text className="mt-1.5 text-[#E15241] font-normal text-base">
-            {item.promotions}
-          </Text>
-          <View className=" mt-2">
-            <TouchableOpacity>
-              <Text className="w-1/3 text-center p-1 border-[#BF3431] border rounded-sm text-[#BF3431]">
-                Đặt chỗ
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
+     {renderLayout()}
     </TouchableOpacity>
   );
 }

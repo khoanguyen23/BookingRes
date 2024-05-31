@@ -1,14 +1,39 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React from "react";
-import RestaurantCard from "./restaurantCard";
 import { themeColors } from "../theme";
+import RestaurantCard from "./restaurantCard";
+import RestaurantGridLayout from "./restaurantGridLayout";
 
-export default function FeatureRow({ title, subTitle, restaurants }) {
-
-  const rows =[[],[]];
+export default function FeatureRow({ title, subTitle, restaurants, layout }) {
+  const rows = [[], []];
   restaurants.forEach((restaurant, index) => {
     rows[index % 2].push(restaurant);
   });
+
+  const renderLayout = () => {
+    if (layout === 1) {
+      return (
+        <View
+          style={{ flexDirection: "column", justifyContent: "space-between" }}
+        >
+          <View style={{ flexDirection: "row" }}>
+            {rows[0].map((restaurant, index) => (
+              <RestaurantGridLayout item={restaurant} key={`row1-${index}`} />
+            ))}
+          </View>
+          <View style={{ flexDirection: "row", marginTop: 10 }}>
+            {rows[1].map((restaurant, index) => (
+              <RestaurantGridLayout item={restaurant} key={`row2-${index}`} />
+            ))}
+          </View>
+        </View>
+      );
+    } else if (layout === 2 || layout === 3) {
+      return restaurants.map((restaurant, index) => (
+        <RestaurantCard item={restaurant} key={index} layout={layout} />
+      ));
+    }
+  };
 
   return (
     <View>
@@ -36,18 +61,7 @@ export default function FeatureRow({ title, subTitle, restaurants }) {
           contentContainerStyle={{}}
           className="overflow-visible py-5"
         >
-          <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
-            <View style={{ flexDirection: 'row' }}>
-              {rows[0].map((restaurant, index) => (
-                <RestaurantCard item={restaurant} key={`row1-${index}`} />
-              ))}
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: 10 }}>
-              {rows[1].map((restaurant, index) => (
-                <RestaurantCard item={restaurant} key={`row2-${index}`} />
-              ))}
-            </View>
-          </View>
+          {renderLayout()}
         </ScrollView>
       </View>
     </View>

@@ -182,6 +182,7 @@ export default function HomeScreen({ navigation, route }) {
                   title={item.title} 
                   restaurants={item.restaurants}
                   subTitle={item.subTitle}
+                  layout={item.layout}
                 />
               );
             }
