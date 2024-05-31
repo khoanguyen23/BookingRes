@@ -15,6 +15,7 @@ import MapCenter from "../screens/MapCenter";
 import ResultScreen from "../screens/ResultScreen";
 import RestaurantDetail from "../screens/RestaurantDetail";
 import ChatScreen from "../screens/ChatScreen";
+import FeatureScreen from "../screens/FeatureScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -43,6 +44,19 @@ const HomeStack = () => (
     <Stack.Screen
       name="RestaurantDetail"
       component={RestaurantDetail}
+      options={{
+        headerShown: true,
+        headerTitleAlign: "center",
+        headerTintColor: "white",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+        headerTransparent: true,
+      }}
+    />
+    <Stack.Screen
+      name="FeatureScreen"
+      component={FeatureScreen}
       options={{
         headerShown: true,
         headerTitleAlign: "center",

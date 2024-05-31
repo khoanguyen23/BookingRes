@@ -3,8 +3,10 @@ import React from "react";
 import { themeColors } from "../theme";
 import RestaurantCard from "./restaurantCard";
 import RestaurantGridLayout from "./restaurantGridLayout";
+import { useNavigation } from "@react-navigation/native";
 
 export default function FeatureRow({ title, subTitle, restaurants, layout }) {
+  const navigation = useNavigation();
   const rows = [[], []];
   restaurants.forEach((restaurant, index) => {
     rows[index % 2].push(restaurant);
@@ -42,7 +44,9 @@ export default function FeatureRow({ title, subTitle, restaurants, layout }) {
           <View className="w-9/12">
             <Text className="font-bold text-xl">{title}</Text>
           </View>
-          <TouchableOpacity className="w-3/12 ml-2">
+          <TouchableOpacity className="w-3/12 ml-2"
+          onPress={() => navigation.navigate("FeatureScreen") }
+          >
             <Text
               style={{ color: themeColors.text }}
               className="text-base font-medium"
