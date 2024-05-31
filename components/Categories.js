@@ -13,9 +13,7 @@ export default function Categories() {
     // Function to fetch categories
     const fetchCategories = async () => {
       try {
-        // Replace 'http://your-api-url' with your actual API endpoint
         const response = await axios.get(`${API_URL}/categories`);
-        // const response = await axios.get("http://192.168.1.7:8000/categories");
         const fetchedCategories = response.data;
         setCategories(fetchedCategories);
       } catch (error) {
@@ -23,9 +21,8 @@ export default function Categories() {
       }
     };
 
-    // Call the function to fetch categories when the component mounts
     fetchCategories();
-  }, []); // Empty dependency array to ensure the effect runs only once when the component mounts
+  }, []);
 
   return (
     <View className="mt-4">

@@ -63,15 +63,12 @@ const SearchScreen = ({ route }) => {
         await getUserLocation();
       }
       if (userLocation) {
-        const response = await axios.get(
-          `${API_URL}/nearby-restaurants`,
-          {
-            params: {
-              latitude: userLocation.latitude,
-              longitude: userLocation.longitude,
-            },
-          }
-        );
+        const response = await axios.get(`${API_URL}/nearby-restaurants`, {
+          params: {
+            latitude: userLocation.latitude,
+            longitude: userLocation.longitude,
+          },
+        });
         const restaurantsWithDistance = response.data.nearbyRestaurants.map(
           (restaurant) => {
             const distance = calculateDistance(
@@ -194,7 +191,6 @@ const SearchScreen = ({ route }) => {
               flexDirection: "row",
               justifyContent: "space-around",
               alignItems: "center",
-
               borderBottomWidth: 1,
               borderBottomColor: "gray",
               width: "44%",
@@ -218,7 +214,7 @@ const SearchScreen = ({ route }) => {
               <TouchableOpacity
                 key={restaurant?._id}
                 onPress={() =>
-                  navigation.navigate("Restaurant", { ...restaurant })
+                  navigation.navigate("RestauranDetail", { ...restaurant })
                 }
               >
                 <View className="m-2 mt-2 p-2 flex-row justify-between rounded-xl">
@@ -283,7 +279,7 @@ const SearchScreen = ({ route }) => {
               <TouchableOpacity
                 key={restaurant?._id}
                 onPress={() =>
-                  navigation.navigate("Restaurant", { ...restaurant })
+                  navigation.navigate("RestaurantDetail", { ...restaurant })
                 }
               >
                 <View className="m-2 p-2 mt-4 flex-row justify-between rounded-xl">

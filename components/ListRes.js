@@ -28,7 +28,7 @@ const ListRes = ({ nearbyRestaurants, navigation, refresh }) => {
     <View className="flex flex-row">
       <TouchableOpacity
         key={restaurant?._id}
-        onPress={() => navigation.navigate("Restaurant", { ...restaurant })}
+        onPress={() => navigation.navigate("RestaurantDetail", { ...restaurant })}
       >
         <View className="m-2 p-2 mt-4 flex-row justify-between rounded-xl">
           <View className=" w-3/12 items-center">
