@@ -10,11 +10,8 @@ const restaurantSchema = new mongoose.Schema({
     maxlength: 200
   },
   image: {
-    type: String // Assuming you store the image URL
+    type: String 
   },
-
-  // longitude: kinh độ, latitude: vĩ độ
-  //  "coordinates": [106.7184612, 10.8275828]
   location: {
     type: {
       type: String,
@@ -39,6 +36,10 @@ const restaurantSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category',
     required: true
+  },
+  promotions : {
+    type : String, 
+    default: 'Đặt bàn giữ chỗ'
   },
   menu: [
     {
