@@ -11,19 +11,11 @@ import {
   Modal,
   Button,
   StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
   Image,
-  FlatList,
   Animated,
   Easing,
 } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { Keyboard } from "react-native";
 import {
   requestForegroundPermissionsAsync,
   getCurrentPositionAsync,
@@ -33,16 +25,10 @@ import {
 import BottomSheet from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
-import MapView, { Circle, Marker } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import Geocoding from "react-native-geocoding";
 import { API_URL, GOOGLE_MAPS_API_KEY } from "@env";
 import ListRes from "../components/ListRes";
-// import Animated, {
-//   useSharedValue,
-//   useAnimatedStyle,
-//   withTiming,
-// } from "react-native-reanimated";
-import { keyframes, stagger } from "popmotion";
 
 const MapCenter = () => {
   const navigation = useNavigation();
@@ -55,7 +41,6 @@ const MapCenter = () => {
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
   const [searchAddress, setSearchAddress] = useState("");
   const [showRedView, setShowRedView] = useState(false);
-
   const scaleAnimationRef = useRef(new Animated.Value(0)).current;
   const opacityAnimationRef = useRef(new Animated.Value(1)).current;
 
@@ -81,7 +66,6 @@ const MapCenter = () => {
           searchAddress
         )}&key=${GOOGLE_MAPS_API_KEY}`
       );
-      console.log("Geocoding API Response:", response.data);
 
       if (response.data.results.length > 0) {
         const location = response.data.results[0].geometry.location;

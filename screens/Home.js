@@ -65,7 +65,7 @@ export default function HomeScreen({ navigation, route }) {
       updateUser(addressData);
       console.log(addressData, "user fetch");
     } catch (error) {
-      console.log(`${API_URL} /address/${userId}`);
+      console.log(`${API_URL}/address/${userId}`);
       console.log("Error fetching address data", error);
     }
   };
