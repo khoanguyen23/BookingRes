@@ -162,7 +162,9 @@ export default function RestaurantDetail({ route }) {
           marginHorizontal: 8,
           marginBottom: 10,
         }}
-      ></View>
+      >
+        
+      </View>
 
       <View style={{ height: 500 }}>
         <MenuTab item={item} />

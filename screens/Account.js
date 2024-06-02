@@ -246,7 +246,7 @@ const AccountScreen = () => {
                 title={"Mời bạn bè"}
                 icon={"adduser"}
                 onPress={() => {
-                  navigation.navigate("Favourite");
+                  navigation.navigate("BottomSheet");
                 }}
               />
               <ProfileTile
