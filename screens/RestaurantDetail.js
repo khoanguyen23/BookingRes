@@ -124,7 +124,7 @@ export default function RestaurantDetail() {
   
 
   return (
-    <View style={{}}>
+    <View style={{flex: 1}}>
       <View style={{ backgroundColor: "#ffffff" }}>
         <NetworkImage
           source={item.image}
@@ -173,10 +173,10 @@ export default function RestaurantDetail() {
         
       </View>
 
-      <View style={{ height: 500 }}>
+      <View style={{flex : 1}}>
         <MenuTab item={item} />
       </View>
-      <View
+      {/* <View
         style={{
           top : -50,
           height: 100,
@@ -191,7 +191,7 @@ export default function RestaurantDetail() {
             navigation.navigate("Order", { restaurant: restaurantItem });
           }}
         />
-      </View>
+      </View> */}
     </View>
   );
 }

@@ -53,6 +53,7 @@ const FirstRoute = ({ item }) => (
         </View>
       </View>
       {/* <Menu /> */}
+      <View className="bg-[#E0E0E0] w-full h-3"></View>
     </ScrollView>
   </View>
 );
@@ -73,7 +74,7 @@ const SecondRoute = ({ item }) => (
     </View>
   </ScrollView>
 );
-const ThirdRoute = ({item}) => (
+const ThirdRoute = ({ item }) => (
   <ScrollView>
     <View style={{ flex: 1, backgroundColor: "#ffffff", padding: 15 }}>
       <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
@@ -89,8 +90,10 @@ const ThirdRoute = ({item}) => (
     </View>
   </ScrollView>
 );
-const FourRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#673ab7" }}></View>
+const FourRoute = ({ item }) => (
+  <View style={{ flex: 1, backgroundColor: "#673ab7" }}>
+    <Text>{item.description}</Text>
+  </View>
 );
 
 const renderScene = (props) => {
@@ -143,6 +146,7 @@ const MenuTab = ({ item }) => {
     key: route.key,
     data: [item],
   }));
+
   return (
     // <TabView
     //   navigationState={{ index, routes }}
@@ -155,9 +159,9 @@ const MenuTab = ({ item }) => {
     <TabbedHeaderList
       backgroundColor={Colors.white}
       titleStyle={screenStyles.text}
-      parallaxHeight={10}
+      parallaxHeight={0}
       foregroundImage={{
-        uri: "https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg",
+        uri: item.image,
       }}
       tabs={routes.map(({ title }) => ({ title }))}
       tabTextStyle={screenStyles.text}
@@ -170,6 +174,7 @@ const MenuTab = ({ item }) => {
       showsVerticalScrollIndicator={false}
       headerHeight={0}
       stickyTabs
+      tabsContainerHorizontalPadding={1}
       // renderSectionHeader={({ section }) => (
       //   <View style={{ backgroundColor: Colors.coralPink, padding: 15 }}>
       //     <Text style={screenStyles.text}>{section.title}</Text>
