@@ -35,18 +35,25 @@ const IMG_HEIGHT = 150;
 import axios from "axios";
 import { API_URL } from "@env";
 
-export default function RestaurantDetail({ route }) {
-  const { name } = route.params;
+export default function RestaurantDetail() {
+  // const { name } = route.params;
   const { params } = useRoute();
   const navigation = useNavigation();
-  let item = params;
+  const item = params;
+  const { name, _id } = item;
   const scrollRef = useAnimatedRef();
   const { user } = useContext(UserType);
   const [isFavorite, setIsFavorite] = useState(false);
   const restaurantId = item._id;
   const userId = user._id;
-  console.log(restaurantId);
-
+  // console.log(restaurantId, "restaurant");
+  // console.log(
+  //   user, "itemj"
+  // )
+  if (!item || !_id) {
+    console.error("Item or _id is undefined in RestaurantDetail");
+    return <Text>Error: Item not found</Text>;
+  }
   useEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
@@ -77,7 +84,7 @@ export default function RestaurantDetail({ route }) {
       ),
     });
   }, []);
-  console.log("first");
+
 
   useEffect(() => {
     // Update isFavorite state when user.favoriteRestaurants or restaurantId changes

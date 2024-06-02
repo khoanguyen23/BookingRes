@@ -61,7 +61,7 @@ const SecondRoute = ({ item }) => (
   <ScrollView>
     <View style={{ flex: 1, backgroundColor: "#ffffff", padding: 15 }}>
       <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-        {item.menu.map((menuImage, index) => (
+        {item.imagePrice.map((menuImage, index) => (
           <View key={index} style={{ width: "50%", padding: 5 }}>
             <Image
               source={{ uri: menuImage.image }}
@@ -73,10 +73,21 @@ const SecondRoute = ({ item }) => (
     </View>
   </ScrollView>
 );
-const ThirdRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#673ab7" }}>
-    <Text>lorem</Text>
-  </View>
+const ThirdRoute = ({item}) => (
+  <ScrollView>
+    <View style={{ flex: 1, backgroundColor: "#ffffff", padding: 15 }}>
+      <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+        {item.album.map((menuImage, index) => (
+          <View key={index} style={{ width: "50%", padding: 5 }}>
+            <Image
+              source={{ uri: menuImage.image }}
+              style={{ width: "100%", height: 120, marginBottom: 10 }}
+            />
+          </View>
+        ))}
+      </View>
+    </View>
+  </ScrollView>
 );
 const FourRoute = () => (
   <View style={{ flex: 1, backgroundColor: "#673ab7" }}></View>

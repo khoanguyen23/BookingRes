@@ -35,6 +35,15 @@ export default function HomeScreen({ navigation, route }) {
     "https://pastaxi-manager.onepas.vn/Photo/ShowPhotoBannerVsSlide?Id=FC15E6C4-5E82-42E6-8A1D-C724DA4E6E36&2023-12-18%2016:12:30",
   ];
 
+  const fetchFeaturedData = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/featured`);
+      setFeaturedData(response.data);
+    } catch (error) {
+      console.error("Failed to fetch featured data:", error);
+    }
+  };
+
   const fetchData = async () => {
     try {
       const response = await fetch(`${API_URL}/api/featured`);
@@ -46,6 +55,7 @@ export default function HomeScreen({ navigation, route }) {
       console.error('Error fetching featured data:', error);
     }
   };
+
 
   const fetchAddress = async () => {
     try {
@@ -82,7 +92,7 @@ export default function HomeScreen({ navigation, route }) {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchFeaturedData()
     fetchAddress();
     fetchCategories();
   }, []);
