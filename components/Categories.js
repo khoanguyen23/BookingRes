@@ -1,20 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
-import axios from "axios"; // Import axios
 import { useNavigation } from "@react-navigation/native";
-import { API_URL } from "@env";
 
 export default function Categories({categories}) {
   const navigation = useNavigation();
   const [activeCategory, setActiveCategory] = useState(null);
-
-
-  // useEffect(() => {
-  //   // Function to fetch categories
-   
-
-  //   fetchCategories();
-  // }, []);
 
   return (
     <View className="mt-4">

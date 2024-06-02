@@ -38,10 +38,12 @@ export default function HomeScreen({ navigation, route }) {
   const fetchData = async () => {
     try {
       const response = await fetch(`${API_URL}/api/featured`);
-      const data = await response.json();
+      const textResponse = await response.text();
+      console.log('Raw response:', textResponse);
+      const data = JSON.parse(textResponse);
       setFeaturedData(data);
     } catch (error) {
-      console.error("Error fetching featured data:", error);
+      console.error('Error fetching featured data:', error);
     }
   };
 
@@ -84,6 +86,7 @@ export default function HomeScreen({ navigation, route }) {
     fetchAddress();
     fetchCategories();
   }, []);
+
 
   return (
     <SafeAreaView className="bg-white">
