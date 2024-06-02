@@ -40,7 +40,7 @@ const restaurantSchema = new mongoose.Schema({
     type : String, 
     default: 'Đặt bàn giữ chỗ'
   },
-  menu: [
+  imagePrice: [
     {
       image: {
         type: String 
