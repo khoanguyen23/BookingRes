@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 mongoose
   .connect(
-    "mongodb+srv://20521328:McvsnJeQrTNWMU7U@bookingres.dprdfjf.mongodb.net/",
+    "mongodb+srv://20521328:Bookingres9999@bookingres.dprdfjf.mongodb.net/",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
