@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  ImageBackground,
+} from "react-native";
 import React from "react";
 import { themeColors } from "../theme";
 import RestaurantCard from "./restaurantCard";
@@ -34,29 +41,93 @@ export default function FeatureRow({ title, subTitle, restaurants, layout }) {
       return restaurants.map((restaurant, index) => (
         <RestaurantCard item={restaurant} key={index} layout={layout} />
       ));
+    } else if (layout === 4) {
+      return <View></View>;
+    }
+  };
+
+  const renderFeature = () => {
+    if (layout === 4) {
+      return (
+        <View
+          className=" bg-[#FFFFFF] h-[390]"
+          style={{
+            shadowColor: "#000000",
+            shadowOffset: {
+              width: 3,
+              height: 3,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 8,
+            borderRadius: 5,
+          }}
+        >
+          <ImageBackground
+            className="h-48"
+            source={{
+              uri: "https://pasgo.vn/Upload/anh-chi-tiet/slide-bo-to-quan-moc-vo-oanh-4-normal-2318786063427.webp",
+            }}
+            resizeMode="cover"
+            imageStyle={{ borderTopLeftRadius: 5, borderTopRightRadius: 5 }}
+          />
+          <View className="flex p-3">
+            <Text className="text-2xl font-bold">{title}</Text>
+            <Text className="text-base">{subTitle}</Text>
+            <TouchableOpacity
+              className="p-2 bg-red-500 mt-4"
+              style={{ borderRadius: 50 }}
+              onPress={() =>
+                navigation.navigate("FeatureScreen", {
+                  title,
+                  subTitle,
+                  restaurants,
+                  layout,
+                })
+              }
+            >
+              <Text className="text-white text-center text-xl font-bold">
+                Xem ngay
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    } else {
+      return (
+        <>
+          <View className="flex-row items-center">
+            <View className="w-9/12">
+              <Text className="font-bold text-xl">{title}</Text>
+            </View>
+            <TouchableOpacity
+              className="w-3/12 ml-2"
+              onPress={() =>
+                navigation.navigate("FeatureScreen", {
+                  title,
+                  subTitle,
+                  restaurants,
+                  layout,
+                })
+              }
+            >
+              <Text
+                style={{ color: themeColors.text }}
+                className="text-base font-medium"
+              >
+                Xem tất cả
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <Text className="text-[#404040] text-base">{subTitle}</Text>
+        </>
+      );
     }
   };
 
   return (
     <View>
-      <View className="px-3">
-        <View className="flex-row items-center">
-          <View className="w-9/12">
-            <Text className="font-bold text-xl">{title}</Text>
-          </View>
-          <TouchableOpacity className="w-3/12 ml-2"
-           onPress={() => navigation.navigate('FeatureScreen', { title, subTitle, restaurants, layout })}
-          >
-            <Text
-              style={{ color: themeColors.text }}
-              className="text-base font-medium"
-            >
-              Xem tất cả
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <Text className="text-[#404040] text-base">{subTitle}</Text>
-      </View>
+      <View className="px-3">{renderFeature()}</View>
 
       <View className="px-3">
         <ScrollView

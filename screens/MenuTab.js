@@ -113,7 +113,7 @@ const renderScene = (props) => {
 };
 const TAB_MARGIN = 24;
 
-const MenuTab = ({ item }) => {
+const  MenuTab = ({ item }) => {
   console.log(item);
 
   const layout = useWindowDimensions();

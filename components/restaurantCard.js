@@ -78,7 +78,7 @@ export default function RestaurantCard({ item, layout }) {
 
   return (
     <TouchableOpacity onPress={handlePress}>
-     {renderLayout()}
+      {renderLayout()}
     </TouchableOpacity>
   );
 }
