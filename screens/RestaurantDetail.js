@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  Alert
+  Alert,
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
@@ -34,6 +34,12 @@ const { width } = Dimensions.get("window");
 const IMG_HEIGHT = 150;
 import axios from "axios";
 import { API_URL } from "@env";
+import {
+  BottomSheetModal,
+  BottomSheetView,
+  BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet';
+import { Button } from "react-native";
 
 export default function RestaurantDetail() {
   // const { name } = route.params;
@@ -85,12 +91,10 @@ export default function RestaurantDetail() {
     });
   }, []);
 
-
   useEffect(() => {
     // Update isFavorite state when user.favoriteRestaurants or restaurantId changes
     setIsFavorite(user.favoriteRestaurants.includes(restaurantId));
   }, [user.favoriteRestaurants, restaurantId]);
-
 
   const handleFavoritePress = async () => {
     try {
@@ -121,10 +125,37 @@ export default function RestaurantDetail() {
     }
   };
 
-  
+    // ref
+ const bottomSheetRef = React.useRef(null);
+
+ // variables
+ const snapPoints = React.useMemo(() => ['25%', '50%'], []);
+
+ // callbacks
+ const handlePresentModalPress = React.useCallback(() => {
+  bottomSheetRef.current?.present();
+ }, []);
+ const handleSheetChanges = React.useCallback((index) => {
+  console.log("handleSheetChanges", index);
+}, []);
+
 
   return (
-    <View style={{flex: 1}}>
+    <BottomSheetModalProvider>
+       
+        <BottomSheetModal
+          ref={bottomSheetRef}
+          index={1}
+          snapPoints={snapPoints}
+          onChange={handleSheetChanges}
+        >
+          <BottomSheetView style={styles.contentContainer}>
+            <Text>Awesome 🎉</Text>
+          </BottomSheetView>
+        </BottomSheetModal>
+
+
+    <View style={{ flex: 1 }}>
       <View style={{ backgroundColor: "#ffffff" }}>
         <NetworkImage
           source={item.image}
@@ -169,30 +200,28 @@ export default function RestaurantDetail() {
           marginHorizontal: 8,
           marginBottom: 10,
         }}
-      >
-        
-      </View>
+      ></View>
 
-      <View style={{flex : 1}}>
-        <MenuTab item={item} />
+      <View style={{ flex: 1 }}>
+        <MenuTab item={item} handlePresentModalPress={handlePresentModalPress}  />
       </View>
-      {/* <View
+      <View
         style={{
-          top : -50,
-          height: 100,
-          backgroundColor: "#ccc",
-          justifyContent: "flex-end",
+          position: "absolute",
+          bottom: 5,
+          right: 0,
+          left: 0,
         }}
       >
         <PopUp
           buttonText="Đặt chỗ"
           onPress={(restaurantItem) => {
-            // Custom logic for onPress
             navigation.navigate("Order", { restaurant: restaurantItem });
           }}
         />
-      </View> */}
+      </View>
     </View>
+    </BottomSheetModalProvider>
   );
 }
 
@@ -237,9 +266,7 @@ const styles = StyleSheet.create({
   },
   popupContainer: {
     position: "absolute",
-    // bottom : 0 ,
     top: 80,
-    // backgroundColor: "red",
     backgroundColor: "white",
     borderTopColor: "#ccc",
     borderTopWidth: 1,
@@ -247,9 +274,7 @@ const styles = StyleSheet.create({
     margin: 10,
     width: "95%",
     height: 145,
-    // justifyContent: "center",
     borderRadius: 5,
-    // alignItems: "center",
     shadowRadius: 2,
     shadowOffset: {
       width: 0,
@@ -263,7 +288,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     zIndex: 999,
     position: "absolute",
-    // top: SIZES.xxLarge + 3,
     top: 15,
   },
   shareBtn: {
@@ -272,7 +296,6 @@ const styles = StyleSheet.create({
     zIndex: 999,
     right: 0,
     position: "absolute",
-    // top: SIZES.xxLarge,
     top: 15,
   },
 });

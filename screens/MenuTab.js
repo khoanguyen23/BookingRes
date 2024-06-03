@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+  Button,
   Image,
   ScrollView,
   StyleSheet,
@@ -14,8 +15,15 @@ import { TabbedHeaderList } from "react-native-sticky-parallax-header";
 import Colors from "../constants/Colors";
 import screenStyles from "../constants/screenStyles";
 
-const FirstRoute = ({ item }) => (
-  <View className="flex">
+
+
+ 
+
+const FirstRoute = ({ item,handlePresentModalPress }) => {
+
+  return (
+    
+    <View className="flex">
     <ScrollView>
       <View style={{ flex: 1, backgroundColor: "#FFFFFF", padding: 15 }}>
         <Text></Text>
@@ -23,6 +31,7 @@ const FirstRoute = ({ item }) => (
         <Text className="mt-2" style={styles.header}>
           I. Đặt chỗ PasGo : Tư vấn - Giữ chỗ
         </Text>
+        {/* <Button title="Open Modal" onPress={handlePresentModalPress} /> */}
         <View style={styles.contentContainer}>
           <Text className="mt-4 text-lg">
             - Quý khách vui lòng đặt chỗ trước ít nhất{" "}
@@ -50,13 +59,17 @@ const FirstRoute = ({ item }) => (
             - Giá menu chưa bao gồm VAT. Nhà hàng luôn thu VAT theo Quy định
             hiện hành
           </Text>
+         
         </View>
       </View>
       {/* <Menu /> */}
       <View className="bg-[#E0E0E0] w-full h-3"></View>
+
     </ScrollView>
   </View>
-);
+
+  )
+};
 
 const SecondRoute = ({ item }) => (
   <ScrollView>
@@ -125,21 +138,6 @@ const  MenuTab = ({ item }) => {
     { key: "third", title: "Ảnh" },
     { key: "four", title: "Thông tin" },
   ]);
-  const renderTabBar = (props) => (
-    <TabBar
-      {...props}
-      indicatorStyle={{
-        backgroundColor: "red",
-        width: TAB_MARGIN + 15, // Adjust the width as needed
-        marginHorizontal:
-          (layout.width / routes.length - (TAB_MARGIN + 15)) / 2,
-      }}
-      style={{ backgroundColor: "white", elevation: 0 }}
-      renderLabel={({ route, focused, color }) => (
-        <Text style={{ color: focused ? "red" : "black" }}>{route.title}</Text>
-      )}
-    />
-  );
 
   const sections = routes.map((route) => ({
     title: route.title,
@@ -148,14 +146,6 @@ const  MenuTab = ({ item }) => {
   }));
 
   return (
-    // <TabView
-    //   navigationState={{ index, routes }}
-    //   renderScene={(props) => renderScene({ ...props, item })}
-    //   // renderScene={renderScene}
-    //   onIndexChange={setIndex}
-    //   initialLayout={{ width: layout.width }}
-    //   renderTabBar={renderTabBar}
-    // />
     <TabbedHeaderList
       backgroundColor={Colors.white}
       titleStyle={screenStyles.text}

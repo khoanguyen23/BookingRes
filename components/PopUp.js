@@ -7,7 +7,7 @@ const PopUp = ({ buttonText, onPress }) => {
   const navigation = useNavigation();
   let item = params;
   return (
-    <View style={styles.popupContainer}>
+    <View style={{}} className="items-center">
       <TouchableOpacity
         style={styles.applyButton}
         onPress={() => {
@@ -25,16 +25,14 @@ export default PopUp;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: "center",
-    // alignItems: "center",
+
     backgroundColor: "#fff",
   },
   applyButton: {
     backgroundColor: "red",
-    width: "90%",
-    marginTop: 20,
-    padding: 17,
+    padding: 10,
     borderRadius: 5,
+    width: "90%"
   },
   applyButtonText: {
     textAlign: "center",
@@ -46,7 +44,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderTopColor: "#ccc",
     borderTopWidth: 1,
-    // width: "95%",
     height: 100,
     justifyContent: "center",
     alignItems: "center",
