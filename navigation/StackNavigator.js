@@ -33,6 +33,7 @@ import ChangePassword from "../screens/ChangePassword";
 import FilterScreen from "../screens/FilterScreen";
 import FavouriteScreen from "../screens/FavouriteScreen";
 import ListMenuRes from "../screens/ListMenuRes";
+import FoodDetail from "../screens/FoodDetail";
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -150,6 +151,19 @@ const StackNavigator = () => {
           options={{
             title: "Danh mục các sản phẩm",
             headerStyle: { backgroundColor: "#FFFFFF" },
+            headerTintColor: "#000000",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="FoodDetail"
+          component={FoodDetail}
+          options={{
+            title: "food details",
+            headerStyle: { backgroundColor: "transparent" },
             headerTintColor: "#000000",
             headerTitleAlign: "center",
             headerTitleStyle: {
