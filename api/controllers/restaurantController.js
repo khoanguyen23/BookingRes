@@ -53,7 +53,7 @@ module.exports = {
   },
   addSuggestion: async (req, res) => {
     const { restaurantId } = req.params;
-    const { title, items } = req.body;
+    const { title } = req.body;
 
     try {
       const restaurant = await Restaurant.findById(restaurantId);
@@ -61,7 +61,7 @@ module.exports = {
         return res.status(404).json({ message: "Nhà hàng không tồn tại" });
       }
 
-      restaurant.suggestions.push({ title, items });
+      restaurant.suggestions.push({ title, items: [] });
       const updatedRestaurant = await restaurant.save();
 
       res.status(200).json(updatedRestaurant);
@@ -71,7 +71,7 @@ module.exports = {
   },
   addComboOrMeal: async (req, res) => {
     const { restaurantId, suggestionTitle } = req.params;
-    const { image, title, description, originalPrice, discountedPrice, discountPercentage } = req.body;
+    const { image, title,subTitle, description,note, originalPrice, discountedPrice, discountPercentage, highLight } = req.body;
 
     try {
       const restaurant = await Restaurant.findById(restaurantId);
@@ -84,7 +84,7 @@ module.exports = {
         return res.status(404).json({ message: "Đề xuất không tồn tại" });
       }
 
-      suggestion.items.push({ image, title, description, originalPrice, discountedPrice, discountPercentage });
+      suggestion.items.push({ image, title,subTitle, description,note, originalPrice, discountedPrice, discountPercentage,highLight });
       const updatedRestaurant = await restaurant.save();
 
       res.status(200).json(updatedRestaurant);
