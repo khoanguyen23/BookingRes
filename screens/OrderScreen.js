@@ -108,6 +108,7 @@ const OrderScreen = ({ navigation }) => {
         date: selectedDate.toISOString(),
         selectedHour: selectedTime || closestTime,
         note: orderNote,
+        selectedItem: selectedItem,
       };
 
       const response = await fetch(`${API_URL}/api/orders`, {

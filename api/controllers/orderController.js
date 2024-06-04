@@ -6,7 +6,7 @@ const User = require("../models/user");
 module.exports = {
     placeOrder: async (req, res) => {
         try {
-            const { restaurantId, userId, adults, children, date, selectedHour, note } = req.body;
+            const { restaurantId, userId, adults, children, date, selectedHour, note, selectedItem } = req.body;
     
             const restaurant = await Restaurant.findById(restaurantId);
             const user = await User.findById(userId);
@@ -26,6 +26,10 @@ module.exports = {
                 status: "Chờ xác nhận",
                 services: "Đặt chỗ",
             });
+
+            if (selectedItem) {
+                order.orderItems.push({ selectedItem });
+            }
     
             await order.save();
     

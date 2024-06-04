@@ -1,5 +1,14 @@
 const mongoose = require("mongoose");
 
+
+const orderItemSchema = new mongoose.Schema({
+  selectedItem: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "suggestionItemSchema", 
+  },
+});
+
+
 const orderSchema = new mongoose.Schema({
   restaurant: {
     type: mongoose.Schema.Types.ObjectId,
@@ -40,6 +49,7 @@ const orderSchema = new mongoose.Schema({
     enum: ["Đặt chỗ", "Giao hàng", "Tự đến lấy"],
     default: "Đặt chỗ",
   },
+  orderItems: [orderItemSchema],
 });
 
 const Order = mongoose.model("Order", orderSchema);
