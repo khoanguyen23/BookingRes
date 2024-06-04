@@ -32,6 +32,7 @@ import BottomSheetTest from "../screens/BottomSheetTest";
 import ChangePassword from "../screens/ChangePassword";
 import FilterScreen from "../screens/FilterScreen";
 import FavouriteScreen from "../screens/FavouriteScreen";
+import ListMenuRes from "../screens/ListMenuRes";
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -137,6 +138,19 @@ const StackNavigator = () => {
             title: "Thông tin giao dịch",
             headerStyle: { backgroundColor: "red" },
             headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="ListMenuRes"
+          component={ListMenuRes}
+          options={{
+            title: "Danh mục các sản phẩm",
+            headerStyle: { backgroundColor: "#FFFFFF" },
+            headerTintColor: "#000000",
             headerTitleAlign: "center",
             headerTitleStyle: {
               fontWeight: "bold",

@@ -258,15 +258,27 @@ const OrderScreen = ({ navigation }) => {
             </>
           ) : (
             <View className="flex flex-row items-center justify-between mb-4">
-              <TouchableOpacity className="border border-orange-600 p-6 rounded w-full h-8 flex-row justify-between items-center">
+              <TouchableOpacity
+                className="border border-orange-600 p-6 rounded w-full h-8 flex-row justify-between items-center"
+                onPress={() => {
+                  navigation.navigate("ListMenuRes", {
+                    restaurant: restaurant,
+                  });
+                }}
+              >
                 <Text className="text-[#ED1C24] font-bold h-5 text-center">
                   Sản phẩm chọn kèm
                 </Text>
                 <Text className=" text-[#ED1C24] font-bold h-5 text-center ml-20">
                   Khám phá ngay
                 </Text>
-                <AntDesign name="right" size={24} color="red" width={20} height={20} />
-
+                <AntDesign
+                  name="right"
+                  size={24}
+                  color="red"
+                  width={20}
+                  height={20}
+                />
               </TouchableOpacity>
             </View>
           )}

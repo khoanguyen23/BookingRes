@@ -6,7 +6,6 @@ import { AntDesign, Entypo } from "@expo/vector-icons";
 const Menu = ({ items, title, onItemSelect }) => {
   const navigation = useNavigation();
 
-  console.log(items, "inmenu");
   return (
     <View className="flex p-6 bg-white">
       {/* <Text className="text-lg font-semibold">Đề xuất</Text> */}
