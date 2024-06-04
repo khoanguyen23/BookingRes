@@ -25,7 +25,7 @@ const DetailOrders = () => {
   const { order, users, restaurants } = route.params;
   console.log(order, "order");
   console.log(restaurants, "suggest");
-  const selectedItem = order.orderItems[0].selectedItem;
+  const selectedItem = order?.orderItems[0]?.selectedItem;
   const selectedRestaurant = restaurants[order.restaurant];
 
   const formatDate = (dateString) => {
