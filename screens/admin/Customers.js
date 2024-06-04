@@ -8,14 +8,14 @@ import { API_URL } from "@env";
 const Customers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  console.log(API_URL);
+  // console.log(API_URL);
 
   useEffect(() => {
     // Fetch all users when the component mounts
     fetchUsers();
   }, []);
 
-  console.log(users);
+  // console.log(users);
 
   const fetchUsers = async () => {
     try {
