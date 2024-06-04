@@ -70,7 +70,8 @@ module.exports = {
     }
   },
   addComboOrMeal: async (req, res) => {
-    const { restaurantId, suggestionTitle } = req.params;
+    const restaurantId = req.params.restaurantId;
+    const suggestionId = req.params.suggestionId;
     const { image, title,subTitle, description,note, originalPrice, discountedPrice, discountPercentage, highLight } = req.body;
 
     try {
@@ -79,15 +80,15 @@ module.exports = {
         return res.status(404).json({ message: "Nhà hàng không tồn tại" });
       }
 
-      const suggestion = restaurant.suggestions.find(s => s.title === suggestionTitle);
+      const suggestion = restaurant.suggestions.id(suggestionId);
       if (!suggestion) {
-        return res.status(404).json({ message: "Đề xuất không tồn tại" });
+        return res.status(404).json({ message: "Không tìm thấy đề xuất" });
       }
+      
+      suggestion.items.push({ image, title, subTitle, description, note, originalPrice, discountedPrice, discountPercentage, highLight });
+      await restaurant.save();
 
-      suggestion.items.push({ image, title,subTitle, description,note, originalPrice, discountedPrice, discountPercentage,highLight });
-      const updatedRestaurant = await restaurant.save();
-
-      res.status(200).json(updatedRestaurant);
+      res.status(200).json(restaurant);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
