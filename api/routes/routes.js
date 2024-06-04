@@ -57,6 +57,9 @@ router.get("/restaurants", RestaurantController.getAllRestaurants);
 router.get("/restaurants/:restaurantId", RestaurantController.getRestaurantsById);
 router.get("/restaurants/categories/:categoryId", RestaurantController.getRestaurantsByCategory);
 router.get("/restaurants/search/:keyword", RestaurantController.searchRestaurants);
+router.post("/restaurants/:restaurantId/suggestions", RestaurantController.addSuggestion); // New route for adding suggestions
+router.post("/restaurants/:restaurantId/suggestions/:suggestionTitle/items", RestaurantController.addComboOrMeal); // New route for adding combos/meals
+
 
 // Order Routes
 router.post("/api/orders", OrderController.placeOrder);

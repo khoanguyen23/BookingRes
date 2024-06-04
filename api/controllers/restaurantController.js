@@ -16,6 +16,7 @@ module.exports = {
       album,
       openingHours,
       bookingHours,
+      suggestions
     } = req.body;
 
     try {
@@ -41,10 +42,52 @@ module.exports = {
         album,
         openingHours,
         bookingHours,
+        suggestions 
       });
 
       const savedRestaurant = await newRestaurant.save();
       res.status(201).json(savedRestaurant);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  addSuggestion: async (req, res) => {
+    const { restaurantId } = req.params;
+    const { title, items } = req.body;
+
+    try {
+      const restaurant = await Restaurant.findById(restaurantId);
+      if (!restaurant) {
+        return res.status(404).json({ message: "Nhà hàng không tồn tại" });
+      }
+
+      restaurant.suggestions.push({ title, items });
+      const updatedRestaurant = await restaurant.save();
+
+      res.status(200).json(updatedRestaurant);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  addComboOrMeal: async (req, res) => {
+    const { restaurantId, suggestionTitle } = req.params;
+    const { image, title, description, originalPrice, discountedPrice, discountPercentage } = req.body;
+
+    try {
+      const restaurant = await Restaurant.findById(restaurantId);
+      if (!restaurant) {
+        return res.status(404).json({ message: "Nhà hàng không tồn tại" });
+      }
+
+      const suggestion = restaurant.suggestions.find(s => s.title === suggestionTitle);
+      if (!suggestion) {
+        return res.status(404).json({ message: "Đề xuất không tồn tại" });
+      }
+
+      suggestion.items.push({ image, title, description, originalPrice, discountedPrice, discountPercentage });
+      const updatedRestaurant = await restaurant.save();
+
+      res.status(200).json(updatedRestaurant);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
