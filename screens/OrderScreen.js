@@ -234,24 +234,42 @@ const OrderScreen = ({ navigation }) => {
         ></View>
         {/* SAN PHAM CHON KEM  */}
         <View style={{ margin: 15 }}>
-          <View className="flex flex-row items-center justify-between mb-4">
-            <Text className="font-medium text-lg py-2">Sản phẩm chọn kèm</Text>
-            <TouchableOpacity className="border border-orange-600 p-1 rounded w-24 h-8">
-              <Text className="text-center text-rose-500">Thay đổi</Text>
-            </TouchableOpacity>
-          </View>
-          {selectedItem && (
-          <View className="flex flex-row items-center">
-            <View className="w-[80%]">
-              <Text className="text-sm">
-                {selectedItem.title}
-              </Text>
+          {selectedItem ? (
+            <>
+              <View className="flex flex-row items-center justify-between mb-4">
+                <Text className="font-medium text-lg py-2">
+                  Sản phẩm chọn kèm
+                </Text>
+                <TouchableOpacity className="border border-orange-600 p-1 rounded w-24 h-8">
+                  <Text className="text-center text-rose-500">Thay đổi</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View className="flex flex-row items-center">
+                <View className="w-[80%]">
+                  <Text className="text-sm">{selectedItem.title}</Text>
+                </View>
+                <View className="w-[20%]">
+                  <Text className="text-base font-bold">
+                    {selectedItem.originalPrice}
+                  </Text>
+                </View>
+              </View>
+            </>
+          ) : (
+            <View className="flex flex-row items-center justify-between mb-4">
+              <TouchableOpacity className="border border-orange-600 p-6 rounded w-full h-8 flex-row justify-between items-center">
+                <Text className="text-[#ED1C24] font-bold h-5 text-center">
+                  Sản phẩm chọn kèm
+                </Text>
+                <Text className=" text-[#ED1C24] font-bold h-5 text-center ml-20">
+                  Khám phá ngay
+                </Text>
+                <AntDesign name="right" size={24} color="red" width={20} height={20} />
+
+              </TouchableOpacity>
             </View>
-            <View className="w-[20%]">
-              <Text className="text-base font-bold">{selectedItem.originalPrice}</Text>
-            </View>
-          </View>
-           )}
+          )}
         </View>
         <View
           style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
