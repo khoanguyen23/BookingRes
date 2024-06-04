@@ -23,7 +23,7 @@ import { UserType } from "../UserContext";
 
 const OrderScreen = ({ navigation }) => {
   const { params } = useRoute();
-  const { restaurant } = params;
+  const { restaurant, selectedItem } = params;
   const [inputState, setInputState] = useState({
     val1: 0,
   });
@@ -43,7 +43,6 @@ const OrderScreen = ({ navigation }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [nearestTime, setNearestTime] = useState("");
-
   const handleTimeChange = (newTime) => {
     setSelectedTime(newTime);
   };
@@ -228,6 +227,30 @@ const OrderScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           </View>
+        </View>
+        <View
+          style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
+        ></View>
+        {/* SAN PHAM CHON KEM  */}
+        <View style={{ margin: 15 }}>
+          <View className="flex flex-row items-center justify-between mb-4">
+            <Text className="font-medium text-lg py-2">Sản phẩm chọn kèm</Text>
+            <TouchableOpacity className="border border-orange-600 p-1 rounded w-24 h-8">
+              <Text className="text-center text-rose-500">Thay đổi</Text>
+            </TouchableOpacity>
+          </View>
+          {selectedItem && (
+          <View className="flex flex-row items-center">
+            <View className="w-[80%]">
+              <Text className="text-sm">
+                {selectedItem.title}
+              </Text>
+            </View>
+            <View className="w-[20%]">
+              <Text className="text-base font-bold">{selectedItem.originalPrice}</Text>
+            </View>
+          </View>
+           )}
         </View>
         <View
           style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}

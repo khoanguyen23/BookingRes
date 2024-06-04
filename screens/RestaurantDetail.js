@@ -38,7 +38,7 @@ import {
   BottomSheetModal,
   BottomSheetView,
   BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet';
+} from "@gorhom/bottom-sheet";
 import { Button } from "react-native";
 
 export default function RestaurantDetail() {
@@ -125,102 +125,103 @@ export default function RestaurantDetail() {
     }
   };
 
-    // ref
- const bottomSheetRef = React.useRef(null);
+  // ref
+  const bottomSheetRef = React.useRef(null);
 
- // variables
- const snapPoints = React.useMemo(() => ['25%', '50%'], []);
+  // variables
+  const snapPoints = React.useMemo(() => ["25%", "50%"], []);
 
- // callbacks
- const handlePresentModalPress = React.useCallback(() => {
-  bottomSheetRef.current?.present();
- }, []);
- const handleSheetChanges = React.useCallback((index) => {
-  console.log("handleSheetChanges", index);
-}, []);
-
+  // callbacks
+  const handlePresentModalPress = React.useCallback(() => {
+    bottomSheetRef.current?.present();
+  }, []);
+  const handleSheetChanges = React.useCallback((index) => {
+    console.log("handleSheetChanges", index);
+  }, []);
 
   return (
     <BottomSheetModalProvider>
-       
-        <BottomSheetModal
-          ref={bottomSheetRef}
-          index={1}
-          snapPoints={snapPoints}
-          onChange={handleSheetChanges}
-        >
-          <BottomSheetView style={styles.contentContainer}>
-            <Text>Awesome 🎉</Text>
-          </BottomSheetView>
-        </BottomSheetModal>
+      <BottomSheetModal
+        ref={bottomSheetRef}
+        index={1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+      >
+        <BottomSheetView style={styles.contentContainer}>
+          <Text>Awesome 🎉</Text>
+        </BottomSheetView>
+      </BottomSheetModal>
 
-
-    <View style={{ flex: 1 }}>
-      <View style={{ backgroundColor: "#ffffff" }}>
-        <NetworkImage
-          source={item.image}
-          height={SIZES.height / 5.5}
-          width={SIZES.width}
-          border={30}
-        />
-        <View style={styles.popupContainer}>
-          <Text className="text-center font-bold text-lg">{item.name}</Text>
-          <Text className="text-center text-gray-500">{item.address}</Text>
-          <View className="flex-column mt-2">
-            <View className="flex-row justify-between">
-              <View className="flex-row items-center">
-                <FontAwesome5 name="door-open" size={24} color="#A0C69D" />
-                <Text className="ml-2">Đang mở cửa</Text>
+      <View style={{ flex: 1 }}>
+        <View style={{ backgroundColor: "#ffffff" }}>
+          <NetworkImage
+            source={item.image}
+            height={SIZES.height / 5.5}
+            width={SIZES.width}
+            border={30}
+          />
+          <View style={styles.popupContainer}>
+            <Text className="text-center font-bold text-lg">{item.name}</Text>
+            <Text className="text-center text-gray-500">{item.address}</Text>
+            <View className="flex-column mt-2">
+              <View className="flex-row justify-between">
+                <View className="flex-row items-center">
+                  <FontAwesome5 name="door-open" size={24} color="#A0C69D" />
+                  <Text className="ml-2">Đang mở cửa</Text>
+                </View>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={styles.truncateText}
+                >
+                  Gọi món Việt, Buffet nướng hàn quốc
+                </Text>
               </View>
-              <Text
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                style={styles.truncateText}
-              >
-                Gọi món Việt, Buffet nướng hàn quốc
-              </Text>
-            </View>
-            <View className="flex-row justify-between mt-1">
-              <View className="flex-row items-center">
-                <AntDesign name="star" size={24} color="gold" />
-                <Text className="ml-4">{item.rating}</Text>
-              </View>
-              <View className="flex-row mr-16">
-                <Ionicons name="location-sharp" size={24} color="red" />
-                <Text className="">4.5 km</Text>
+              <View className="flex-row justify-between mt-1">
+                <View className="flex-row items-center">
+                  <AntDesign name="star" size={24} color="gold" />
+                  <Text className="ml-4">{item.rating}</Text>
+                </View>
+                <View className="flex-row mr-16">
+                  <Ionicons name="location-sharp" size={24} color="red" />
+                  <Text className="">4.5 km</Text>
+                </View>
               </View>
             </View>
           </View>
         </View>
-      </View>
-      <View
-        style={{
-          backgroundColor: "#ffffff",
-          marginTop: 80,
-          marginHorizontal: 8,
-          marginBottom: 10,
-        }}
-      ></View>
-
-      <View style={{ flex: 1 }}>
-        <MenuTab item={item} handlePresentModalPress={handlePresentModalPress}  />
-      </View>
-      <View
-        style={{
-          position: "absolute",
-          bottom: 5,
-          right: 0,
-          left: 0,
-        }}
-      >
-        <PopUp
-          buttonText="Đặt chỗ"
-          onPress={(restaurantItem) => {
-            navigation.navigate("Order", { restaurant: restaurantItem });
+        <View
+          style={{
+            backgroundColor: "#ffffff",
+            marginTop: 80,
+            marginHorizontal: 8,
+            marginBottom: 10,
           }}
-        />
+        ></View>
+
+        <View style={{ flex: 1 }}>
+          <MenuTab
+            item={item}
+            handlePresentModalPress={handlePresentModalPress}
+            
+          />
+        </View>
+        <View
+          style={{
+            position: "absolute",
+            bottom: 5,
+            right: 0,
+            left: 0,
+          }}
+        >
+          <PopUp
+            buttonText="Đặt chỗ"
+            onPress={() => {
+              navigation.navigate("Order", { restaurant: item }); // assuming `item` is the restaurant data
+            }}
+          />
+        </View>
       </View>
-    </View>
     </BottomSheetModalProvider>
   );
 }
