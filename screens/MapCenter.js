@@ -124,7 +124,7 @@ const MapCenter = () => {
         currentPosition.coords.longitude
       );
     } else {
-      console.error("Location permission not granted");
+      console.error("Quyền truy cập vị trí không được cấp");
     }
   }
 
