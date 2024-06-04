@@ -311,12 +311,201 @@ const DetailOrders = () => {
     // Handle the case where there are no suggestions or items
     return (
       <ScrollView style={styles.container}>
-        {/* Other parts of your component */}
-        <View style={{ margin: 15, height: 80 }}>
-          <Text className="py-4 text-lg font-medium">Món ăn</Text>
-          <Text>No food items available</Text>
+        {/* THONG TIN DON HANG  */}
+
+        <View style={{ margin: 15 }}>
+          <Text className="font-medium text-lg py-4">Đặt chỗ đến</Text>
+
+          <View className="border p-2 flex-row justify-between rounded-xl">
+            {restaurants[order.restaurant] && (
+              <Image
+                source={{
+                  uri: restaurants[order.restaurant].image,
+                }}
+                style={{
+                  width: 85,
+                  height: 85,
+                  borderRadius: 5,
+                  objectFit: "cover",
+                }}
+              />
+            )}
+            <View className="w-2/3">
+              <Text className="text-lg text-gray-950">
+                {restaurants[order.restaurant]?.name}
+              </Text>
+              <Text className="text-gray-500">
+                {restaurants[order.restaurant]?.address}
+              </Text>
+            </View>
+          </View>
+          <Text className="py-4 text-lg font-medium">Thông tin đơn hàng</Text>
+          <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
+            <View className="flex-row justify-between  items-center  w-4/12">
+              <FontAwesome5 name="user" size={24} color="black" />
+              <Text className="ml-0">Số người lớn </Text>
+            </View>
+            <Text className="w-8/12 ml-4">{order.adults}</Text>
+          </View>
+          <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
+            <View className="flex-row justify-between  items-center  w-4/12">
+              <MaterialIcons name="child-care" size={24} color="black" />
+
+              <Text className="mr-4">Số trẻ em : </Text>
+            </View>
+            <Text className="w-8/12 ml-4">{order.children}</Text>
+          </View>
+          <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
+            <View className="flex-row justify-between  items-center  w-4/12">
+              <AntDesign name="calendar" size={24} color="black" />
+
+              <Text className="mr-4">Ngày đến : </Text>
+            </View>
+            <Text className="w-8/12 ml-4">{formatDate(order.date)}</Text>
+          </View>
+          <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
+            <View className="flex-row justify-between  items-center  w-4/12">
+              <AntDesign name="clockcircleo" size={24} color="black" />
+
+              <Text className="mr-4">Giờ đến : </Text>
+            </View>
+            <Text className="w-8/12 ml-4">{order.selectedHour}</Text>
+          </View>
         </View>
-        {/* Other parts of your component */}
+        <View
+          style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
+        ></View>
+        {/* Tinh trang don hang  */}
+        <View
+          style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
+        ></View>
+        <View style={{ margin: 15, height: 80 }}>
+          <Text className="py-4 text-lg font-medium">Tình trạng đơn hàng</Text>
+          <View className="flex-row justify-between">
+            <Text className="text-lg">Order Status: {localOrderStatus}</Text>
+            <TouchableOpacity onPress={openModal}>
+              <Entypo name="pencil" size={24} color="green" />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View
+          style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
+        ></View>
+
+        {/* THONG TIN KHACH HANG  */}
+        <View style={{ margin: 15 }}>
+          <Text className="font-medium text-lg py-2">Thông tin khách hàng</Text>
+          <View className="flex-row p-5  items-center">
+            <View className="flex-row items-center w-2/4 justify-start">
+              <FontAwesome5 name="user-circle" size={24} color="black" />
+              <Text className="ml-4">Tên liên lạc</Text>
+            </View>
+            <Text className="w-2/4">{users[order.user]?.name}</Text>
+          </View>
+          <View className="flex-row p-5  items-center">
+            <View className="flex-row items-center w-2/4 justify-start">
+              <Feather name="phone" size={24} color="black" />
+
+              <Text className="ml-4">Số điện thoại</Text>
+            </View>
+            <Text className="w-2/4">{users[order.user]?.mobileNo}</Text>
+          </View>
+          <View className="flex-row p-5  items-center">
+            <View className="flex-row items-center w-2/4 justify-start">
+              <FontAwesome name="envelope" size={24} color="black" />
+              <Text className="ml-4">Email</Text>
+            </View>
+            <Text className="w-2/4">{users[order.user]?.email}</Text>
+          </View>
+        </View>
+        <View
+          style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
+        ></View>
+
+        {/* GHI CHU  */}
+        <View style={{ margin: 15, height: 80 }}>
+          <View className="flex-row p-5  items-center">
+            <View className="flex-row w-2/5 h-14 justify-around items-center ">
+              <Foundation name="clipboard-notes" size={24} color="black" />
+              <Text className="mr-14">Ghi chú</Text>
+            </View>
+            <View className="w-3/5 h-14">
+              <TextInput
+                placeholder={order.note}
+                className="ml-2 p-2 flex-1 rounded-xl border border-slate-200"
+                keyboardType="default"
+              />
+            </View>
+          </View>
+        </View>
+        <Modal visible={isModalVisible} transparent animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text className="text-xl font-bold p-4 text-center border-b-2 border-b-zinc-300">
+                Edit Order Status
+              </Text>
+              {statusOptions.map((option, index) => (
+                <CheckBox
+                  key={index}
+                  title={option}
+                  textStyle={{
+                    fontSize: 20,
+                    fontWeight: "600",
+                    color: "black",
+                  }}
+                  containerStyle={{
+                    backgroundColor: "#fff",
+                    borderColor: "#fff",
+                  }}
+                  checkedIcon={
+                    <Icon
+                      name="check-box"
+                      type="material"
+                      color="#34DBA1"
+                      size={30}
+                      containerStyle={{ marginRight: 10 }}
+                    />
+                  }
+                  uncheckedIcon={
+                    <Icon
+                      name="check-box-outline-blank"
+                      type="material"
+                      color="gray"
+                      size={30}
+                      containerStyle={{ marginRight: 10 }}
+                    />
+                  }
+                  checked={selectedStatus === option}
+                  onPress={() => setSelectedStatus(option)}
+                />
+              ))}
+              <TouchableOpacity
+                onPress={updateStatus}
+                style={{
+                  backgroundColor: "#22BFED",
+                  padding: 10,
+                  borderRadius: 5,
+                  alignItems: "center",
+                  marginTop: 10,
+                }}
+              >
+                <Text style={{ color: "#ffffff", fontSize: 17 }}>Update</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={closeModal}
+                style={{
+                  marginTop: 10,
+                  backgroundColor: "#DB4C40",
+                  padding: 10,
+                  borderRadius: 5,
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ color: "#ffffff", fontSize: 17 }}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     );
   }
