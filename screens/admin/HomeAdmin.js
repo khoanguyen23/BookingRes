@@ -8,7 +8,9 @@ const HomeAdmin = () => {
 
   return (
     <View style={{ flex: 1, padding: 10 }}>
+      
       <View className="flex-row justify-between">
+      <TouchableOpacity onPress={()=> {navigation.navigate('Restaurants')}}>
         <View
           style={{
             width: 120,
@@ -43,6 +45,7 @@ const HomeAdmin = () => {
           </View>
           <Text className="mt-2 font-semibold">Restaurants</Text>
         </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={()=> {navigation.navigate('Customers')}}>
           <View
             style={{
