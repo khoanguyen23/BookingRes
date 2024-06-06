@@ -14,6 +14,8 @@ import AccountScreen from "../screens/Account";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeAdmin from "../screens/admin/HomeAdmin";
+import Restaurants from "../screens/admin/Restaurants";
+
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
 import Customers from "../screens/admin/Customers";
 import { useNavigation } from "@react-navigation/native";
@@ -64,6 +66,16 @@ const AdminTabNavigator = () => {
         <Drawer.Screen
           name="Dashboard"
           component={HomeAdmin}
+          options={{
+            headerTitleAlign: "center",
+            drawerIcon: ({ color, size }) => (
+              <AntDesign name="home" size={size} color={color} />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Restaurants"
+          component={Restaurants}
           options={{
             headerTitleAlign: "center",
             drawerIcon: ({ color, size }) => (
