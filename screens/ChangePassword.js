@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { View, TextInput, TouchableOpacity, Alert } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { API_URL } from "@env";
 import { UserType } from "../UserContext";
@@ -32,13 +32,10 @@ const ChangePassword = ({ navigation }) => {
 
   const handleChangePassword = async () => {
     try {
-      // Kiểm tra xác nhận mật khẩu
       if (newPassword !== confirmPassword) {
         Alert.alert("Error", "New Password and Confirm Password do not match");
         return;
       }
-
-      // Gọi API đổi mật khẩu bằng fetch
       const response = await fetch(`${API_URL}/change-password/${user._id}`, {
         method: "PUT",
         headers: {
@@ -50,18 +47,13 @@ const ChangePassword = ({ navigation }) => {
           confirmPassword,
         }),
       });
-
-      // Kiểm tra trạng thái của phản hồi từ server
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
-      // Xử lý phản hồi từ API ở đây
       Alert.alert("Success", "Password changed successfully");
       navigation.goBack();
     } catch (error) {
       console.error("API Error:", error.message);
-      // Xử lý lỗi từ API ở đây
       Alert.alert("Error", "Failed to change password. Please try again.");
     }
   };
@@ -105,7 +97,6 @@ const ChangePassword = ({ navigation }) => {
             />
           </TouchableOpacity>
         </View>
-
         {/* Input New Password */}
         <View
           style={{
@@ -135,7 +126,6 @@ const ChangePassword = ({ navigation }) => {
             />
           </TouchableOpacity>
         </View>
-
         {/* Input Confirm Password */}
         <View
           style={{
@@ -165,9 +155,6 @@ const ChangePassword = ({ navigation }) => {
             />
           </TouchableOpacity>
         </View>
-
-        {/* Button to Change Password */}
-        
       </View>
       <PopUp buttonText="Cập nhật" onPress={handleChangePassword} />
     </View>

@@ -1,9 +1,6 @@
 import { View, TextInput, TouchableOpacity } from "react-native";
 import React from "react";
 import HomeScreen from "../screens/Home";
-import Map from "../screens/Map";
-import Map2d from "../screens/Map2d";
-import MapDemo from "../screens/MapDemo";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Entypo } from "@expo/vector-icons";
@@ -18,6 +15,7 @@ import MapCenter from "../screens/MapCenter";
 import ResultScreen from "../screens/ResultScreen";
 import RestaurantDetail from "../screens/RestaurantDetail";
 import ChatScreen from "../screens/ChatScreen";
+import FeatureScreen from "../screens/FeatureScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -26,7 +24,7 @@ const Stack = createNativeStackNavigator();
 const HomeStack = () => (
   <Stack.Navigator>
     <Stack.Screen
-      name="Home"
+      name="HomeScreen"
       component={HomeScreen}
       options={{ headerShown: false }}
     />
@@ -44,10 +42,22 @@ const HomeStack = () => (
       }}
     />
     <Stack.Screen
-      name="Restaurant"
+      name="RestaurantDetail"
       component={RestaurantDetail}
       options={{
-        // title: "",
+        headerShown: true,
+        headerTitleAlign: "center",
+        headerTintColor: "white",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+        headerTransparent: true,
+      }}
+    />
+    <Stack.Screen
+      name="FeatureScreen"
+      component={FeatureScreen}
+      options={{
         headerShown: true,
         headerTitleAlign: "center",
         headerTintColor: "white",
@@ -63,7 +73,7 @@ const HomeStack = () => (
 const AccountStack = () => (
   <Stack.Navigator>
     <Stack.Screen
-      name="Account"
+      name="AccountScreen"
       component={AccountScreen}
       options={{
         title: "Tài khoản",
@@ -74,17 +84,9 @@ const AccountStack = () => (
         headerShown: true,
         tabBarIcon: ({ focused }) =>
           focused ? (
-            <MaterialCommunityIcons
-              name="account"
-              size={24}
-              color="#D71537"
-            />
+            <MaterialCommunityIcons name="account" size={24} color="#D71537" />
           ) : (
-            <MaterialCommunityIcons
-              name="account"
-              size={24}
-              color="#7E7E80"
-            />
+            <MaterialCommunityIcons name="account" size={24} color="#7E7E80" />
           ),
       }}
     />
@@ -109,7 +111,7 @@ const BottomTabNavigator = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Home"
+        name="HomeTab"
         component={HomeStack}
         options={{
           tabBarLabel: "Home",
@@ -147,7 +149,6 @@ const BottomTabNavigator = () => {
                   justifyContent: "space-around",
                   padding: 10,
                   flexDirection: "row",
-                  // flex: 1,
                 }}
               >
                 <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -175,7 +176,6 @@ const BottomTabNavigator = () => {
                     paddingLeft: 40,
                     marginLeft: 30,
                   }}
-                  // className="text-red-500"
                   keyboardType="default"
                 />
               </View>
@@ -199,7 +199,7 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Account"
+        name="AccountTab"
         component={AccountStack}
         options={{
           title: "Tài khoản",

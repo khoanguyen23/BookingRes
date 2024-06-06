@@ -1,5 +1,51 @@
 const mongoose = require('mongoose');
 
+
+const suggestionItemSchema = new mongoose.Schema({
+  image: {
+    type: String,
+    required: true
+  },
+  title: {
+    type: String,
+    required: true
+  },
+  subTitle : {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  note : {
+    type: [String],
+    required: true,
+  },
+  originalPrice: {
+    type: Number,
+    required: true
+  },
+  discountedPrice: {
+    type: Number,
+  },
+  discountPercentage: {
+    type: Number,
+  },
+  highLight : {
+    type: String,
+    required: true
+  }
+});
+
+const suggestionSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  items: [suggestionItemSchema]
+});
+
 const restaurantSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -7,14 +53,10 @@ const restaurantSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    maxlength: 200
   },
   image: {
-    type: String // Assuming you store the image URL
+    type: String 
   },
-
-  // longitude: kinh độ, latitude: vĩ độ
-  //  "coordinates": [106.7184612, 10.8275828]
   location: {
     type: {
       type: String,
@@ -40,7 +82,18 @@ const restaurantSchema = new mongoose.Schema({
     ref: 'Category',
     required: true
   },
-  menu: [
+  promotions : {
+    type : String, 
+    default: 'Đặt bàn giữ chỗ'
+  },
+  imagePrice: [
+    {
+      image: {
+        type: String 
+      }
+    }
+  ],
+  album: [
     {
       image: {
         type: String 
@@ -54,6 +107,7 @@ const restaurantSchema = new mongoose.Schema({
     type: String,
     required: true,
   }],
+  suggestions: [suggestionSchema]
 });
 
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);

@@ -13,8 +13,38 @@ const ChatController = require("../controllers/chatController");
 // routes.js admin
 const AdminController = require("../controllers/adminController");
 
-// User Routes
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User management
+ */
+
+/**
+ * @swagger
+ * /register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User registered successfully
+ *       400:
+ *         description: Bad request
+ */
 router.post("/register", UserController.register);
+
 router.get("/verify/:token", UserController.verifyEmail);
 router.post("/login", UserController.login);
 router.put("/address/:userId", UserController.updateAddress);
@@ -27,6 +57,9 @@ router.get("/restaurants", RestaurantController.getAllRestaurants);
 router.get("/restaurants/:restaurantId", RestaurantController.getRestaurantsById);
 router.get("/restaurants/categories/:categoryId", RestaurantController.getRestaurantsByCategory);
 router.get("/restaurants/search/:keyword", RestaurantController.searchRestaurants);
+router.post("/restaurants/:restaurantId/suggestions", RestaurantController.addSuggestion); // New route for adding suggestions
+router.post("/restaurants/:restaurantId/suggestions/:suggestionId/items", RestaurantController.addComboOrMeal);
+
 
 // Order Routes
 router.post("/api/orders", OrderController.placeOrder);
@@ -37,9 +70,19 @@ router.put('/api/orders/:orderId', OrderController.updateOrder);
 // Feature Routes
 router.get("/api/featured", FeatureController.getFeatured);
 router.post("/api/featured", FeatureController.createFeatured);
+router.put("/api/featured/:id", FeatureController.updateFeatured);
 
 // Category Routes
 router.post("/categories", CategoryController.createCategory);
+/**
+ * @swagger
+ * /categories:
+ *   get:
+ *     summary: Get all categories
+ *     responses:
+ *       200:
+ *         description: A list of categories
+ */
 router.get("/categories", CategoryController.getAllCategories);
 
 // Map 

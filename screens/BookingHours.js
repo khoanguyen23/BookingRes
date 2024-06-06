@@ -2,7 +2,6 @@ import {
   View,
   Text,
   ScrollView,
-  StyleSheet,
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
@@ -13,34 +12,27 @@ import { useNavigation } from "@react-navigation/native";
 
 const BookingHours = () => {
   const navigation = useNavigation();
-  
+  const route = useRoute();
+  const { restaurant, selectedDate, bookingHours, closestTime, onTimeChange } =
+    route.params;
+  const [selectedTime, setSelectedTime] = useState(closestTime);
 
   const handleGoBack = () => {
     navigation.goBack();
   };
-  const route = useRoute();
-  const { restaurant, selectedDate, bookingHours, closestTime,onTimeChange } = route.params;
 
-  
-  // Function to check if a time is in the past
   const isPastTime = (bookingTime) => {
-    const [hour, minute] = bookingTime.split(':');
+    const [hour, minute] = bookingTime.split(":");
     const bookingTotalMinutes = parseInt(hour) * 60 + parseInt(minute);
-    const currentTotalMinutes = new Date().getHours() * 60 + new Date().getMinutes();
+    const currentTotalMinutes =
+      new Date().getHours() * 60 + new Date().getMinutes();
     return bookingTotalMinutes <= currentTotalMinutes;
   };
-  
-  const [selectedTime, setSelectedTime] = useState(closestTime);
 
   const handleApply = () => {
-    // Call the callback function to update the selected time in the Order screen
     onTimeChange(selectedTime);
-    // Navigate back to the Order screen
     navigation.goBack();
   };
-  
-
-  // Now you can use the restaurant data in your component
 
   return (
     <View style={{ backgroundColor: "#FAFAFA" }}>
@@ -77,8 +69,12 @@ const BookingHours = () => {
             {restaurant.bookingHours.map((hour, index) => (
               <TouchableOpacity
                 style={{
-                //   backgroundColor: "#ffffff",
-                backgroundColor: selectedTime === hour ? "red" : isPastTime(hour) ? "#D0D0D0" : "#ffffff",
+                  backgroundColor:
+                    selectedTime === hour
+                      ? "red"
+                      : isPastTime(hour)
+                      ? "#D0D0D0"
+                      : "#ffffff",
                   padding: 10,
                   width: "20%",
                   alignItems: "center",
@@ -93,12 +89,15 @@ const BookingHours = () => {
                 }}
                 onPress={() => setSelectedTime(hour)}
                 disabled={isPastTime(hour)}
-                // disabled={isPastTime(hour) && closestTime !== hour} 
               >
                 <Text
                   style={{
-                    // color: "#666666",
-                    color: selectedTime === hour ? "#ffffff" : isPastTime(hour) ? "#666666" : "#666666",
+                    color:
+                      selectedTime === hour
+                        ? "#ffffff"
+                        : isPastTime(hour)
+                        ? "#666666"
+                        : "#666666",
                     fontWeight: "bold",
                     fontSize: 17,
                   }}
@@ -112,28 +111,10 @@ const BookingHours = () => {
       </View>
       <View style={{ height: 500, backgroundColor: "#FAFAFA" }}>
         <View style={{ height: 300 }}></View>
-        <PopUp buttonText="Áp dụng" onPress={handleApply}/>
+        <PopUp buttonText="Áp dụng" onPress={handleApply} />
       </View>
     </View>
   );
 };
 
 export default BookingHours;
-
-const styles = StyleSheet.create({
-  //   container: {
-  //     flexDirection: "row",
-  //     justifyContent: "space-around",
-  //     alignItems: "center",
-  //     marginBottom: 10,
-  //   },
-  //   hourContainer: {
-  //     padding: 10,
-  //     borderWidth: 1,
-  //     borderColor: "#ccc",
-  //     borderRadius: 5,
-  //   },
-  //   hourText: {
-  //     fontSize: 16,
-  //   },
-});

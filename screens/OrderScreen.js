@@ -3,12 +3,11 @@ import {
   Text,
   StyleSheet,
   Image,
-  Button,
   TouchableOpacity,
   ScrollView,
   TextInput,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { InputNumber } from "@nutui/nutui-react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -24,32 +23,29 @@ import { UserType } from "../UserContext";
 
 const OrderScreen = ({ navigation }) => {
   const { params } = useRoute();
-  const { restaurant } = params;
+  const { restaurant, selectedItem } = params;
   const [inputState, setInputState] = useState({
     val1: 0,
   });
   const [inputState1, setInputState1] = useState({
     val2: 0,
   });
-
-  console.log(restaurant.bookingHours);
-
   const [selectedTime, setSelectedTime] = useState("");
   const [orderNote, setOrderNote] = useState("");
-
-  const handleTimeChange = (newTime) => {
-    setSelectedTime(newTime);
-  };
-
   const currentTime = new Date();
   const currentHours = currentTime.getHours();
   const currentMinutes = currentTime.getMinutes();
   const currentTotalMinutes = currentHours * 60 + currentMinutes;
-
   const bookingHours = restaurant.bookingHours;
-
   let closestTime = null;
   let closestTimeDiff = Infinity;
+  const { user } = useContext(UserType);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [nearestTime, setNearestTime] = useState("");
+  const handleTimeChange = (newTime) => {
+    setSelectedTime(newTime);
+  };
 
   bookingHours.forEach((bookingTime) => {
     const [hour, minute] = bookingTime.split(":");
@@ -65,21 +61,6 @@ const OrderScreen = ({ navigation }) => {
     }
   });
 
-  console.log("Giờ gần nhất là:", closestTime);
-
-  const { user } = useContext(UserType);
-
-  // console.log(user);
-  console.log("fe");
-
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
-
-  const [nearestTime, setNearestTime] = useState("");
-
-  console.log("User:", user);
-  console.log("Restaurant:", restaurant);
-
   const handleAdultsChange = (value) => {
     console.log("Adults value changed:", value);
     setInputState((prevState) => ({
@@ -87,7 +68,7 @@ const OrderScreen = ({ navigation }) => {
       val1: value,
     }));
   };
-  
+
   const handleChildrenChange = (value) => {
     console.log("Children value changed:", value);
     setInputState1((prevState) => ({
@@ -115,12 +96,10 @@ const OrderScreen = ({ navigation }) => {
         console.error("Selected date is null");
         return;
       }
-
       if (!user || !restaurant) {
         console.error("User or restaurant not found");
         return;
       }
-
       const orderData = {
         userId: user._id,
         restaurantId: restaurant._id,
@@ -129,6 +108,7 @@ const OrderScreen = ({ navigation }) => {
         date: selectedDate.toISOString(),
         selectedHour: selectedTime || closestTime,
         note: orderNote,
+        selectedItem: selectedItem,
       };
 
       const response = await fetch(`${API_URL}/api/orders`, {
@@ -140,15 +120,12 @@ const OrderScreen = ({ navigation }) => {
       });
 
       if (response.ok) {
-        // Order submitted successfully
         const responseData = await response.json();
         console.log("Order submitted successfully:", responseData);
-        // Navigate to the next screen or perform other actions
         navigation.navigate("OrderSuccess");
       } else {
-        // Log detailed error information
         console.error("Failed to submit order. Status code:", response.status);
-        const errorResponse = await response.json(); // Attempt to parse error response
+        const errorResponse = await response.json();
         console.error("Error response:", errorResponse);
       }
     } catch (error) {
@@ -162,8 +139,6 @@ const OrderScreen = ({ navigation }) => {
         {/* THONG TIN DON HANG  */}
         <View style={{ margin: 15 }}>
           <Text className="font-medium text-lg py-4">Đặt chỗ đến</Text>
-          {/* <Text>{user?.name}</Text> */}
-
           <View className="border p-2 flex-row justify-between rounded-xl">
             <Image
               source={{ uri: restaurant.image }}
@@ -183,7 +158,6 @@ const OrderScreen = ({ navigation }) => {
             <FontAwesome5 name="user" size={24} color="black" />
             <View className="flex-row justify-around  items-center  w-9/12">
               <Text className="ml-0">Số người lớn :</Text>
-              {/* <InputNumber modelValue={inputState.val1} min="0" /> */}
               <InputNumber
                 modelValue={inputState.val1}
                 min="0"
@@ -195,7 +169,6 @@ const OrderScreen = ({ navigation }) => {
             <MaterialIcons name="child-care" size={24} color="black" />
             <View className="flex-row justify-around  items-center  w-9/12">
               <Text className="mr-4">Số trẻ em :</Text>
-              {/* <InputNumber modelValue={inputState1.val2} min="0" /> */}
               <InputNumber
                 modelValue={inputState1.val2}
                 min="0"
@@ -236,7 +209,6 @@ const OrderScreen = ({ navigation }) => {
               <TouchableOpacity
                 className="flex-row items-center"
                 onPress={() => {
-                  // Truyền dữ liệu của nhà hàng (restaurant) qua trang Order
                   navigation.navigate("BookingHours", {
                     restaurant,
                     selectedDate,
@@ -260,6 +232,60 @@ const OrderScreen = ({ navigation }) => {
         <View
           style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
         ></View>
+        {/* SAN PHAM CHON KEM  */}
+        <View style={{ margin: 15 }}>
+          {selectedItem ? (
+            <>
+              <View className="flex flex-row items-center justify-between mb-4">
+                <Text className="font-medium text-lg py-2">
+                  Sản phẩm chọn kèm
+                </Text>
+                <TouchableOpacity className="border border-orange-600 p-1 rounded w-24 h-8">
+                  <Text className="text-center text-rose-500">Thay đổi</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View className="flex flex-row items-center">
+                <View className="w-[80%]">
+                  <Text className="text-sm">{selectedItem.title}</Text>
+                </View>
+                <View className="w-[20%]">
+                  <Text className="text-base font-bold">
+                    {selectedItem.originalPrice}
+                  </Text>
+                </View>
+              </View>
+            </>
+          ) : (
+            <View className="flex flex-row items-center justify-between mb-4">
+              <TouchableOpacity
+                className="border border-orange-600 p-6 rounded w-full h-8 flex-row justify-between items-center"
+                onPress={() => {
+                  navigation.navigate("ListMenuRes", {
+                    restaurant: restaurant,
+                  });
+                }}
+              >
+                <Text className="text-[#ED1C24] font-bold h-5 text-center">
+                  Sản phẩm chọn kèm
+                </Text>
+                <Text className=" text-[#ED1C24] font-bold h-5 text-center ml-20">
+                  Khám phá ngay
+                </Text>
+                <AntDesign
+                  name="right"
+                  size={24}
+                  color="red"
+                  width={20}
+                  height={20}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+        <View
+          style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
+        ></View>
         {/* THONG TIN KHACH HANG  */}
         <View style={{ margin: 15 }}>
           <Text className="font-medium text-lg py-2">Thông tin khách hàng</Text>
@@ -273,7 +299,6 @@ const OrderScreen = ({ navigation }) => {
           <View className="flex-row p-5  items-center">
             <View className="flex-row items-center w-2/4 justify-start">
               <Feather name="phone" size={24} color="black" />
-
               <Text className="ml-4">Số điện thoại</Text>
             </View>
             <Text className="w-2/4">{user?.mobileNo}</Text>
@@ -289,7 +314,6 @@ const OrderScreen = ({ navigation }) => {
         <View
           style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
         ></View>
-
         {/* GHI CHU  */}
         <View style={{ margin: 15, height: 80 }}>
           <View className="flex-row p-5  items-center">
@@ -328,11 +352,7 @@ export default OrderScreen;
 
 const styles = StyleSheet.create({
   container: {
-    // margin: 15,
-    // backgroundColor: "#FFFFFF",
-    // height: 1000,
     flex: 1,
-
     backgroundColor: "#fff",
   },
   applyButton: {

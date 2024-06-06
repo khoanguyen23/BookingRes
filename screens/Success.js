@@ -6,7 +6,7 @@ import LottieView from "lottie-react-native";
 const Success = () => {
   const navigation = useNavigation();
   const navigateToHome = () => {
-    navigation.navigate("Home");
+    navigation.navigate("HomeScreen");
   };
   return (
     <View style={styles.container}>

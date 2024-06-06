@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -12,9 +6,7 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import HomeScreen from "../screens/Home";
 import RestaurantDetail from "../screens/RestaurantDetail";
-import Map from "../screens/Map";
 import Account from "../screens/Account";
-import MapPrepare from "../screens/MapPrepare";
 import EditAccount from "../screens/EditAccount";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Entypo } from "@expo/vector-icons";
@@ -27,12 +19,11 @@ import SearchScreen from "../screens/SearchScreen";
 import * as Icon from "react-native-feather";
 import OrderScreen from "../screens/OrderScreen";
 import AccountScreen from "../screens/Account";
-import { FontAwesome } from '@expo/vector-icons'; 
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-
+import { FontAwesome } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ResultScreen from "../screens/ResultScreen";
-import BottomTabNavigator from './bottomTabNavigator';
-import AdminTabNavigator from './adminTabNavigator';
+import BottomTabNavigator from "./bottomTabNavigator";
+import AdminTabNavigator from "./adminTabNavigator";
 import BookingHours from "../screens/BookingHours";
 import Success from "../screens/Success";
 import Privacy from "../screens/Privacy";
@@ -41,14 +32,12 @@ import BottomSheetTest from "../screens/BottomSheetTest";
 import ChangePassword from "../screens/ChangePassword";
 import FilterScreen from "../screens/FilterScreen";
 import FavouriteScreen from "../screens/FavouriteScreen";
-
-
+import ListMenuRes from "../screens/ListMenuRes";
+import FoodDetail from "../screens/FoodDetail";
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
-
-  
 
   return (
     <NavigationContainer>
@@ -63,7 +52,7 @@ const StackNavigator = () => {
           component={LoginScreen}
           options={{ headerShown: false }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Register"
           component={RegisterScreen}
           options={{ headerShown: false }}
@@ -93,12 +82,12 @@ const StackNavigator = () => {
         />
         <Stack.Screen
           name="Favourite"
-          component={BottomSheetTest}
-          // component={FavouriteScreen}
+          // component={BottomSheetTest}
+          component={FavouriteScreen}
           options={{
             title: "Yêu thích",
             headerTitleAlign: "center",
-            // headerStyle: { backgroundColor: "white" },
+            headerStyle: { backgroundColor: "red" },
             headerTintColor: "#fff",
             headerTitleStyle: {
               fontWeight: "bold",
@@ -118,20 +107,6 @@ const StackNavigator = () => {
             // },
           }}
         />
-         {/* <Stack.Screen
-          name="Restaurant"
-          component={RestaurantDetail}
-          options={{ 
-            // title: "",
-            headerShown: true, 
-            headerTitleAlign : 'center',
-            headerTintColor: "white",
-            headerTitleStyle: {
-              fontWeight: "bold",
-            },
-            headerTransparent: true,
-          }}
-        /> */}
         <Stack.Screen
           name="City"
           component={CityScreen}
@@ -157,20 +132,6 @@ const StackNavigator = () => {
             },
           }}
         />
-        {/* <Stack.Screen
-          name="Result"
-          component={ResultScreen}
-          options={{
-            title: "",
-            headerStyle: { backgroundColor: "red" },
-            headerTintColor: "#fff",
-            headerTitleAlign: "center",
-            headerTitleStyle: {
-              
-              fontWeight: "bold"
-            },
-          }}
-        /> */}
         <Stack.Screen
           name="Order"
           component={OrderScreen}
@@ -178,6 +139,32 @@ const StackNavigator = () => {
             title: "Thông tin giao dịch",
             headerStyle: { backgroundColor: "red" },
             headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="ListMenuRes"
+          component={ListMenuRes}
+          options={{
+            title: "Danh mục các sản phẩm",
+            headerStyle: { backgroundColor: "#FFFFFF" },
+            headerTintColor: "#000000",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="FoodDetail"
+          component={FoodDetail}
+          options={{
+            title: "food details",
+            headerStyle: { backgroundColor: "transparent" },
+            headerTintColor: "#000000",
             headerTitleAlign: "center",
             headerTitleStyle: {
               fontWeight: "bold",
@@ -237,29 +224,12 @@ const StackNavigator = () => {
               fontWeight: "bold",
             },
             headerShown: true,
-            // headerLeft: () => (
-            //   <AntDesign
-            //     name="close"
-            //     size={27}
-            //     color="white"
-            //     style={{ marginLeft: 5 }}
-            //     onPress={() => {
-            //       navigation.goBack();
-            //     }}
-            //   />
-            // ),
           }}
         />
-  
+
         <Stack.Screen
           name="Admin"
           component={AdminTabNavigator}
-          options={{ headerShown: false }}
-        />
-       
-        <Stack.Screen
-          name="Map"
-          component={Map}
           options={{ headerShown: false }}
         />
         <Stack.Screen

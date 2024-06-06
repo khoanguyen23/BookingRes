@@ -21,6 +21,7 @@ import Customers from "../screens/admin/Customers";
 import { useNavigation } from "@react-navigation/native";
 import Orders from "../screens/admin/Orders";
 import DetailOrders from "../screens/admin/DetailOrders";
+import ResAdmin from "../screens/admin/ResAdmin";
 
 const Drawer = createDrawerNavigator();
 
@@ -85,6 +86,43 @@ const AdminTabNavigator = () => {
         <Drawer.Screen
           name="Customers"
           component={Customers}
+          options={{
+            headerTitleAlign: "center",
+            drawerIcon: ({ color, size }) => (
+              <AntDesign name="home" size={size} color={color} />
+            ),
+            headerLeft: ({ onPress, tintColor }) => (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("Dashboard");
+                }}
+              >
+                <View
+                  style={{
+                    marginLeft: 5,
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Ionicons name="chevron-back" size={35} color="#037AFF" />
+                  <Text
+                    style={{
+                      color: "#58A7FF",
+                      fontSize: 17,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Home
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ),
+            // Thêm dòng này nếu bạn muốn hiển thị tiêu đề "Home"
+          }}
+        />
+        <Drawer.Screen
+          name="RestaurantAdmin"
+          component={ResAdmin}
           options={{
             headerTitleAlign: "center",
             drawerIcon: ({ color, size }) => (

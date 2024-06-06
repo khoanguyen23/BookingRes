@@ -23,6 +23,11 @@ import { API_URL } from "@env";
 const DetailOrders = () => {
   const route = useRoute();
   const { order, users, restaurants } = route.params;
+  console.log(order, "order");
+  console.log(restaurants, "suggest");
+  const selectedItem = order?.orderItems[0]?.selectedItem;
+
+  const selectedRestaurant = restaurants[order.restaurant];
 
   const formatDate = (dateString) => {
     const options = {
@@ -33,7 +38,6 @@ const DetailOrders = () => {
 
     return new Date(dateString).toLocaleDateString("vi-VN", options);
   };
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(order.status);
   const [localOrderStatus, setLocalOrderStatus] = useState(order.status);
@@ -48,27 +52,61 @@ const DetailOrders = () => {
 
   const updateStatus = () => {
     fetch(`${API_URL}/api/orders/${order._id}`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ status: selectedStatus }),
     })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Order updated successfully', data);
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Order updated successfully", data);
         closeModal();
 
         setLocalOrderStatus(selectedStatus);
-      
       })
-      .catch(error => {
-        console.error('Error updating order:', error);
-
+      .catch((error) => {
+        console.error("Error updating order:", error);
       });
   };
-  const statusOptions = ["Chờ xác nhận", "Đã tiếp nhận", "Hoàn thành", "Đã hủy"];
+  const statusOptions = [
+    "Chờ xác nhận",
+    "Đã tiếp nhận",
+    "Hoàn thành",
+    "Đã hủy",
+  ];
+  let foodItemsSection = null;
 
+  if (
+    selectedRestaurant &&
+    selectedRestaurant.suggestions &&
+    selectedRestaurant.suggestions.length > 0 &&
+    selectedRestaurant.suggestions[0].items &&
+    selectedRestaurant.suggestions[0].items.length > 0
+  ) {
+    foodItemsSection = (
+      <>
+        <View
+          style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
+        ></View>
+        {selectedRestaurant.suggestions[0].items.map((item, index) => (
+          <View style={{ margin: 15 }} key={index}>
+            <Text className="py-4 text-lg font-medium">Món ăn</Text>
+            <View className="flex flex-row items-center">
+              <View className="w-[80%]">
+                <Text className="text-sm">{item.title}</Text>
+              </View>
+              <View className="w-[20%]">
+                <Text className="text-base font-bold">
+                  {item.originalPrice}
+                </Text>
+              </View>
+            </View>
+          </View>
+        ))}
+      </>
+    );
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -149,6 +187,11 @@ const DetailOrders = () => {
           </TouchableOpacity>
         </View>
       </View>
+      {/* MON AN DI KEM  */}
+      <View
+        style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
+      ></View>
+      {foodItemsSection}
 
       <View
         style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
@@ -203,13 +246,22 @@ const DetailOrders = () => {
       <Modal visible={isModalVisible} transparent animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text className="text-xl font-bold p-4 text-center border-b-2 border-b-zinc-300">Edit Order Status</Text>
+            <Text className="text-xl font-bold p-4 text-center border-b-2 border-b-zinc-300">
+              Edit Order Status
+            </Text>
             {statusOptions.map((option, index) => (
               <CheckBox
                 key={index}
                 title={option}
-                textStyle={{ fontSize: 20, fontWeight: "600", color: "black" }}
-                containerStyle={{ backgroundColor: "#fff", borderColor: "#fff" }}
+                textStyle={{
+                  fontSize: 20,
+                  fontWeight: "600",
+                  color: "black",
+                }}
+                containerStyle={{
+                  backgroundColor: "#fff",
+                  borderColor: "#fff",
+                }}
                 checkedIcon={
                   <Icon
                     name="check-box"
@@ -232,11 +284,29 @@ const DetailOrders = () => {
                 onPress={() => setSelectedStatus(option)}
               />
             ))}
-            <TouchableOpacity onPress={updateStatus} style={{ backgroundColor: '#22BFED', padding: 10, borderRadius: 5, alignItems: 'center', marginTop: 10 }}>
-              <Text style={{ color: '#ffffff', fontSize:17 }}>Update</Text>
+            <TouchableOpacity
+              onPress={updateStatus}
+              style={{
+                backgroundColor: "#22BFED",
+                padding: 10,
+                borderRadius: 5,
+                alignItems: "center",
+                marginTop: 10,
+              }}
+            >
+              <Text style={{ color: "#ffffff", fontSize: 17 }}>Update</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={closeModal} style={{ marginTop: 10 , backgroundColor:"#DB4C40", padding :10 , borderRadius:5 , alignItems:"center" }}>
-              <Text style={{ color: '#ffffff', fontSize:17 }}>Cancel</Text>
+            <TouchableOpacity
+              onPress={closeModal}
+              style={{
+                marginTop: 10,
+                backgroundColor: "#DB4C40",
+                padding: 10,
+                borderRadius: 5,
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ color: "#ffffff", fontSize: 17 }}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -249,9 +319,6 @@ export default DetailOrders;
 
 const styles = StyleSheet.create({
   container: {
-    // margin: 15,
-    // backgroundColor: "#FFFFFF",
-    // height: 1000,
     flex: 1,
 
     backgroundColor: "#fff",
@@ -280,14 +347,15 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
     width: 300,
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
   },
 });
+

@@ -1,31 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
-import axios from "axios"; // Import axios
 import { useNavigation } from "@react-navigation/native";
-import { API_URL } from "@env";
 
-export default function Categories() {
+export default function Categories({categories}) {
   const navigation = useNavigation();
-  const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
-
-  useEffect(() => {
-    // Function to fetch categories
-    const fetchCategories = async () => {
-      try {
-        // Replace 'http://your-api-url' with your actual API endpoint
-        const response = await axios.get(`${process.env.API_URL}/categories`);
-        // const response = await axios.get("http://192.168.1.7:8000/categories");
-        const fetchedCategories = response.data;
-        setCategories(fetchedCategories);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    // Call the function to fetch categories when the component mounts
-    fetchCategories();
-  }, []); // Empty dependency array to ensure the effect runs only once when the component mounts
 
   return (
     <View className="mt-4">

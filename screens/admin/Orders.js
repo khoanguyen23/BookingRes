@@ -36,17 +36,12 @@ const Orders = () => {
               [restaurantId]: restaurantData.restaurant,
             }));
           } else {
-            console.error(
-              "khong lay duoc id nha hang",
-              restaurantData.message
-            );
+            console.error('khong lay duoc id nha hang', restaurantData.message);
           }
         });
 
         const userPromises = data.orders.map(async (order) => {
-          const userResponse = await fetch(
-            `${API_URL}/address/${order.user}`
-          );
+          const userResponse = await fetch(`${API_URL}/address/${order.user}`);
           const userData = await userResponse.json();
 
           if (userResponse.ok) {
@@ -55,7 +50,7 @@ const Orders = () => {
               [order.user]: userData, // Store user data using user ID as key
             }));
           } else {
-            console.error("Error fetching user:", userData.message);
+            console.error('Error fetching user:', userData.message);
           }
         });
 
@@ -70,15 +65,13 @@ const Orders = () => {
     }
   };
 
-   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
       fetchOrders();
     });
 
     return unsubscribe;
   }, [navigation]);
-
-
 
   const formatDate = (dateString) => {
     const options = {
@@ -97,16 +90,18 @@ const Orders = () => {
     const searchTerm = searchPhrase.toLowerCase();
 
     return (
-      orderStatus.includes(searchTerm) || restaurantName.includes(searchTerm) || customerName.includes(searchTerm)
+      orderStatus.includes(searchTerm) ||
+      restaurantName.includes(searchTerm) ||
+      customerName.includes(searchTerm)
     );
   });
-  console.log("Cac don hang", orders)
+  console.log("Cac don hang", orders);
 
   const navigation = useNavigation();
-const route = useRoute();
+  const route = useRoute();
 
   return (
-    <ScrollView style={{flex : 1,backgroundColor :"#F8F8F9" }}>
+    <ScrollView style={{ flex: 1, backgroundColor: "#F8F8F9" }}>
       <SearchBar
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
@@ -184,7 +179,13 @@ const route = useRoute();
                   borderRadius: 3,
                   textAlign: "center",
                 }}
-                onPress={() => navigation.navigate("DetailOrders", { order, users, restaurants })}
+                onPress={() =>
+                  navigation.navigate("DetailOrders", {
+                    order,
+                    users,
+                    restaurants,
+                  })
+                }
               >
                 Chi tiết
               </Text>

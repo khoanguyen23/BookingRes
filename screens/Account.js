@@ -25,13 +25,10 @@ const AccountScreen = () => {
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
 
-  console.log(API_URL);
-
   const handleAvatarPress = async () => {
     try {
       const permissionResult =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
-
       if (!permissionResult.granted) {
         Alert.alert(
           "Permission Denied",
@@ -39,19 +36,15 @@ const AccountScreen = () => {
         );
         return;
       }
-
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
         quality: 1,
       });
-
       if (result.assets.length > 0) {
         const selectedImage = result.assets[0];
         const imageUri = selectedImage.uri;
-
-        // Lưu đường dẫn ảnh vào state và gọi hàm fetchAddressData
         setAddress({ ...address, avatar: imageUri });
         await updateAddressData({ ...address, avatar: imageUri });
       }
@@ -59,23 +52,17 @@ const AccountScreen = () => {
       console.error("Error picking image:", error);
     }
   };
-
   const updateAddressData = async (updatedData) => {
     try {
       const token = await AsyncStorage.getItem("authToken");
       const decodedToken = jwt_decode(token);
       const userId = decodedToken.userId;
-
-      // Gọi API để cập nhật dữ liệu địa chỉ với đường dẫn ảnh mới
       await axios.put(`${API_URL}/address/${userId}`, updatedData);
-
-      // Gọi lại fetchAddressData để cập nhật state với dữ liệu mới
       await fetchAddressData(userId);
     } catch (error) {
       console.log("Error updating address data", error);
     }
   };
-
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("authToken");
@@ -85,7 +72,6 @@ const AccountScreen = () => {
       Alert.alert("Logout Error", "An error occurred while logging out.");
     }
   };
-
   const fetchAddress = async () => {
     try {
       const token = await AsyncStorage.getItem("authToken");
@@ -97,7 +83,6 @@ const AccountScreen = () => {
       console.log("Error fetching address", error);
     }
   };
-
   useEffect(() => {
     fetchAddress();
   }, []);
@@ -170,7 +155,6 @@ const AccountScreen = () => {
               style={{
                 height: 210,
                 backgroundColor: COLORS.lightWhite,
-                // margin: 10,
                 borderRadius: 12,
               }}
             >
@@ -230,7 +214,6 @@ const AccountScreen = () => {
               style={{
                 flexDirection: "row",
                 marginHorizontal: 20,
-
                 justifyContent: "space-between",
                 alignItems: "center",
               }}
@@ -263,7 +246,7 @@ const AccountScreen = () => {
                 title={"Mời bạn bè"}
                 icon={"adduser"}
                 onPress={() => {
-                  navigation.navigate("Favourite");
+                  navigation.navigate("BottomSheet");
                 }}
               />
               <ProfileTile
@@ -306,7 +289,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   logoutButton: {
-    backgroundColor: "#FEF2F2", // Use your desired color
+    backgroundColor: "#FEF2F2",
     padding: 15,
     borderRadius: 8,
     width: "60%",
@@ -332,7 +315,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginHorizontal: 20,
-    // marginTop: 60,
     margin: 20,
   },
 });

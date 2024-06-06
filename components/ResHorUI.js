@@ -20,7 +20,7 @@ const RestaurantUI = ({ restaurantData}) => {
       {restaurantData.map((restaurant) => (
         <TouchableOpacity
           key={restaurant._id} // Assuming each restaurant has a unique ID
-          onPress={() => navigation.navigate('Restaurant', { ...restaurant })}
+          onPress={() => navigation.navigate('RestaurantDetail', { ...restaurant })}
           
         >
           <View className="m-2 mt-2 p-2 flex-row justify-between rounded-xl">

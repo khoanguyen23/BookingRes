@@ -11,9 +11,12 @@ module.exports = {
       address,
       rating,
       type,
-      menu,
+      promotions,
+      imagePrice,
+      album,
       openingHours,
       bookingHours,
+      suggestions
     } = req.body;
 
     try {
@@ -34,13 +37,58 @@ module.exports = {
         address,
         rating,
         type,
-        menu,
+        promotions,
+        imagePrice,
+        album,
         openingHours,
         bookingHours,
+        suggestions 
       });
 
       const savedRestaurant = await newRestaurant.save();
       res.status(201).json(savedRestaurant);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  addSuggestion: async (req, res) => {
+    const { restaurantId } = req.params;
+    const { title } = req.body;
+
+    try {
+      const restaurant = await Restaurant.findById(restaurantId);
+      if (!restaurant) {
+        return res.status(404).json({ message: "Nhà hàng không tồn tại" });
+      }
+
+      restaurant.suggestions.push({ title, items: [] });
+      const updatedRestaurant = await restaurant.save();
+
+      res.status(200).json(updatedRestaurant);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  addComboOrMeal: async (req, res) => {
+    const restaurantId = req.params.restaurantId;
+    const suggestionId = req.params.suggestionId;
+    const { image, title,subTitle, description,note, originalPrice, discountedPrice, discountPercentage, highLight } = req.body;
+
+    try {
+      const restaurant = await Restaurant.findById(restaurantId);
+      if (!restaurant) {
+        return res.status(404).json({ message: "Nhà hàng không tồn tại" });
+      }
+
+      const suggestion = restaurant.suggestions.id(suggestionId);
+      if (!suggestion) {
+        return res.status(404).json({ message: "Không tìm thấy đề xuất" });
+      }
+      
+      suggestion.items.push({ image, title, subTitle, description, note, originalPrice, discountedPrice, discountPercentage, highLight });
+      await restaurant.save();
+
+      res.status(200).json(restaurant);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -86,13 +134,10 @@ module.exports = {
         return res.status(404).json({ message: "Khong tim thay nha hang" });
       }
 
-      res
-        .status(200)
-        .json({ message: "thanh cong", restaurant });
+      res.status(200).json({ message: "thanh cong", restaurant });
     } catch (error) {
       console.error("loi khong lay duoc data nha hang", error);
       res.status(500).json({ message: "loi server" });
     }
   },
- 
 };
