@@ -36,7 +36,7 @@ const Orders = () => {
               [restaurantId]: restaurantData.restaurant,
             }));
           } else {
-            console.error('khong lay duoc id nha hang', restaurantData.message);
+            console.error("khong lay duoc id nha hang", restaurantData.message);
           }
         });
 
@@ -50,7 +50,7 @@ const Orders = () => {
               [order.user]: userData, // Store user data using user ID as key
             }));
           } else {
-            console.error('Error fetching user:', userData.message);
+            console.error("Error fetching user:", userData.message);
           }
         });
 
@@ -95,7 +95,7 @@ const Orders = () => {
       customerName.includes(searchTerm)
     );
   });
-  console.log("Cac don hang", orders);
+  // console.log("Cac don hang", orders);
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -117,6 +117,8 @@ const Orders = () => {
               borderColor: "#DEDEDE",
               borderRadius: 5,
               marginTop: 5,
+              marginRight: 5,
+              marginLeft: 5,
             }}
           >
             <View
@@ -166,6 +168,7 @@ const Orders = () => {
                   {/* Thời gian đến : {formatDate(order.date)} {order.selectedHour} */}
                   {users[order.user]?.name}
                 </Text>
+                <Text className="text-sm mt-2 text-orange-800 font-bold">{order.note}</Text>
               </View>
             </View>
             <View className="flex-row justify-between mt-2">

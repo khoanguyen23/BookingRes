@@ -23,10 +23,10 @@ import { API_URL } from "@env";
 const DetailOrders = () => {
   const route = useRoute();
   const { order, users, restaurants } = route.params;
-  console.log(order, "order");
-  console.log(restaurants, "suggest");
+  console.log(order, "order details")
+  // console.log(order, "order");
+  // console.log(restaurants, "suggest");
   const selectedItem = order?.orderItems[0]?.selectedItem;
-
   const selectedRestaurant = restaurants[order.restaurant];
 
   const formatDate = (dateString) => {
@@ -41,6 +41,8 @@ const DetailOrders = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(order.status);
   const [localOrderStatus, setLocalOrderStatus] = useState(order.status);
+
+  // console.log(localOrderStatus)
 
   const openModal = () => {
     setIsModalVisible(true);
@@ -62,7 +64,6 @@ const DetailOrders = () => {
       .then((data) => {
         console.log("Order updated successfully", data);
         closeModal();
-
         setLocalOrderStatus(selectedStatus);
       })
       .catch((error) => {
@@ -181,7 +182,7 @@ const DetailOrders = () => {
       <View style={{ margin: 15, height: 80 }}>
         <Text className="py-4 text-lg font-medium">Tình trạng đơn hàng</Text>
         <View className="flex-row justify-between">
-          <Text className="text-lg">Order Status: {localOrderStatus}</Text>
+          <Text className="text-lg">Order Status: {order.status}</Text>
           <TouchableOpacity onPress={openModal}>
             <Entypo name="pencil" size={24} color="green" />
           </TouchableOpacity>
@@ -358,4 +359,3 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-
