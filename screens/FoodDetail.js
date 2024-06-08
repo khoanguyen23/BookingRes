@@ -29,12 +29,13 @@ import SectionList from "react-native-tabs-section-list";
 const { width } = Dimensions.get("window");
 const IMG_HEIGHT = 250;
 
-const FoodDetail = () => {
+const FoodDetail = ({route}) => {
   const listRef = useRef();
   const navigation = useNavigation();
   const scrollRef = useAnimatedRef();
   const scrollOffset = useScrollViewOffset(scrollRef);
   const translateY = useSharedValue(0);
+  const { item, restaurant } = route.params;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -141,7 +142,7 @@ const FoodDetail = () => {
       >
         <Animated.Image
           source={{
-            uri: "https://pasgo.vn/Upload/anh-chi-tiet/slide-isushi-1-normal-2281058760960.webp",
+            uri: item.image
           }}
           style={[styles.image, imageAnimatedStyle]}
           resizeMode="cover"
@@ -151,25 +152,31 @@ const FoodDetail = () => {
           <View className="p-4">
             <View className="">
               <Text className="text-xl font-bold">
-                <Text className="text-base text-[#E84C3F]">Độc quyền</Text> Suất
-                Buffet Trưa T2-T6 - D’Maris Lotte Mart Quận 7
+                <Text className="text-base text-[#E84C3F]">Độc quyền  </Text>
+               {item.title}
               </Text>
               <Text className="text-base">
-                Gồm: Cá hồi xông khói, Pasta, Steak, Hải sản, Sushi, Sashimi,
-                Salad, Bakery
+              {item.subTitle}
               </Text>
-              <Text className="font-bold mt-2">
-                <Text className="line-through text-[#ccc] font-normal">
-                  476.000đ
-                </Text>
-                /428.000đ<Text className="text-[#E84C3F]">-10%</Text>
-              </Text>
+              {item.originalPrice !== item.discountedPrice ? (
+                    <Text className="font-bold mt-2">
+                      <Text className="line-through text-[#ccc] font-normal">
+                        {item.originalPrice}đ
+                      </Text>
+                      /{item.discountedPrice}đ
+                      <Text className="text-[#E84C3F]">
+                        -{item.discountPercentage}%
+                      </Text>
+                    </Text>
+                  ) : (
+                    <Text className="font-bold mt-2">{item.originalPrice}đ</Text>
+                  )}
               <Text className="text-[#ED1C24] text-base mt-2">
-                Menu 200 món Hàn, Nhật, Trung, Việt, Âu
+              {item.highLight}
               </Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Text className="text-base text-[#337ab7] underline mt-2">
-                  D’Maris - Lotte Mart Quận 7 - 10435.39 km
+                  {restaurant.name}
                 </Text>
               </TouchableOpacity>
             </View>

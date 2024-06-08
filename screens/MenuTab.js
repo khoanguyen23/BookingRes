@@ -80,6 +80,7 @@ const FirstRoute = ({ item, handlePresentModalPress}) => {
                   items={suggestion.items}
                   title={suggestion.title}
                   onItemSelect={handleItemSelect}
+                  restaurant={item}
                 />
               )
           )

@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 
-const Menu = ({ items, title, onItemSelect }) => {
+const Menu = ({ items, title, onItemSelect,restaurant }) => {
   const navigation = useNavigation();
 
   return (
@@ -13,7 +13,7 @@ const Menu = ({ items, title, onItemSelect }) => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {items.map((item, index) => (
           <View key={index}>
-            <TouchableOpacity onPress={()=> navigation.navigate("FoodDetail")}>
+            <TouchableOpacity onPress={() => navigation.navigate("FoodDetail", { item, restaurant })}>
               <View className="flex flex-row pb-4 border-b-[1px] border-b-[#B7B7B7] w-[100%] mt-2 mr-4">
                 <View className="mr-2">
                   <Image
