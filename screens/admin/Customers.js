@@ -91,6 +91,19 @@ const Customers = () => {
                 source={{ uri: user?.avatar || AVATAR_DEFAULT }}
               />
               <View style={styles.userInfo}>
+                <View
+                  className={`rounded-lg w-14 h-5 ${
+                    user.admin ? "bg-[#FADCDE]" : "bg-[#CCEEDD]"
+                  } `}
+                >
+                  <Text
+                    className={`text-center ${
+                      user.admin ? "text-[#E7515A]" : "text-[#00AB55]"
+                    } `}
+                  >
+                    {user.admin ? "admin" : "user"}
+                  </Text>
+                </View>
                 <Text style={styles.userName}>{user.name}</Text>
                 <Text style={styles.userMobile}>{user.mobileNo}</Text>
               </View>
