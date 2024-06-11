@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, TextInput, Alert, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  Alert,
+  StyleSheet,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { Avatar, Button, Overlay } from "@rneui/themed";
 import axios from "axios";
@@ -8,7 +15,11 @@ const Customers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
-  const [newUser, setNewUser] = useState({ name: "", mobileNo: "", avatar: "" });
+  const [newUser, setNewUser] = useState({
+    name: "",
+    mobileNo: "",
+    avatar: "",
+  });
 
   useEffect(() => {
     fetchUsers();
@@ -62,8 +73,8 @@ const Customers = () => {
   };
 
   const AVATAR_DEFAULT =
-    "https://scontent.fsgn2-11.fna.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-7&_nc_sid=2b6aad&_nc_ohc=FaPLa6I4CdUAX_MgB9o&_nc_ht=scontent.fsgn2-11.fna&oh=00_AfAr1sfq0gLcMllCAwN9pe8MpGIn1g5bXcJBi0YhiZMz-g&oe=65BB4078";
-
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png";
+  console.log(users);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -77,7 +88,7 @@ const Customers = () => {
               <Avatar
                 size={60}
                 rounded
-                source={{ uri: user.avatar || AVATAR_DEFAULT }}
+                source={{ uri: user?.avatar || AVATAR_DEFAULT }}
               />
               <View style={styles.userInfo}>
                 <Text style={styles.userName}>{user.name}</Text>
@@ -106,7 +117,10 @@ const Customers = () => {
           </View>
         ))}
       </View>
-      <Overlay isVisible={isVisible} onBackdropPress={() => setIsVisible(false)}>
+      <Overlay
+        isVisible={isVisible}
+        onBackdropPress={() => setIsVisible(false)}
+      >
         <View style={styles.overlay}>
           <Text style={styles.overlayTitle}>Add New User</Text>
           <TextInput
