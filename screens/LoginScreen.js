@@ -75,7 +75,7 @@ const LoginPage = ({ navigation }) => {
         Alert.alert("Lỗi", "Hãy kiểm tra lại thông tin");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      // console.error("Error during login:", error);
       Alert.alert("Lỗi", "Hãy kiểm tra lại thông tin");
     } finally {
       setLoader(false);
