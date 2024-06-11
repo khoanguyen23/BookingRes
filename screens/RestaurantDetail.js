@@ -9,29 +9,21 @@ import {
   Dimensions,
   Alert,
 } from "react-native";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import * as Icon from "react-native-feather";
-import { themeColors } from "../theme";
+
 import MenuTab from "./MenuTab";
 import NetworkImage from "../components/NetworkImage";
-import { COLORS, SIZES } from "../constants/theme";
+import {  SIZES } from "../constants/theme";
 import PopUp from "../components/PopUp";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import Animated, {
-  SlideInDown,
-  interpolate,
+import  {
   useAnimatedRef,
-  useAnimatedStyle,
-  useScrollViewOffset,
 } from "react-native-reanimated";
 import Colors from "../constants/Colors";
-import { defaultStyles } from "../constants/Styles";
 import { UserType } from "../UserContext";
-const { width } = Dimensions.get("window");
-const IMG_HEIGHT = 150;
 import axios from "axios";
 import { API_URL } from "@env";
 import {
@@ -39,28 +31,25 @@ import {
   BottomSheetView,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
-import { Button } from "react-native";
 
 export default function RestaurantDetail() {
-  // const { name } = route.params;
   const { params } = useRoute();
   const navigation = useNavigation();
   const item = params;
   const { name, _id } = item;
   const scrollRef = useAnimatedRef();
-  const { user } = useContext(UserType);
+  const { user, updateUser } = useContext(UserType);
+
   const [isFavorite, setIsFavorite] = useState(false);
   const restaurantId = item._id;
-  const userId = user._id;
-  // console.log(restaurantId, "restaurant");
-  // console.log(
-  //   user, "itemj"
-  // )
+  const userId = user?._id;
+
   if (!item || !_id) {
     console.error("Item or _id is undefined in RestaurantDetail");
     return <Text>Error: Item not found</Text>;
   }
-  useEffect(() => {
+
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
         <Text
@@ -89,33 +78,37 @@ export default function RestaurantDetail() {
         </View>
       ),
     });
-  }, []);
+  }, [isFavorite]);
 
   useEffect(() => {
-    // Update isFavorite state when user.favoriteRestaurants or restaurantId changes
-    setIsFavorite(user.favoriteRestaurants.includes(restaurantId));
-  }, [user.favoriteRestaurants, restaurantId]);
+    const checkFavoriteStatus = async () => {
+      if (user && user.favoriteRestaurants) {
+        setIsFavorite(user.favoriteRestaurants.includes(restaurantId));
+      }
+    };
+
+    checkFavoriteStatus();
+  }, [user, restaurantId]);
 
   const handleFavoritePress = async () => {
     try {
-      console.log("userId:", userId);
-      console.log("restaurantId:", restaurantId);
-
-      // Add to favorites
       const response = await axios.post(`${API_URL}/addToFavorites`, {
         userId,
         restaurantId,
       });
 
-      console.log("Add to favorites response:", response);
-
       if (response.status === 200) {
-        // Check if the restaurant is already in favorites
         if (response.data.message === "Restaurant already in favorites") {
-          // Display an alert
           Alert.alert("Thông báo", "Nhà hàng đã có trong danh sách yêu thích");
         } else {
           setIsFavorite(true);
+          updateUser((prevUser) => ({
+            ...prevUser,
+            favoriteRestaurants: [
+              ...prevUser.favoriteRestaurants,
+              restaurantId,
+            ],
+          }));
         }
       } else {
         console.warn("Error adding to favorites");
@@ -125,20 +118,15 @@ export default function RestaurantDetail() {
     }
   };
 
-  // ref
   const bottomSheetRef = React.useRef(null);
-
-  // variables
   const snapPoints = React.useMemo(() => ["25%", "50%"], []);
 
-  // callbacks
   const handlePresentModalPress = React.useCallback(() => {
     bottomSheetRef.current?.present();
   }, []);
   const handleSheetChanges = React.useCallback((index) => {
     console.log("handleSheetChanges", index);
   }, []);
-
   return (
     <BottomSheetModalProvider>
       <BottomSheetModal
@@ -203,7 +191,6 @@ export default function RestaurantDetail() {
           <MenuTab
             item={item}
             handlePresentModalPress={handlePresentModalPress}
-            
           />
         </View>
         <View
