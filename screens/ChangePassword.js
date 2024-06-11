@@ -1,34 +1,19 @@
 import React, { useContext, useState } from "react";
-import { View, TextInput, TouchableOpacity, Alert } from "react-native";
+import { View, TouchableOpacity, Alert } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { API_URL } from "@env";
 import { UserType } from "../UserContext";
 import PopUp from "../components/PopUp";
+import { TextInput } from "react-native-paper";
 
 const ChangePassword = ({ navigation }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [obscureTextOld, setObscureTextOld] = useState(true);
-  const [obscureTextNew, setObscureTextNew] = useState(true);
-  const [obscureTextConfirm, setObscureTextConfirm] = useState(true);
   const { user } = useContext(UserType);
-
-  const handleToggleObscureText = (field) => {
-    switch (field) {
-      case "oldPassword":
-        setObscureTextOld(!obscureTextOld);
-        break;
-      case "newPassword":
-        setObscureTextNew(!obscureTextNew);
-        break;
-      case "confirmPassword":
-        setObscureTextConfirm(!obscureTextConfirm);
-        break;
-      default:
-        break;
-    }
-  };
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChangePassword = async () => {
     try {
@@ -59,101 +44,64 @@ const ChangePassword = ({ navigation }) => {
   };
 
   return (
-    <View
-      style={{
-        backgroundColor: "#ffffff",
-        padding: 10,
-        flex: 1,
-        justifyContent: "space-between",
-      }}
-    >
+    <View className="flex bg-white p-4 mt-2 justify-between h-full">
       <View>
         {/* Input Old Password */}
-        <View
-          style={{
-            borderWidth: 2,
-            borderColor: "#E4E4E4",
-            height: 60,
-            borderRadius: 5,
-            flexDirection: "row",
-            paddingHorizontal: 15,
-            alignItems: "center",
-            marginBottom: 20,
-            justifyContent: "space-between",
-          }}
-        >
+        <View className="mb-5">
           <TextInput
-            secureTextEntry={obscureTextOld}
-            placeholder="Old Password"
             value={oldPassword}
             onChangeText={(text) => setOldPassword(text)}
+            mode="outlined"
+            label="Mật khẩu cũ"
+            secureTextEntry={!showOldPassword}
+            right={
+              <TextInput.Icon
+                icon={showOldPassword ? "eye-off" : "eye"}
+                onPress={() => setShowOldPassword(!showOldPassword)}
+              />
+            }
+            outlineColor="#D9D9D9"
+            activeOutlineColor="#D73724"
+            style={{ height: 60 }}
           />
-          <TouchableOpacity
-            onPress={() => handleToggleObscureText("oldPassword")}
-          >
-            <MaterialCommunityIcons
-              name={obscureTextOld ? "eye-off-outline" : "eye-outline"}
-              size={18}
-            />
-          </TouchableOpacity>
         </View>
         {/* Input New Password */}
-        <View
-          style={{
-            borderWidth: 2,
-            borderColor: "#E4E4E4",
-            height: 60,
-            borderRadius: 5,
-            flexDirection: "row",
-            paddingHorizontal: 15,
-            alignItems: "center",
-            marginBottom: 20,
-            justifyContent: "space-between",
-          }}
-        >
+        <View className="mb-5">
           <TextInput
-            secureTextEntry={obscureTextNew}
-            placeholder="New Password"
             value={newPassword}
             onChangeText={(text) => setNewPassword(text)}
+            mode="outlined"
+            label="Mật khẩu mới"
+            secureTextEntry={!showNewPassword}
+            right={
+              <TextInput.Icon
+                icon={showNewPassword ? "eye-off" : "eye"}
+                onPress={() => setShowNewPassword(!showNewPassword)}
+              />
+            }
+            outlineColor="#D9D9D9"
+            activeOutlineColor="#D73724"
+            style={{ height: 60 }}
           />
-          <TouchableOpacity
-            onPress={() => handleToggleObscureText("newPassword")}
-          >
-            <MaterialCommunityIcons
-              name={obscureTextNew ? "eye-off-outline" : "eye-outline"}
-              size={18}
-            />
-          </TouchableOpacity>
         </View>
         {/* Input Confirm Password */}
-        <View
-          style={{
-            borderWidth: 2,
-            borderColor: "#E4E4E4",
-            height: 60,
-            borderRadius: 5,
-            flexDirection: "row",
-            paddingHorizontal: 15,
-            alignItems: "center",
-            marginBottom: 20,
-            justifyContent: "space-between",
-          }}
-        >
+        <View className="mb-5">
           <TextInput
-            secureTextEntry={obscureTextConfirm}
-            placeholder="Confirm Password"
             value={confirmPassword}
             onChangeText={(text) => setConfirmPassword(text)}
+            mode="outlined"
+            label="Nhập lại mật khẩu"
+            secureTextEntry={!showConfirmPassword}
+            right={
+              <TextInput.Icon
+                icon={showConfirmPassword ? "eye-off" : "eye"}
+                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+              />
+            }
+            outlineColor="#D9D9D9"
+            activeOutlineColor="#D73724"
+            style={{ height: 60 }}
           />
-          <TouchableOpacity
-            onPress={() => handleToggleObscureText("confirmPassword")}
-          >
-            <MaterialCommunityIcons
-              name={obscureTextConfirm ? "eye-off-outline" : "eye-outline"}
-              size={18}
-            />
-          </TouchableOpacity>
         </View>
       </View>
       <PopUp buttonText="Cập nhật" onPress={handleChangePassword} />
