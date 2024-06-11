@@ -5,7 +5,8 @@ import { StyleSheet } from "react-native";
 import StackNavigator from "./navigation/StackNavigator";
 import { useFonts } from "expo-font";
 import { UserProvider } from "./UserContext";
-
+// import { PaperProvider } from "react-native-paper";
+import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -20,22 +21,33 @@ export default function App() {
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
-
     }
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     return;
   }
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: 'blue',
+      primaryContainer:'red',
+      secondary: 'yellow',
+      placeholder: 'yellow',
+      outlineVariant:"red"
+    },
+  };
+
   return (
     <>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <UserProvider>
-          <StackNavigator />
+        <PaperProvider theme={theme}>
+            <StackNavigator />
+          </PaperProvider>
         </UserProvider>
       </GestureHandlerRootView>
     </>
   );
 }
-
-
