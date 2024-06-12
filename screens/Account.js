@@ -18,12 +18,15 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import NetworkImage from "../components/NetworkImage";
 import ProfileTile from "../components/ProfileTile";
-import { API_URL } from "@env";
+import { API_URL, CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET } from "@env";
+
 
 const AccountScreen = () => {
   const navigation = useNavigation();
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
+
+  console.log(process.env.CLOUDINARY_UPLOAD_PRESET, "preset")
 
   const handleAvatarPress = async () => {
     try {
@@ -42,11 +45,29 @@ const AccountScreen = () => {
         aspect: [1, 1],
         quality: 1,
       });
-      if (result.assets.length > 0) {
+      if (result.assets && result.assets.length > 0) {
         const selectedImage = result.assets[0];
         const imageUri = selectedImage.uri;
+
+         // Upload image to Cloudinary
+         const formData = new FormData();
+         formData.append('file', {
+           uri: imageUri,
+           type: 'image/jpeg',
+           name: 'avatar.jpg',
+         });
+         formData.append('upload_preset', process.env.CLOUDINARY_UPLOAD_PRESET);
+ 
+         const response = await axios.post(process.env.CLOUDINARY_UPLOAD_URL, formData, {
+           headers: {
+             'Content-Type': 'multipart/form-data',
+           },
+         });
+ 
+         const avatarUrl = response.data.secure_url;
+
         setAddress({ ...address, avatar: imageUri });
-        await updateAddressData({ ...address, avatar: imageUri });
+        await updateAddressData({ ...address, avatar: avatarUrl });
       }
     } catch (error) {
       console.error("Error picking image:", error);

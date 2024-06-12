@@ -2,6 +2,17 @@ const User = require("../models/user");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
+const cloudinary = require('cloudinary').v2;
+import dotenv from "dotenv";
+
+
+dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
 const sendVerificationEmail = async (email, verificationToken) => {
   // Create a Nodemailer transporter
@@ -33,8 +44,20 @@ const generateSecretKey = () => {
 
   return secretKey;
 };
-
 const secretKey = generateSecretKey();
+
+// function upload userImage to Cloudinary
+const uploadToCloudinary = async (imagePath) => {
+  try {
+    const result = await cloudinary.uploader.upload(imagePath, {
+      folder: "BookingApp/UserImage",
+    });
+    return result.secure_url; // Return the secure URL of the uploaded image
+  } catch (error) {
+    console.error("Error uploading to Cloudinary:", error);
+    throw error;
+  }
+};
 
 module.exports = {
   register: async (req, res) => {
@@ -116,6 +139,14 @@ module.exports = {
     try {
       const userId = req.params.userId;
       const updateFields = req.body;
+      let avatarUrl;
+
+       // Check if there's an avatar to upload
+       if (updateFields.avatar) {
+        avatarUrl = await uploadToCloudinary(updateFields.avatar);
+        updateFields.avatar = avatarUrl;
+      }
+      
 
       // Check if latitude and longitude are provided before updating location
       const locationUpdate =
