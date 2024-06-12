@@ -18,12 +18,15 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import NetworkImage from "../components/NetworkImage";
 import ProfileTile from "../components/ProfileTile";
-import { API_URL } from "@env";
+import { API_URL, API_KEY, CLOUD_NAME } from "@env";
 
 const AccountScreen = () => {
   const navigation = useNavigation();
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
+  // console.log(process.env.API_KEY, "apikey cloudinary");
+  const cloudName = process.env.CLOUD_NAME;
+  const uploadApiKey = process.env.API_KEY;
 
   const handleAvatarPress = async () => {
     try {
@@ -45,14 +48,44 @@ const AccountScreen = () => {
       if (result.assets && result.assets.length > 0) {
         const selectedImage = result.assets[0];
         const imageUri = selectedImage.uri;
-        setAddress({ ...address, avatar: imageUri });
-        await updateAddressData({ ...address, avatar: imageUri });
+        // Upload to Cloudinary and get URL
+        const imageUrl = await uploadImageToCloudinary(imageUri);
+        if (imageUrl) {
+          setAddress({ ...address, avatar: imageUrl });
+          await updateAddressData({ ...address, avatar: imageUrl });
+        }
       }
     } catch (error) {
       console.error("Error picking image:", error);
     }
   };
-  const updateAddressData = async (updatedData) => {
+
+  const uploadImageToCloudinary = async (imageUri) => {
+    let formData = new FormData();
+    formData.append('file', {
+      uri: imageUri,
+      type: 'image/jpeg',
+      name: 'upload.jpg',
+    });
+    formData.append('api_key', uploadApiKey);
+    formData.append('timestamp', Math.floor(Date.now() / 1000).toString());
+    formData.append('folder', 'BookingApp/UserImage'); // Specify the folder path
+    
+    // You can optionally include other parameters like public_id, tags, etc.
+    try {
+      const response = await axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data.secure_url;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      return null;
+    }
+  };
+
+ const updateAddressData = async (updatedData) => {
     try {
       const token = await AsyncStorage.getItem("authToken");
       const decodedToken = jwt_decode(token);
@@ -63,6 +96,7 @@ const AccountScreen = () => {
       console.log("Error updating address data", error);
     }
   };
+  
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("authToken");
