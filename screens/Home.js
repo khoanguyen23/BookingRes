@@ -92,7 +92,7 @@ export default function HomeScreen({ navigation, route }) {
   };
 
   useEffect(() => {
-    fetchFeaturedData()
+    fetchFeaturedData();
     // fetchData();
     fetchAddress();
     fetchCategories();

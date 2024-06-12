@@ -1,6 +1,7 @@
 // routes.js
 const express = require("express");
 const router = express.Router();
+const fileUpload = require('express-fileupload');
 const UserController = require("../controllers/userController");
 const RestaurantController = require("../controllers/restaurantController");
 const OrderController = require("../controllers/orderController");
@@ -8,10 +9,13 @@ const FeatureController = require("../controllers/featureController");
 const CategoryController = require("../controllers/categoryController");
 const GeospatialController = require("../controllers/geospatialController");
 const ChatController = require("../controllers/chatController");
-
-
-// routes.js admin
 const AdminController = require("../controllers/adminController");
+
+// configure fileUpload
+router.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: '/tmp/'
+  }));
 
 /**
  * @swagger

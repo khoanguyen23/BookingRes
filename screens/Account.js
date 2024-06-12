@@ -18,15 +18,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import NetworkImage from "../components/NetworkImage";
 import ProfileTile from "../components/ProfileTile";
-import { API_URL, CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET } from "@env";
-
+import { API_URL } from "@env";
 
 const AccountScreen = () => {
   const navigation = useNavigation();
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
-
-  console.log(process.env.CLOUDINARY_UPLOAD_PRESET, "preset")
 
   const handleAvatarPress = async () => {
     try {
@@ -49,25 +46,26 @@ const AccountScreen = () => {
         const selectedImage = result.assets[0];
         const imageUri = selectedImage.uri;
 
-         // Upload image to Cloudinary
-         const formData = new FormData();
-         formData.append('file', {
-           uri: imageUri,
-           type: 'image/jpeg',
-           name: 'avatar.jpg',
-         });
-         formData.append('upload_preset', process.env.CLOUDINARY_UPLOAD_PRESET);
- 
-         const response = await axios.post(process.env.CLOUDINARY_UPLOAD_URL, formData, {
-           headers: {
-             'Content-Type': 'multipart/form-data',
-           },
-         });
- 
-         const avatarUrl = response.data.secure_url;
-
-        setAddress({ ...address, avatar: imageUri });
-        await updateAddressData({ ...address, avatar: avatarUrl });
+        const formData = new FormData();
+        formData.append('avatar', {
+          uri: imageUri,
+          type: 'image/jpeg', // or the appropriate type for the image
+          name: 'avatar.jpg',
+        });
+  
+        const token = await AsyncStorage.getItem('authToken');
+        const decodedToken = jwt_decode(token);
+        const userId = decodedToken.userId;
+        
+        // setAddress({ ...address, avatar: imageUri });
+        // await updateAddressData({ ...address, avatar: imageUri });
+        const response = await axios.put(`${API_URL}/address/${userId}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+  
+        await fetchAddressData(userId);
       }
     } catch (error) {
       console.error("Error picking image:", error);
