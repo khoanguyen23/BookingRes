@@ -10,7 +10,7 @@ const HomeAdmin = () => {
     <View style={{ flex: 1, padding: 10 }}>
       
       <View className="flex-row justify-between">
-      <TouchableOpacity onPress={()=> {navigation.navigate('Restaurants')}}>
+      <TouchableOpacity onPress={()=> {navigation.navigate('RestaurantAdmin')}}>
         <View
           style={{
             width: 120,
@@ -82,7 +82,7 @@ const HomeAdmin = () => {
             <Text className="mt-2 font-semibold">Customers</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=> {navigation.navigate('Orders')}}
+        <TouchableOpacity onPress={()=> {navigation.navigate('OrderTab')}}
           style={{
             width: 120,
             height: 180,

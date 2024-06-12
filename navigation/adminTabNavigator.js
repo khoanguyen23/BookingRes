@@ -16,13 +16,18 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeAdmin from "../screens/admin/HomeAdmin";
 import Restaurants from "../screens/admin/Restaurants";
 
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+} from "@react-navigation/drawer";
 import Customers from "../screens/admin/Customers";
 import { useNavigation } from "@react-navigation/native";
 import Orders from "../screens/admin/Orders";
 import DetailOrders from "../screens/admin/DetailOrders";
 import ResAdmin from "../screens/admin/ResAdmin";
-
+import OrdersStackNavigator from "./ordersStackNavigator";
+import ResAdminStackNavigator from "./resAdminStackNavigator";
 const Drawer = createDrawerNavigator();
 
 const CustomDrawerContent = (props) => {
@@ -44,8 +49,18 @@ const CustomDrawerContent = (props) => {
         {/* Your app's logo or header */}
       </View>
       <DrawerItemList {...props} />
-      <TouchableOpacity onPress={handleLogout} style={{ padding: 10, borderTopWidth: 1, borderTopColor: "#ccc" }}>
-        <View style={{ flexDirection: "row", alignItems: "center", marginLeft:10 , marginTop : 10}}>
+      <TouchableOpacity
+        onPress={handleLogout}
+        style={{ padding: 10, borderTopWidth: 1, borderTopColor: "#ccc" }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginLeft: 10,
+            marginTop: 10,
+          }}
+        >
           <AntDesign name="logout" size={24} color="black" />
           <Text style={{ marginLeft: 10 }}>Logout</Text>
         </View>
@@ -54,183 +69,80 @@ const CustomDrawerContent = (props) => {
   );
 };
 
-
 const AdminTabNavigator = () => {
   const navigation = useNavigation();
 
   return (
-
-      <Drawer.Navigator screenOptions={{ headerShown: true }}
+    <Drawer.Navigator
+      screenOptions={{ headerShown: true }}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
-      >
-        <Drawer.Screen
-          name="Dashboard"
-          component={HomeAdmin}
-          options={{
-            headerTitleAlign: "center",
-            drawerIcon: ({ color, size }) => (
-              <AntDesign name="home" size={size} color={color} />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="Restaurants"
-          component={Restaurants}
-          options={{
-            headerTitleAlign: "center",
-            drawerIcon: ({ color, size }) => (
-              <AntDesign name="home" size={size} color={color} />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="Customers"
-          component={Customers}
-          options={{
-            headerTitleAlign: "center",
-            drawerIcon: ({ color, size }) => (
-              <AntDesign name="home" size={size} color={color} />
-            ),
-            headerLeft: ({ onPress, tintColor }) => (
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("Dashboard");
+    >
+      <Drawer.Screen
+        name="Dashboard"
+        component={HomeAdmin}
+        options={{
+          headerTitleAlign: "center",
+          drawerIcon: ({ color, size }) => (
+            <AntDesign name="home" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Customers"
+        component={Customers}
+        options={{
+          headerTitleAlign: "center",
+          drawerIcon: ({ color, size }) => (
+            <AntDesign name="home" size={size} color={color} />
+          ),
+          headerLeft: ({ onPress, tintColor }) => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Dashboard");
+              }}
+            >
+              <View
+                style={{
+                  marginLeft: 5,
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
-                <View
+                <Ionicons name="chevron-back" size={35} color="#037AFF" />
+                <Text
                   style={{
-                    marginLeft: 5,
-                    flexDirection: "row",
-                    alignItems: "center",
+                    color: "#58A7FF",
+                    fontSize: 17,
+                    fontWeight: "bold",
                   }}
                 >
-                  <Ionicons name="chevron-back" size={35} color="#037AFF" />
-                  <Text
-                    style={{
-                      color: "#58A7FF",
-                      fontSize: 17,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Home
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                  Home
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ),
+          // Thêm dòng này nếu bạn muốn hiển thị tiêu đề "Home"
+        }}
+      />
+      <Drawer.Screen
+        name="RestaurantAdmin"
+        component={ResAdminStackNavigator}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <AntDesign name="home" size={size} color={color} />
             ),
-            // Thêm dòng này nếu bạn muốn hiển thị tiêu đề "Home"
-          }}
-        />
-        <Drawer.Screen
-          name="RestaurantAdmin"
-          component={ResAdmin}
-          options={{
-            headerTitleAlign: "center",
-            drawerIcon: ({ color, size }) => (
-              <AntDesign name="home" size={size} color={color} />
-            ),
-            headerLeft: ({ onPress, tintColor }) => (
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("Dashboard");
-                }}
-              >
-                <View
-                  style={{
-                    marginLeft: 5,
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Ionicons name="chevron-back" size={35} color="#037AFF" />
-                  <Text
-                    style={{
-                      color: "#58A7FF",
-                      fontSize: 17,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Home
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            ),
-            // Thêm dòng này nếu bạn muốn hiển thị tiêu đề "Home"
-          }}
-        />
-        <Drawer.Screen
-          name="Orders"
-          component={Orders}
-          options={{
-            headerTitleAlign: "center",
-            drawerIcon: ({ color, size }) => (
-              <AntDesign name="home" size={size} color={color} />
-            ),
-            headerTintColor: "#fff",
-            headerStyle: { backgroundColor: "#1C212D" },
-            headerLeft: ({ onPress, tintColor }) => (
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("Dashboard");
-                }}
-              >
-                <View
-                  style={{
-                    marginLeft: 5,
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Ionicons name="chevron-back" size={35} color="#34DBA1" />
-                  {/* #037AFF */}
-                  <Text
-                    style={{
-                      color: "#ffffff",
-                      fontSize: 17,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {/* #58A7FF */}
-                    Home
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            ),
-            // Thêm dòng này nếu bạn muốn hiển thị tiêu đề "Home"
-          }}
-        />
-        <Drawer.Screen
-          name="DetailOrders"
-          component={DetailOrders}
-          options={{
-            headerTitleAlign: "center",
-            drawerIcon: ({ color, size }) => (
-              <AntDesign name="home" size={size} color={color} />
-            ),
-            headerTintColor: "#fff",
-            headerStyle: { backgroundColor: "#1C212D" },
-            headerLeft: ({ onPress, tintColor }) => (
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("Orders");
-                }}
-              >
-                <View
-                  style={{
-                    marginLeft: 5,
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Ionicons name="chevron-back" size={35} color="#34DBA1" />
-                  {/* #037AFF */}
-                </View>
-              </TouchableOpacity>
-            ),
-            // Thêm dòng này nếu bạn muốn hiển thị tiêu đề "Home"
-          }}
-        />
-      </Drawer.Navigator>
-
+            headerShown: false,
+          // Thêm dòng này nếu bạn muốn hiển thị tiêu đề "Home"
+        }}
+      />
+      <Drawer.Screen
+        name="OrderTab"
+        component={OrdersStackNavigator}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Drawer.Navigator>
   );
 };
 
