@@ -78,12 +78,22 @@ const AccountScreen = () => {
       const token = await AsyncStorage.getItem("authToken");
       const decodedToken = jwt_decode(token);
       const userId = decodedToken.userId;
-      await axios.put(`${API_URL}/address/${userId}`, updatedData);
+  
+      const response = await axios.put(`${API_URL}/address/${userId}`, updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Gửi token trong header
+          'Content-Type': 'application/json', // Thiết lập kiểu dữ liệu gửi đi
+        },
+      });
+  
+      // Nếu dữ liệu cập nhật thành công, bạn có thể cập nhật lại addressData
       await fetchAddressData(userId);
     } catch (error) {
       console.log("Error updating address data", error);
+      // Nếu có lỗi xảy ra, bạn có thể in ra lỗi hoặc xử lý tùy ý ở đây
     }
   };
+  
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("authToken");
