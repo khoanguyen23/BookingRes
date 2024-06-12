@@ -45,27 +45,8 @@ const AccountScreen = () => {
       if (result.assets && result.assets.length > 0) {
         const selectedImage = result.assets[0];
         const imageUri = selectedImage.uri;
-
-        const formData = new FormData();
-        formData.append('avatar', {
-          uri: imageUri,
-          type: 'image/jpeg', // or the appropriate type for the image
-          name: 'avatar.jpg',
-        });
-  
-        const token = await AsyncStorage.getItem('authToken');
-        const decodedToken = jwt_decode(token);
-        const userId = decodedToken.userId;
-        
-        // setAddress({ ...address, avatar: imageUri });
-        // await updateAddressData({ ...address, avatar: imageUri });
-        const response = await axios.put(`${API_URL}/address/${userId}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-  
-        await fetchAddressData(userId);
+        setAddress({ ...address, avatar: imageUri });
+        await updateAddressData({ ...address, avatar: imageUri });
       }
     } catch (error) {
       console.error("Error picking image:", error);

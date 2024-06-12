@@ -1,5 +1,4 @@
 const User = require("../models/user");
-const cloudinary = require('../config/cloudinary');
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
@@ -117,14 +116,6 @@ module.exports = {
     try {
       const userId = req.params.userId;
       const updateFields = req.body;
-
-      if (req.files && req.files.avatar) {
-        const file = req.files.avatar;
-        const uploadResponse = await cloudinary.uploader.upload(file.path, {
-          folder: 'BookingApp/UserImage',
-        });
-        updateFields.avatar = uploadResponse.secure_url;
-      }
 
       // Check if latitude and longitude are provided before updating location
       const locationUpdate =
