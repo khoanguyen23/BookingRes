@@ -16,7 +16,7 @@ const ResAdminStackNavigator = () => {
         component={ResAdmin}
         options={{
           headerTitleAlign: "center",
-          headerTitle: "Quản lý nhà hàng",
+          headerTitle: "経営レストラン",
           headerTintColor: "#fff",
           headerStyle: { backgroundColor: "#1C212D" },
           headerLeft: ({ onPress, tintColor }) => (

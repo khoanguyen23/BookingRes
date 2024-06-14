@@ -92,7 +92,7 @@ const DetailOrders = () => {
         ></View>
         {selectedRestaurant.suggestions[0].items.map((item, index) => (
           <View style={{ margin: 15 }} key={index}>
-            <Text className="py-4 text-lg font-medium">Món ăn</Text>
+            <Text className="py-4 text-lg font-bold">食べ物</Text>
             <View className="flex flex-row items-center">
               <View className="w-[80%]">
                 <Text className="text-sm">{item.title}</Text>
@@ -114,7 +114,7 @@ const DetailOrders = () => {
       {/* THONG TIN DON HANG  */}
 
       <View style={{ margin: 15 }}>
-        <Text className="font-medium text-lg py-4">Đặt chỗ đến</Text>
+        <Text className="font-medium text-lg py-4">予約先:</Text>
 
         <View className="border p-2 flex-row justify-between rounded-xl">
           {restaurants[order.restaurant] && (
@@ -139,27 +139,27 @@ const DetailOrders = () => {
             </Text>
           </View>
         </View>
-        <Text className="py-4 text-lg font-medium">Thông tin đơn hàng</Text>
+        <Text className="py-4 text-lg font-medium">予約情報:</Text>
         <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
-          <View className="flex-row justify-between  items-center  w-4/12">
+          <View className="flex-row justify-between  items-center  w-5/12">
             <FontAwesome5 name="user" size={24} color="black" />
-            <Text className="ml-0">Số người lớn </Text>
+            <Text className="ml-0 text-base">大人の人数  : </Text>
           </View>
-          <Text className="w-8/12 ml-4">{order.adults}</Text>
+          <Text className="w-7/12 ml-4">{order.adults}</Text>
         </View>
         <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
-          <View className="flex-row justify-between  items-center  w-4/12">
+          <View className="flex-row justify-between items-center w-5/12">
             <MaterialIcons name="child-care" size={24} color="black" />
 
-            <Text className="mr-4">Số trẻ em : </Text>
+            <Text className="ml-0 text-base">子どもの数  ：</Text>
           </View>
-          <Text className="w-8/12 ml-4">{order.children}</Text>
+          <Text className="w-7/12 ml-4">{order.children}</Text>
         </View>
         <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
           <View className="flex-row justify-between  items-center  w-4/12">
             <AntDesign name="calendar" size={24} color="black" />
 
-            <Text className="mr-4">Ngày đến : </Text>
+            <Text className="mr-4">到着日 : </Text>
           </View>
           <Text className="w-8/12 ml-4">{formatDate(order.date)}</Text>
         </View>
@@ -167,7 +167,7 @@ const DetailOrders = () => {
           <View className="flex-row justify-between  items-center  w-4/12">
             <AntDesign name="clockcircleo" size={24} color="black" />
 
-            <Text className="mr-4">Giờ đến : </Text>
+            <Text className="mr-4">到着時間 : </Text>
           </View>
           <Text className="w-8/12 ml-4">{order.selectedHour}</Text>
         </View>
@@ -180,9 +180,9 @@ const DetailOrders = () => {
         style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
       ></View>
       <View style={{ margin: 15, height: 80 }}>
-        <Text className="py-4 text-lg font-medium">Tình trạng đơn hàng</Text>
+        <Text className="py-4 text-lg font-bold">注文の状況</Text>
         <View className="flex-row justify-between">
-          <Text className="text-lg">Order Status: {order.status}</Text>
+          <Text className="text-lg">注文の状況: {order.status}</Text>
           <TouchableOpacity onPress={openModal}>
             <Entypo name="pencil" size={24} color="green" />
           </TouchableOpacity>
@@ -200,11 +200,11 @@ const DetailOrders = () => {
 
       {/* THONG TIN KHACH HANG  */}
       <View style={{ margin: 15 }}>
-        <Text className="font-medium text-lg py-2">Thông tin khách hàng</Text>
+        <Text className="font-bold text-lg py-2">顧客情報</Text>
         <View className="flex-row p-5  items-center">
           <View className="flex-row items-center w-2/4 justify-start">
             <FontAwesome5 name="user-circle" size={24} color="black" />
-            <Text className="ml-4">Tên liên lạc</Text>
+            <Text className="ml-4 text-base">名前</Text>
           </View>
           <Text className="w-2/4">{users[order.user]?.name}</Text>
         </View>
@@ -212,14 +212,14 @@ const DetailOrders = () => {
           <View className="flex-row items-center w-2/4 justify-start">
             <Feather name="phone" size={24} color="black" />
 
-            <Text className="ml-4">Số điện thoại</Text>
+            <Text className="ml-4 text-base">電話番号</Text>
           </View>
           <Text className="w-2/4">{users[order.user]?.mobileNo}</Text>
         </View>
         <View className="flex-row p-5  items-center">
           <View className="flex-row items-center w-2/4 justify-start">
             <FontAwesome name="envelope" size={24} color="black" />
-            <Text className="ml-4">Email</Text>
+            <Text className="ml-4">Eメール</Text>
           </View>
           <Text className="w-2/4">{users[order.user]?.email}</Text>
         </View>
@@ -233,7 +233,7 @@ const DetailOrders = () => {
         <View className="flex-row p-5  items-center">
           <View className="flex-row w-2/5 h-14 justify-around items-center ">
             <Foundation name="clipboard-notes" size={24} color="black" />
-            <Text className="mr-14">Ghi chú</Text>
+            <Text className="mr-14 text-base">注記</Text>
           </View>
           <View className="w-3/5 h-14">
             <TextInput
@@ -248,7 +248,7 @@ const DetailOrders = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text className="text-xl font-bold p-4 text-center border-b-2 border-b-zinc-300">
-              Edit Order Status
+            注文ステータスの編集
             </Text>
             {statusOptions.map((option, index) => (
               <CheckBox
@@ -295,7 +295,7 @@ const DetailOrders = () => {
                 marginTop: 10,
               }}
             >
-              <Text style={{ color: "#ffffff", fontSize: 17 }}>Update</Text>
+              <Text style={{ color: "#ffffff", fontSize: 17 }}>更新</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={closeModal}
@@ -307,7 +307,7 @@ const DetailOrders = () => {
                 alignItems: "center",
               }}
             >
-              <Text style={{ color: "#ffffff", fontSize: 17 }}>Cancel</Text>
+              <Text style={{ color: "#ffffff", fontSize: 17 }}>キャンセル</Text>
             </TouchableOpacity>
           </View>
         </View>

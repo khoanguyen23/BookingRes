@@ -62,7 +62,7 @@ const CustomDrawerContent = (props) => {
           }}
         >
           <AntDesign name="logout" size={24} color="black" />
-          <Text style={{ marginLeft: 10 }}>Logout</Text>
+          <Text style={{ marginLeft: 10 }}>ログアウト</Text>
         </View>
       </TouchableOpacity>
     </DrawerContentScrollView>

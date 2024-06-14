@@ -10,7 +10,7 @@ const SearchBar = ({ searchPhrase, setSearchPhrase }) => {
         <Feather name="search" size={20} color="#34DBA1" style={{ marginLeft: 1 }} />
         <TextInput
           style={styles.input}
-          placeholder="Tra cứu orders"
+          placeholder="注文を調べる"
           value={searchPhrase}
           onChangeText={setSearchPhrase}
           placeholderTextColor="#A5B1AF" 

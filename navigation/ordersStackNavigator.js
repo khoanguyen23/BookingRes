@@ -16,7 +16,7 @@ const OrdersStackNavigator = () => {
         component={Orders}
         options={{
           headerTitleAlign: "center",
-          headerTitle: "Danh sách đơn đặt chỗ",
+          headerTitle: "予約リスト",
           headerTintColor: "#fff",
           headerStyle: { backgroundColor: "#1C212D" },
           headerLeft: ({ onPress, tintColor }) => (
@@ -54,7 +54,7 @@ const OrdersStackNavigator = () => {
         options={{
           headerStyle: { backgroundColor: "#1C212D" },
           headerTitleAlign: "center",
-          headerTitle: "Chi tiết đơn hàng",
+          headerTitle: "予約の詳細",
           headerTintColor: "#fff",
          
         }}

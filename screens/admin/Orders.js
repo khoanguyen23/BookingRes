@@ -181,6 +181,7 @@ const Orders = () => {
                   width: 70,
                   borderRadius: 3,
                   textAlign: "center",
+                  fontSize: 15,
                 }}
                 onPress={() =>
                   navigation.navigate("DetailOrders", {
@@ -190,7 +191,7 @@ const Orders = () => {
                   })
                 }
               >
-                Chi tiết
+                詳細
               </Text>
             </View>
           </View>
