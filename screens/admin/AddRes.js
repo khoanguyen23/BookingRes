@@ -121,13 +121,13 @@ const AddRes = () => {
                 <View className="bg-[#21BF73] w-10 h-10 rounded-lg items-center justify-center">
                   <Feather name="navigation" size={24} color="white" />
                 </View>
-                <Text className="text-lg">Use my current location</Text>
+                <Text className="text-lg">現在の位置情報を使用する</Text>
               </View>
               <AntDesign name="right" size={24} color="#B4B4BC" />
             </View>
           </View>
           <View className="p-4 mt-2">
-            <Text className="text-base">Địa chỉ nhà hàng : </Text>
+            <Text className="text-base">レストランの住所 : </Text>
             <Text className="text-base mt-2">Longitude: {longitude}</Text>
             <Text className="text-base mt-2">Latitude: {latitude}</Text>
           </View>
@@ -135,7 +135,7 @@ const AddRes = () => {
             style={[styles.button, styles.buttonOpen]}
             onPress={() => setModalVisible(true)}
           >
-            <Text style={styles.textStyle}>Show Modal</Text>
+            <Text style={styles.textStyle}>モーダルを表示</Text>
           </Pressable>
           {/* <TouchableOpacity className="bg-slate-100 p-3 m-3 flex flex-row justify-between rounded">
             <Text className="text-base font-bold text-emerald-500">
@@ -162,7 +162,7 @@ const AddRes = () => {
               textInputProps={{
                 InputComp: TextInput,
                 mode: "outlined",
-                label: "Search location ....",
+                label: "検索場所 ....",
                 style: { width: "100%", backgroundColor: "#EFEFF0" },
                 activeOutlineColor: "red",
                 outlineStyle: { borderRadius: 12, borderWidth: 0 },
@@ -200,7 +200,7 @@ const AddRes = () => {
           >
             <ScrollView style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text className="text-xl mb-4">Thêm sản phẩm</Text>
+                <Text className="text-xl mb-4">レストランを追加</Text>
                 <TouchableOpacity
                   onPress={pickImages}
                   className="border-dashed border-2 border-indigo-600 p-2"
@@ -214,6 +214,14 @@ const AddRes = () => {
                           : "https://t4.ftcdn.net/jpg/04/81/13/43/360_F_481134373_0W4kg2yKeBRHNEklk4F9UXtGHdub3tYk.jpg",
                     }}
                   />
+                  {images.length > 0 && (
+                    <TouchableOpacity
+                      style={styles.removeLargeIconContainer}
+                      onPress={() => removeImage(0)}
+                    >
+                      <FontAwesome6 name="xmark" size={16} color="white" />
+                    </TouchableOpacity>
+                  )}
                 </TouchableOpacity>
                 {/* <TouchableOpacity
                     style={styles.removeLargeIconContainer}
@@ -257,45 +265,25 @@ const AddRes = () => {
                 </View>
 
                 <View className="mt-10" style={{}}>
-                  <Text>Phần ở dưới</Text>
-                  <View className="flex flex-row justify-between">
-                   <View className="w-36">
-                   <TextInput
-                    value={latitude}
-                      mode="outlined"
-                      label="Outlined input"
-                      placeholder="Type something"
-                    />
-                   </View>
-                   <View className="w-36">
-                   <TextInput
-                      mode="outlined"
-                      label="Outlined input"
-                      placeholder="Type something"
-                    />
-                   </View>
-                  </View>
+                  {/* <Text>Phần ở dưới</Text> */}
+                
 
                   <View className="space-y-4 grid">
                     <TextInput
                       mode="outlined"
-                      label="Outlined input"
-                      placeholder="Type something"
+                      label="レストラン名"
+                    />
+
+                  
+                    <TextInput
+                      mode="outlined"
+                      label='レストランの説明'
+                      multiline={true}
                     />
                     <TextInput
                       mode="outlined"
-                      label="Outlined input"
-                      placeholder="Type something"
-                    />
-                    <TextInput
-                      mode="outlined"
-                      label="Outlined input"
-                      placeholder="Type something"
-                    />
-                    <TextInput
-                      mode="outlined"
-                      label="Outlined input"
-                      placeholder="Type something"
+                      label="レストランの住所"
+                      multiline={true}
                     />
                     <TextInput
                       mode="outlined"
@@ -324,7 +312,7 @@ const AddRes = () => {
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => setModalVisible(!modalVisible)}
                 >
-                  <Text style={styles.textStyle}>Hide Modal</Text>
+                  <Text style={styles.textStyle}>モーダルを非表示</Text>
                 </Pressable>
               </View>
             </ScrollView>
@@ -435,8 +423,8 @@ const styles = StyleSheet.create({
   },
   removeLargeIconContainer: {
     position: "absolute",
-    top: 70,
-    left: 35,
+    top: 1,
+    left: 0,
     backgroundColor: "red",
     borderRadius: 50,
     width: 25,

@@ -18,15 +18,13 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import NetworkImage from "../components/NetworkImage";
 import ProfileTile from "../components/ProfileTile";
-import { API_URL, CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET } from "@env";
+import { API_URL } from "@env";
 
 
 const AccountScreen = () => {
   const navigation = useNavigation();
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
-
-  console.log(process.env.CLOUDINARY_UPLOAD_PRESET, "preset")
 
   const handleAvatarPress = async () => {
     try {

@@ -22,7 +22,7 @@ const ResAdminStackNavigator = () => {
           headerLeft: ({ onPress, tintColor }) => (
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("Dashboard");
+                navigation.navigate("ダッシュボード");
               }}
             >
               <View

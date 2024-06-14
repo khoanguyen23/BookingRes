@@ -10,7 +10,7 @@ const HomeAdmin = () => {
     <View style={{ flex: 1, padding: 10 }}>
       
       <View className="flex-row justify-between">
-      <TouchableOpacity onPress={()=> {navigation.navigate('RestaurantAdmin')}}>
+      <TouchableOpacity onPress={()=> {navigation.navigate('レストラン')}}>
         <View
           style={{
             width: 120,
@@ -43,10 +43,10 @@ const HomeAdmin = () => {
               }}
             />
           </View>
-          <Text className="mt-2 font-semibold">Restaurants</Text>
+          <Text className="mt-2 font-semibold">レストラン</Text>
         </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=> {navigation.navigate('Customers')}}>
+        <TouchableOpacity onPress={()=> {navigation.navigate('顧客')}}>
           <View
             style={{
               width: 120,
@@ -79,7 +79,7 @@ const HomeAdmin = () => {
                 }}
               />
             </View>
-            <Text className="mt-2 font-semibold">Customers</Text>
+            <Text className="mt-2 font-semibold">顧客</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={()=> {navigation.navigate('OrderTab')}}
@@ -114,7 +114,7 @@ const HomeAdmin = () => {
               }}
             />
           </View>
-          <Text className="mt-2 font-semibold">Orders</Text>
+          <Text className="mt-2 font-semibold">注文</Text>
         </TouchableOpacity>
       </View>
     </View>

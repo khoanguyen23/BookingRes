@@ -78,7 +78,7 @@ const AdminTabNavigator = () => {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen
-        name="Dashboard"
+        name="ダッシュボード"
         component={HomeAdmin}
         options={{
           headerTitleAlign: "center",
@@ -88,7 +88,7 @@ const AdminTabNavigator = () => {
         }}
       />
       <Drawer.Screen
-        name="Customers"
+        name="顧客"
         component={Customers}
         options={{
           headerTitleAlign: "center",
@@ -98,7 +98,7 @@ const AdminTabNavigator = () => {
           headerLeft: ({ onPress, tintColor }) => (
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("Dashboard");
+                navigation.navigate("ダッシュボード");
               }}
             >
               <View
@@ -125,7 +125,7 @@ const AdminTabNavigator = () => {
         }}
       />
       <Drawer.Screen
-        name="RestaurantAdmin"
+        name="レストラン"
         component={ResAdminStackNavigator}
         options={{
           drawerIcon: ({ color, size }) => (
