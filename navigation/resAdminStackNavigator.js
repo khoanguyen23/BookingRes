@@ -16,13 +16,13 @@ const ResAdminStackNavigator = () => {
         component={ResAdmin}
         options={{
           headerTitleAlign: "center",
-          headerTitle: "経営レストラン",
+          headerTitle: "Manage",
           headerTintColor: "#fff",
           headerStyle: { backgroundColor: "#1C212D" },
           headerLeft: ({ onPress, tintColor }) => (
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("ダッシュボード");
+                navigation.navigate("Dashboard");
               }}
             >
               <View

@@ -121,13 +121,13 @@ const AddRes = () => {
                 <View className="bg-[#21BF73] w-10 h-10 rounded-lg items-center justify-center">
                   <Feather name="navigation" size={24} color="white" />
                 </View>
-                <Text className="text-lg">現在の位置情報を使用する</Text>
+                <Text className="text-lg">Get my current location</Text>
               </View>
               <AntDesign name="right" size={24} color="#B4B4BC" />
             </View>
           </View>
           <View className="p-4 mt-2">
-            <Text className="text-base">レストランの住所 : </Text>
+            <Text className="text-base">Restaurant address selected : </Text>
             <Text className="text-base mt-2">Longitude: {longitude}</Text>
             <Text className="text-base mt-2">Latitude: {latitude}</Text>
           </View>
@@ -135,7 +135,7 @@ const AddRes = () => {
             style={[styles.button, styles.buttonOpen]}
             onPress={() => setModalVisible(true)}
           >
-            <Text style={styles.textStyle}>モーダルを表示</Text>
+            <Text style={styles.textStyle}>Add infomation restaurant</Text>
           </Pressable>
           {/* <TouchableOpacity className="bg-slate-100 p-3 m-3 flex flex-row justify-between rounded">
             <Text className="text-base font-bold text-emerald-500">
@@ -162,7 +162,7 @@ const AddRes = () => {
               textInputProps={{
                 InputComp: TextInput,
                 mode: "outlined",
-                label: "検索場所 ....",
+                label: "type address...",
                 style: { width: "100%", backgroundColor: "#EFEFF0" },
                 activeOutlineColor: "red",
                 outlineStyle: { borderRadius: 12, borderWidth: 0 },
@@ -200,7 +200,7 @@ const AddRes = () => {
           >
             <ScrollView style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text className="text-xl mb-4">レストランを追加</Text>
+                <Text className="text-xl mb-4">Add Restaurant</Text>
                 <TouchableOpacity
                   onPress={pickImages}
                   className="border-dashed border-2 border-indigo-600 p-2"
@@ -271,18 +271,18 @@ const AddRes = () => {
                   <View className="space-y-4 grid">
                     <TextInput
                       mode="outlined"
-                      label="レストラン名"
+                      label="Name"
                     />
 
                   
                     <TextInput
                       mode="outlined"
-                      label='レストランの説明'
+                      label='Description'
                       multiline={true}
                     />
                     <TextInput
                       mode="outlined"
-                      label="レストランの住所"
+                      label="Address"
                       multiline={true}
                     />
                     <TextInput
@@ -312,7 +312,7 @@ const AddRes = () => {
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => setModalVisible(!modalVisible)}
                 >
-                  <Text style={styles.textStyle}>モーダルを非表示</Text>
+                  <Text style={styles.textStyle}>Close</Text>
                 </Pressable>
               </View>
             </ScrollView>

@@ -62,7 +62,7 @@ const CustomDrawerContent = (props) => {
           }}
         >
           <AntDesign name="logout" size={24} color="black" />
-          <Text style={{ marginLeft: 10 }}>ログアウト</Text>
+          <Text style={{ marginLeft: 10 }}>Logout</Text>
         </View>
       </TouchableOpacity>
     </DrawerContentScrollView>
@@ -78,7 +78,7 @@ const AdminTabNavigator = () => {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen
-        name="ダッシュボード"
+        name="Dashboard"
         component={HomeAdmin}
         options={{
           headerTitleAlign: "center",
@@ -88,7 +88,7 @@ const AdminTabNavigator = () => {
         }}
       />
       <Drawer.Screen
-        name="顧客"
+        name="Customers"
         component={Customers}
         options={{
           headerTitleAlign: "center",
@@ -98,7 +98,7 @@ const AdminTabNavigator = () => {
           headerLeft: ({ onPress, tintColor }) => (
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("ダッシュボード");
+                navigation.navigate("Dashboard");
               }}
             >
               <View
@@ -125,7 +125,7 @@ const AdminTabNavigator = () => {
         }}
       />
       <Drawer.Screen
-        name="レストラン"
+        name="Restaurants"
         component={ResAdminStackNavigator}
         options={{
           drawerIcon: ({ color, size }) => (

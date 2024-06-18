@@ -23,7 +23,7 @@ import { API_URL } from "@env";
 const DetailOrders = () => {
   const route = useRoute();
   const { order, users, restaurants } = route.params;
-  console.log(order, "order details")
+  console.log(order, "order details");
   // console.log(order, "order");
   // console.log(restaurants, "suggest");
   const selectedItem = order?.orderItems[0]?.selectedItem;
@@ -92,7 +92,7 @@ const DetailOrders = () => {
         ></View>
         {selectedRestaurant.suggestions[0].items.map((item, index) => (
           <View style={{ margin: 15 }} key={index}>
-            <Text className="py-4 text-lg font-bold">食べ物</Text>
+            <Text className="py-4 text-lg font-bold">Món ăn</Text>
             <View className="flex flex-row items-center">
               <View className="w-[80%]">
                 <Text className="text-sm">{item.title}</Text>
@@ -114,7 +114,7 @@ const DetailOrders = () => {
       {/* THONG TIN DON HANG  */}
 
       <View style={{ margin: 15 }}>
-        <Text className="font-medium text-lg py-4">予約先:</Text>
+        <Text className="font-medium text-lg py-4">Thông tin đặt bàn: </Text>
 
         <View className="border p-2 flex-row justify-between rounded-xl">
           {restaurants[order.restaurant] && (
@@ -139,35 +139,33 @@ const DetailOrders = () => {
             </Text>
           </View>
         </View>
-        <Text className="py-4 text-lg font-medium">予約情報:</Text>
-        <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
-          <View className="flex-row justify-between  items-center  w-5/12">
-            <FontAwesome5 name="user" size={24} color="black" />
-            <Text className="ml-0 text-base">大人の人数  : </Text>
-          </View>
-          <Text className="w-7/12 ml-4">{order.adults}</Text>
-        </View>
-        <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
-          <View className="flex-row justify-between items-center w-5/12">
-            <MaterialIcons name="child-care" size={24} color="black" />
-
-            <Text className="ml-0 text-base">子どもの数  ：</Text>
-          </View>
-          <Text className="w-7/12 ml-4">{order.children}</Text>
-        </View>
+        <Text className="py-4 text-lg font-medium">Thông tin khách hàng:</Text>
         <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
           <View className="flex-row justify-between  items-center  w-4/12">
-            <AntDesign name="calendar" size={24} color="black" />
+            <FontAwesome5 name="user" size={24} color="black" />
+            <Text className="ml-0 text-base">Người lớn : </Text>
+          </View>
+          <Text className="w-8/12 ml-4">{order.adults}</Text>
+        </View>
+        <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
+          <View className="flex-row justify-between items-center w-4/12">
+            <MaterialIcons name="child-care" size={24} color="black" />
 
-            <Text className="mr-4">到着日 : </Text>
+            <Text className="ml-0 text-base">Trẻ em ：</Text>
+          </View>
+          <Text className="w-8/12 ml-4">{order.children}</Text>
+        </View>
+        <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
+          <View className="flex-row justify-between  items-center  w-5/12">
+            <AntDesign name="calendar" size={24} color="black" />
+            <Text className="mr-4">Ngày đặt bàn : </Text>
           </View>
           <Text className="w-8/12 ml-4">{formatDate(order.date)}</Text>
         </View>
         <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
-          <View className="flex-row justify-between  items-center  w-4/12">
+          <View className="flex-row justify-between  items-center  w-5/12">
             <AntDesign name="clockcircleo" size={24} color="black" />
-
-            <Text className="mr-4">到着時間 : </Text>
+            <Text className="mr-4">Giờ đặt bàn : </Text>
           </View>
           <Text className="w-8/12 ml-4">{order.selectedHour}</Text>
         </View>
@@ -200,7 +198,7 @@ const DetailOrders = () => {
 
       {/* THONG TIN KHACH HANG  */}
       <View style={{ margin: 15 }}>
-        <Text className="font-bold text-lg py-2">顧客情報</Text>
+        <Text className="font-bold text-lg py-2">Customers情報</Text>
         <View className="flex-row p-5  items-center">
           <View className="flex-row items-center w-2/4 justify-start">
             <FontAwesome5 name="user-circle" size={24} color="black" />
@@ -248,7 +246,7 @@ const DetailOrders = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text className="text-xl font-bold p-4 text-center border-b-2 border-b-zinc-300">
-            注文ステータスの編集
+              注文ステータスの編集
             </Text>
             {statusOptions.map((option, index) => (
               <CheckBox

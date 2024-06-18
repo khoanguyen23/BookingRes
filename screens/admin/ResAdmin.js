@@ -94,7 +94,7 @@ const ResAdmin = () => {
         color="#2DDB6D"
         titleStyle={{ fontWeight: "semibold", fontSize: 23 }}
       >
-        レストランを追加
+        Add Restaurants
       </Button>
     </>
   );

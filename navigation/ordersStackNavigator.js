@@ -16,13 +16,13 @@ const OrdersStackNavigator = () => {
         component={Orders}
         options={{
           headerTitleAlign: "center",
-          headerTitle: "予約リスト",
+          headerTitle: "List Orders",
           headerTintColor: "#fff",
           headerStyle: { backgroundColor: "#1C212D" },
           headerLeft: ({ onPress, tintColor }) => (
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("ダッシュボード");
+                navigation.navigate("Dashboard");
               }}
             >
               <View
@@ -54,7 +54,7 @@ const OrdersStackNavigator = () => {
         options={{
           headerStyle: { backgroundColor: "#1C212D" },
           headerTitleAlign: "center",
-          headerTitle: "予約の詳細",
+          headerTitle: "Details Orders",
           headerTintColor: "#fff",
          
         }}
