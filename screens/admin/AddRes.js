@@ -31,7 +31,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 const AddRes = () => {
   const bottomSheetRef = useRef(null);
   const [refresh, setRefresh] = useState(0);
-  const snapPoints = useMemo(() => ["20%", "40%", "60%", "85%", "100%"], []);
+  const snapPoints = useMemo(() => ["20%", "40%", "60%", "85%", "90%"], []);
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
   }, []);
