@@ -22,6 +22,14 @@ const BookingHours = () => {
   };
 
   const isPastTime = (bookingTime) => {
+    const currentDate = new Date();
+    const selectedDateWithoutTime = new Date(selectedDate.setHours(0, 0, 0, 0));
+    const currentDateWithoutTime = new Date(currentDate.setHours(0, 0, 0, 0));
+
+    if (selectedDateWithoutTime > currentDateWithoutTime) {
+      return false; // selected date is in the future, so all times are valid
+    }
+    
     const [hour, minute] = bookingTime.split(":");
     const bookingTotalMinutes = parseInt(hour) * 60 + parseInt(minute);
     const currentTotalMinutes =
