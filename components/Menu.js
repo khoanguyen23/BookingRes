@@ -43,7 +43,7 @@ const Menu = ({ items, title, onItemSelect,restaurant }) => {
                   <View className="mt-2 ">
                     <TouchableOpacity onPress={() => onItemSelect(item)}>
                       <Text className="w-full text-center p-1 border-[#9A9A9A] border rounded-sm text-[#313131]">
-                        Chọn ngay
+                        Select now
                       </Text>
                     </TouchableOpacity>
                   </View>

@@ -42,6 +42,8 @@ const ChangePassword = ({ navigation }) => {
       Alert.alert("Error", "Failed to change password. Please try again.");
     }
   };
+  console.log(user,"changePassword")
+
 
   return (
     <View className="flex bg-white p-4 mt-2 justify-between h-full">
@@ -52,7 +54,7 @@ const ChangePassword = ({ navigation }) => {
             value={oldPassword}
             onChangeText={(text) => setOldPassword(text)}
             mode="outlined"
-            label="Mật khẩu cũ"
+            label="Type old password"
             secureTextEntry={!showOldPassword}
             right={
               <TextInput.Icon
@@ -71,7 +73,7 @@ const ChangePassword = ({ navigation }) => {
             value={newPassword}
             onChangeText={(text) => setNewPassword(text)}
             mode="outlined"
-            label="Mật khẩu mới"
+            label="Type new password"
             secureTextEntry={!showNewPassword}
             right={
               <TextInput.Icon
@@ -90,7 +92,7 @@ const ChangePassword = ({ navigation }) => {
             value={confirmPassword}
             onChangeText={(text) => setConfirmPassword(text)}
             mode="outlined"
-            label="Nhập lại mật khẩu"
+            label="Type new password again"
             secureTextEntry={!showConfirmPassword}
             right={
               <TextInput.Icon
@@ -104,7 +106,7 @@ const ChangePassword = ({ navigation }) => {
           />
         </View>
       </View>
-      <PopUp buttonText="Cập nhật" onPress={handleChangePassword} />
+      <PopUp buttonText="UPDATE" onPress={handleChangePassword} />
     </View>
   );
 };

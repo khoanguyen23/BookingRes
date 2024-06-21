@@ -86,7 +86,7 @@ const RegisterScreen = () => {
             .post(`${API_URL}/register`, user)
             .then((response) => {
                 console.log(response);
-                Alert.alert("Thành công", "Chúc mừng bạn đã đăng ký thành công");
+                Alert.alert("Success", "Congratulations, you have successfully registered");
                 setName("");
                 setEmail("");
                 setPassword("");
@@ -124,12 +124,12 @@ const RegisterScreen = () => {
         </View>
         <BackBtn onPress={() => navigation.goBack()} />
 
-        <Text style={styles.titleLogin}>Đặt nhà hàng</Text>
+        <Text style={styles.titleLogin}>Booking App</Text>
 
         <KeyboardAvoidingView>
           <View>
             <View style={styles.wrapper}>
-              <Text style={styles.label}>Họ và tên</Text>
+              <Text style={styles.label}>Fullname</Text>
               <View style={styles.inputWrapper(COLORS.offwhite)}>
                 <MaterialCommunityIcons
                   name="face-man-profile"
@@ -139,7 +139,7 @@ const RegisterScreen = () => {
                 />
 
                 <TextInput
-                  placeholder="Nhập họ và tên"
+                  placeholder="type fullname"
                   onChangeText={(text) => setName(text)}
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -159,7 +159,7 @@ const RegisterScreen = () => {
                 />
 
                 <TextInput
-                  placeholder="Nhập email"
+                  placeholder="type email"
                   value={email}
                   onChangeText={(text) => setEmail(text)}
                   autoCapitalize="none"
@@ -170,7 +170,7 @@ const RegisterScreen = () => {
             </View>
 
             <View style={styles.wrapper}>
-              <Text style={styles.label}>Mật khẩu</Text>
+              <Text style={styles.label}>Password</Text>
               <View
                 style={styles.inputWrapper(
                   // touched.password ? COLORS.secondary : COLORS.offwhite
@@ -186,7 +186,7 @@ const RegisterScreen = () => {
 
                 <TextInput
                   secureTextEntry={obsecureText}
-                  placeholder="Nhập mật khẩu"
+                  placeholder="type password"
                   value={password}
                   onChangeText={(text) => setPassword(text)}
                   autoCapitalize="none"
@@ -220,7 +220,7 @@ const RegisterScreen = () => {
             </View>
 
             <Button
-              title={"ĐĂNG KÝ"}
+              title={"REGISTER"}
               onPress={handleRegister}
               loader={loader}
             />

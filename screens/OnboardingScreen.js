@@ -116,7 +116,7 @@ const OnboardingScreen = ({ navigation }) => {
         />
       </View>
       <TouchableOpacity style={styles.beginButton} onPress={handleButtonPress}>
-        <Text style={styles.beginButtonText}>Bắt đầu</Text>
+        <Text style={styles.beginButtonText}>Begin</Text>
         <MaterialIcons name="arrow-forward-ios" size={22} color="#fff" />
       </TouchableOpacity>
     </SafeAreaView>

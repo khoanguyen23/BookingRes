@@ -131,7 +131,7 @@ const BottomTabNavigator = () => {
         options={({ navigation }) => ({
           headerStyle: { backgroundColor: "red" },
           tabBarLabelStyle: { color: "#008E97" },
-          title: "Tìm kiếm",
+          title: "Search",
           tabBarIcon: ({ focused }) =>
             focused ? (
               <FontAwesome name="search" size={24} color="#D71537" />
@@ -202,7 +202,7 @@ const BottomTabNavigator = () => {
         name="AccountTab"
         component={AccountStack}
         options={{
-          title: "Tài khoản",
+          title: "Account",
           headerStyle: { backgroundColor: "red" },
           headerTintColor: "#fff",
           headerTitleAlign: "center",

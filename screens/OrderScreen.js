@@ -341,7 +341,7 @@ const OrderScreen = ({ navigation }) => {
       </ScrollView>
       <View style={styles.popupContainer}>
         <TouchableOpacity style={styles.applyButton} onPress={submitOrder}>
-          <Text style={styles.applyButtonText}>Tiếp tục</Text>
+          <Text style={styles.applyButtonText}>Order</Text>
         </TouchableOpacity>
       </View>
     </>

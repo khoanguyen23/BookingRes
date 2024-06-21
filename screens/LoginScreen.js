@@ -95,7 +95,7 @@ const LoginPage = ({ navigation }) => {
             source={require("../assets/lottie/login.json")}
           />
         </View>
-        <Text style={styles.titleLogin}>Đặt nhà hàng</Text>
+        <Text style={styles.titleLogin}>BOOKING APP</Text>
 
         <Formik
           initialValues={{ email: "", password: "" }}
@@ -127,7 +127,7 @@ const LoginPage = ({ navigation }) => {
                   />
 
                   <TextInput
-                    placeholder="Nhập email"
+                    placeholder="type your email"
                     onFocus={() => {
                       setFieldTouched("email");
                     }}
@@ -147,7 +147,7 @@ const LoginPage = ({ navigation }) => {
               </View>
 
               <View style={styles.wrapper}>
-                <Text style={styles.label}>Mật khẩu</Text>
+                <Text style={styles.label}>Password</Text>
                 <View
                   style={styles.inputWrapper(
                     touched.password ? COLORS.secondary : COLORS.offwhite
@@ -161,7 +161,7 @@ const LoginPage = ({ navigation }) => {
                   />
                   <TextInput
                     secureTextEntry={obsecureText}
-                    placeholder="Nhập mật khẩu"
+                    placeholder="type your password"
                     onFocus={() => {
                       setFieldTouched("password");
                     }}
@@ -191,17 +191,17 @@ const LoginPage = ({ navigation }) => {
               </View>
               <Button
                 loader={loader}
-                title={"ĐĂNG NHẬP"}
+                title={"LOGIN"}
                 onPress={isValid ? handleSubmit : inValidForm}
                 isValid={isValid}
               />
-              <Text style={styles.label}>chưa có mật khẩu</Text>
+              <Text style={styles.label}>Forget password ?</Text>
               <Text
                 style={styles.registration}
                 onPress={() => navigation.navigate("Register")}
               >
                 {" "}
-                Đăng ký{" "}
+                REGISTER{" "}
               </Text>
             </View>
           )}

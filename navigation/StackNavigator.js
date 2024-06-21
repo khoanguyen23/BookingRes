@@ -175,7 +175,7 @@ const StackNavigator = () => {
           name="ChangePassword"
           component={ChangePassword}
           options={{
-            title: "Thay đổi mật khẩu",
+            title: "Change password",
             headerStyle: { backgroundColor: "red" },
             headerTintColor: "#fff",
             headerTitleAlign: "center",

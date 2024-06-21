@@ -202,7 +202,7 @@ export default function RestaurantDetail() {
           }}
         >
           <PopUp
-            buttonText="Đặt chỗ"
+            buttonText="Book"
             onPress={() => {
               navigation.navigate("Order", { restaurant: item }); // assuming `item` is the restaurant data
             }}

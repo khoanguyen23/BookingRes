@@ -193,7 +193,7 @@ const FoodDetail = ({route}) => {
             </View>
             <TouchableOpacity className="bg-[#F44236] p-4 mt-3 rounded">
               <Text className="text-white text-center text-base font-bold">
-                Chọn ngay
+              Select now
               </Text>
             </TouchableOpacity>
           </View>
