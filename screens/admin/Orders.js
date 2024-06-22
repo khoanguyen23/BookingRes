@@ -196,7 +196,7 @@ const Orders = () => {
                   })
                 }
               >
-                詳細
+                Details
               </Text>
             </View>
           </View>
