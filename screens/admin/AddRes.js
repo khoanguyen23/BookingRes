@@ -88,7 +88,7 @@ const AddRes = () => {
 
   const handlePickImages = async () => {
     try {
-      const result = await pickImages(true); // Pass `true` for allowsMultipleSelection
+      const result = await pickImages(images,true); // Pass `true` for allowsMultipleSelection
 
       if (result.length > 0) {
         setImages(result);
@@ -120,17 +120,17 @@ const AddRes = () => {
     }
   };
 
-   const removeImage = (index) => {
-                    if (index < images.length) {
-                      // Xóa hình ảnh từ mảng images
-                      setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-                    } else {
-                      // Xóa URL từ mảng urls
-                      const updatedUrls = [...urls];
-                      updatedUrls.splice(index - images.length, 1); // Tính chỉ mục đúng trong mảng urls
-                      setUrls(updatedUrls);
-                    }
-                  };
+  const removeImage = (index) => {
+    if (index < images.length) {
+      // Xóa hình ảnh từ mảng images
+      setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    } else {
+      // Xóa URL từ mảng urls
+      const updatedUrls = [...urls];
+      updatedUrls.splice(index - images.length, 1); // Tính chỉ mục đúng trong mảng urls
+      setUrls(updatedUrls);
+    }
+  };
   const removeImagePrice = (index) => {
     setImagePrice((prevImages) => prevImages.filter((_, i) => i !== index));
   };
@@ -273,16 +273,29 @@ const AddRes = () => {
                           : "https://t4.ftcdn.net/jpg/04/81/13/43/360_F_481134373_0W4kg2yKeBRHNEklk4F9UXtGHdub3tYk.jpg",
                     }}
                   />
-
-{(images.length > 0 || urls.length > 0) && (
-    <TouchableOpacity
-      style={styles.removeLargeIconContainer}
-      onPress={() => removeImage(0)}
-    >
-      <FontAwesome6 name="xmark" size={16} color="white" />
-    </TouchableOpacity>
-  )}
+                  {(images.length > 0 || urls.length > 0) && (
+                    <TouchableOpacity
+                      style={styles.removeLargeIconContainer}
+                      onPress={() => removeImage(0)}
+                    >
+                      <FontAwesome6 name="xmark" size={16} color="white" />
+                    </TouchableOpacity>
+                  )}
+                  
                 </TouchableOpacity>
+                <View style={styles.imageList}>
+                  {[...images, ...urls].slice(1).map((item, index) => (
+                    <View key={index} style={styles.imageWrapper}>
+                      <Image style={styles.smallImage} source={{ uri: item }} />
+                      <TouchableOpacity
+                        style={styles.removeIconContainer}
+                        onPress={() => removeImage(index + 1)}
+                      >
+                        <FontAwesome6 name="xmark" size={16} color="white" />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
                 <View style={styles.inputContainer}>
                   <TextInput
                     style={styles.textInput}
@@ -301,22 +314,7 @@ const AddRes = () => {
                   </TouchableOpacity>
                 </View>
 
-                <View style={styles.imageList}>
-    {[...images, ...urls].slice(1).map((item, index) => (
-      <View key={index} style={styles.imageWrapper}>
-        <Image
-          style={styles.smallImage}
-          source={{ uri: item }}
-        />
-        <TouchableOpacity
-          style={styles.removeIconContainer}
-          onPress={() => removeImage(index + 1)}
-        >
-          <FontAwesome6 name="xmark" size={16} color="white" />
-        </TouchableOpacity>
-      </View>
-    ))}
-  </View>
+             
 
                 <Text className="text-xl mb-4">image price</Text>
                 <TouchableOpacity
