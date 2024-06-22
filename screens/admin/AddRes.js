@@ -43,6 +43,7 @@ const AddRes = () => {
   const [modalVisible, setModalVisible] = useState(true);
   const [images, setImages] = useState([]);
   const [urls, setUrls] = useState([]);
+  const [urlsImagePrice, setUrlsImagePrice] = useState([]);
   const [inputUrl, setInputUrl] = useState("");
   const [imagePrice, setImagePrice] = useState([]);
 
@@ -84,26 +85,11 @@ const AddRes = () => {
       </View>
     );
   };
-  // const pickImages = async () => {
-  //   try {
-  //     const result = await ImagePicker.launchImageLibraryAsync({
-  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //       // allowsMultipleSelection: true, 
-  //       quality: 1,
-  //     });
-
-  //     if (!result.canceled) {
-  //       setImages(result.assets.map((asset) => asset.uri));
-  //     }
-  //   } catch (error) {
-  //     console.log("Error picking images:", error);
-  //   }
-  // };
 
   const handlePickImages = async () => {
     try {
-      const result = await pickImages(); // Pass `true` for allowsMultipleSelection
-  
+      const result = await pickImages(true); // Pass `true` for allowsMultipleSelection
+
       if (result.length > 0) {
         setImages(result);
       }
@@ -114,7 +100,18 @@ const AddRes = () => {
   const handlePickImagesPrice = async () => {
     try {
       const result = await pickImages(true); // Pass `true` for allowsMultipleSelection
-  
+
+      if (result.length > 0) {
+        setImagePrice(result);
+      }
+    } catch (error) {
+      console.log("Error picking images:", error);
+    }
+  };
+  const handlePickImagesAlbum = async () => {
+    try {
+      const result = await pickImages(true); // Pass `true` for allowsMultipleSelection
+
       if (result.length > 0) {
         setImagePrice(result);
       }
@@ -123,10 +120,17 @@ const AddRes = () => {
     }
   };
 
-
-  const removeImage = (index) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-  };
+   const removeImage = (index) => {
+                    if (index < images.length) {
+                      // Xóa hình ảnh từ mảng images
+                      setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+                    } else {
+                      // Xóa URL từ mảng urls
+                      const updatedUrls = [...urls];
+                      updatedUrls.splice(index - images.length, 1); // Tính chỉ mục đúng trong mảng urls
+                      setUrls(updatedUrls);
+                    }
+                  };
   const removeImagePrice = (index) => {
     setImagePrice((prevImages) => prevImages.filter((_, i) => i !== index));
   };
@@ -264,35 +268,55 @@ const AddRes = () => {
                       uri:
                         images.length > 0
                           ? images[0]
+                          : urls.length > 0
+                          ? urls[0]
                           : "https://t4.ftcdn.net/jpg/04/81/13/43/360_F_481134373_0W4kg2yKeBRHNEklk4F9UXtGHdub3tYk.jpg",
                     }}
                   />
-                  {images.length > 0 && (
-                    <TouchableOpacity
-                      style={styles.removeLargeIconContainer}
-                      onPress={() => removeImage(0)}
-                    >
-                      <FontAwesome6 name="xmark" size={16} color="white" />
-                    </TouchableOpacity>
-                  )}
+
+{(images.length > 0 || urls.length > 0) && (
+    <TouchableOpacity
+      style={styles.removeLargeIconContainer}
+      onPress={() => removeImage(0)}
+    >
+      <FontAwesome6 name="xmark" size={16} color="white" />
+    </TouchableOpacity>
+  )}
                 </TouchableOpacity>
-              
-                <View style={styles.imageList}>
-                  {images.slice(1).map((imageUri, index) => (
-                    <View key={index} style={styles.imageWrapper}>
-                      <Image
-                        style={styles.smallImage}
-                        source={{ uri: imageUri }}
-                      />
-                      <TouchableOpacity
-                        style={styles.removeIconContainer}
-                        onPress={() => removeImage(index + 1)}
-                      >
-                        <FontAwesome6 name="xmark" size={16} color="white" />
-                      </TouchableOpacity>
-                    </View>
-                  ))}
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="Paste URL here"
+                    value={inputUrl}
+                    onChangeText={handleChangeText}
+                  />
+                  <TouchableOpacity onPress={handlePaste} style={styles.button}>
+                    <Text style={styles.buttonText}>Paste</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={handleAddUrl}
+                    style={styles.button}
+                  >
+                    <Text style={styles.buttonText}>Add</Text>
+                  </TouchableOpacity>
                 </View>
+
+                <View style={styles.imageList}>
+    {[...images, ...urls].slice(1).map((item, index) => (
+      <View key={index} style={styles.imageWrapper}>
+        <Image
+          style={styles.smallImage}
+          source={{ uri: item }}
+        />
+        <TouchableOpacity
+          style={styles.removeIconContainer}
+          onPress={() => removeImage(index + 1)}
+        >
+          <FontAwesome6 name="xmark" size={16} color="white" />
+        </TouchableOpacity>
+      </View>
+    ))}
+  </View>
 
                 <Text className="text-xl mb-4">image price</Text>
                 <TouchableOpacity
@@ -303,7 +327,7 @@ const AddRes = () => {
                     style={styles.tinyLogo}
                     source={{
                       uri:
-                      imagePrice.length > 0
+                        imagePrice.length > 0
                           ? imagePrice[0]
                           : "https://t4.ftcdn.net/jpg/04/81/13/43/360_F_481134373_0W4kg2yKeBRHNEklk4F9UXtGHdub3tYk.jpg",
                     }}
@@ -532,38 +556,38 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 20,
   },
   textInput: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     padding: 10,
     borderRadius: 5,
     marginRight: 10,
   },
   button: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: "#4CAF50",
     padding: 10,
     borderRadius: 5,
     marginLeft: 5,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
   },
   imageContainer: {
-    width: '100%',
+    width: "100%",
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 200,
     marginBottom: 20,
   },
   placeholder: {
     marginTop: 20,
-    color: '#888',
-    textAlign: 'center',
+    color: "#888",
+    textAlign: "center",
   },
 });
