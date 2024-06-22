@@ -14,12 +14,6 @@ import { API_URL } from "@env";
 const Customers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isVisible, setIsVisible] = useState(false);
-  const [newUser, setNewUser] = useState({
-    name: "",
-    mobileNo: "",
-    avatar: "",
-  });
 
   useEffect(() => {
     fetchUsers();
@@ -55,32 +49,11 @@ const Customers = () => {
     }
   };
 
-  const handleAddUser = async () => {
-    try {
-      const response = await axios.post(`${API_URL}/admin`, newUser);
-      if (response.status === 201) {
-        setNewUser({ name: "", mobileNo: "", avatar: "" });
-        setIsVisible(false);
-        fetchUsers();
-        Alert.alert("Success", "User added successfully");
-      } else {
-        Alert.alert("Error", "Failed to add user");
-      }
-    } catch (error) {
-      console.error("Error adding user:", error);
-      Alert.alert("Error", "Failed to add user");
-    }
-  };
-
   const AVATAR_DEFAULT =
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png";
   console.log(users);
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Customers</Text>
-        <Button title="Add User" onPress={() => setIsVisible(true)} />
-      </View>
       <View style={styles.content}>
         {users.map((user) => (
           <View key={user._id} style={styles.userContainer}>
@@ -130,33 +103,6 @@ const Customers = () => {
           </View>
         ))}
       </View>
-      <Overlay
-        isVisible={isVisible}
-        onBackdropPress={() => setIsVisible(false)}
-      >
-        <View style={styles.overlay}>
-          <Text style={styles.overlayTitle}>Add New User</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Name"
-            value={newUser.name}
-            onChangeText={(text) => setNewUser({ ...newUser, name: text })}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Mobile Number"
-            value={newUser.mobileNo}
-            onChangeText={(text) => setNewUser({ ...newUser, mobileNo: text })}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Avatar URL"
-            value={newUser.avatar}
-            onChangeText={(text) => setNewUser({ ...newUser, avatar: text })}
-          />
-          <Button title="Add User" onPress={handleAddUser} />
-        </View>
-      </Overlay>
     </ScrollView>
   );
 };
@@ -165,17 +111,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 15,
-    backgroundColor: "#20C0ED",
-  },
-  headerText: {
-    fontSize: 24,
-    color: "#fff",
   },
   content: {
     padding: 10,
