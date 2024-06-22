@@ -29,6 +29,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { ActionSheet, Cell } from "@nutui/nutui-react-native";
 import * as ImagePicker from "expo-image-picker";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { pickImages } from "../../utils/uploadImage";
 
 const AddRes = () => {
   const bottomSheetRef = useRef(null);
@@ -43,6 +44,7 @@ const AddRes = () => {
   const [images, setImages] = useState([]);
   const [urls, setUrls] = useState([]);
   const [inputUrl, setInputUrl] = useState("");
+  const [imagePrice, setImagePrice] = useState([]);
 
   const handlePaste = async () => {
     const clipboardContent = await Clipboard.getString();
@@ -82,23 +84,51 @@ const AddRes = () => {
       </View>
     );
   };
-  const pickImages = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsMultipleSelection: true, // Cho phép chọn nhiều ảnh
-        quality: 1,
-      });
+  // const pickImages = async () => {
+  //   try {
+  //     const result = await ImagePicker.launchImageLibraryAsync({
+  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //       // allowsMultipleSelection: true, 
+  //       quality: 1,
+  //     });
 
-      if (!result.canceled) {
-        setImages(result.assets.map((asset) => asset.uri));
+  //     if (!result.canceled) {
+  //       setImages(result.assets.map((asset) => asset.uri));
+  //     }
+  //   } catch (error) {
+  //     console.log("Error picking images:", error);
+  //   }
+  // };
+
+  const handlePickImages = async () => {
+    try {
+      const result = await pickImages(); // Pass `true` for allowsMultipleSelection
+  
+      if (result.length > 0) {
+        setImages(result);
       }
     } catch (error) {
       console.log("Error picking images:", error);
     }
   };
+  const handlePickImagesPrice = async () => {
+    try {
+      const result = await pickImages(true); // Pass `true` for allowsMultipleSelection
+  
+      if (result.length > 0) {
+        setImagePrice(result);
+      }
+    } catch (error) {
+      console.log("Error picking images:", error);
+    }
+  };
+
+
   const removeImage = (index) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+  };
+  const removeImagePrice = (index) => {
+    setImagePrice((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
   const SearchIcon = () => (
@@ -223,9 +253,9 @@ const AddRes = () => {
           >
             <ScrollView style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text className="text-xl mb-4">Add Restaurant</Text>
+                <Text className="text-xl mb-4">Image Restaurant</Text>
                 <TouchableOpacity
-                  onPress={pickImages}
+                  onPress={handlePickImages}
                   className="border-dashed border-2 border-indigo-600 p-2"
                 >
                   <Image
@@ -246,30 +276,7 @@ const AddRes = () => {
                     </TouchableOpacity>
                   )}
                 </TouchableOpacity>
-                {/* <TouchableOpacity
-                    style={styles.removeLargeIconContainer}
-                    onPress={() => removeImage(index + 1)}
-                  >
-                    <FontAwesome6 name="xmark" size={16} color="white" />
-                  </TouchableOpacity> */}
-                {/* <View className="flex flex-row space-x-2">
-                  <View className="mt-2">
-                    <Image
-                      className="w-12 h-12 rounded-md"
-                      source={{
-                        uri: "https://thanhnienmoi.com/upload/images/top-5-dia-diem-du-lich-o-thuy-si-03.jpg",
-                      }}
-                    />
-                  </View>
-                  <View className="mt-2">
-                    <Image
-                      className="w-12 h-12 rounded-md"
-                      source={{
-                        uri: "https://thanhnienmoi.com/upload/images/top-5-dia-diem-du-lich-o-thuy-si-03.jpg",
-                      }}
-                    />
-                  </View>
-                </View> */}
+              
                 <View style={styles.imageList}>
                   {images.slice(1).map((imageUri, index) => (
                     <View key={index} style={styles.imageWrapper}>
@@ -287,29 +294,45 @@ const AddRes = () => {
                   ))}
                 </View>
 
-                <Text className="text-xl mb-4">Add Restaurant</Text>
+                <Text className="text-xl mb-4">image price</Text>
                 <TouchableOpacity
-                  onPress={pickImages}
+                  onPress={handlePickImagesPrice}
                   className="border-dashed border-2 border-indigo-600 p-2"
                 >
                   <Image
                     style={styles.tinyLogo}
                     source={{
                       uri:
-                        images.length > 0
-                          ? images[0]
+                      imagePrice.length > 0
+                          ? imagePrice[0]
                           : "https://t4.ftcdn.net/jpg/04/81/13/43/360_F_481134373_0W4kg2yKeBRHNEklk4F9UXtGHdub3tYk.jpg",
                     }}
                   />
-                  {images.length > 0 && (
+                  {imagePrice.length > 0 && (
                     <TouchableOpacity
                       style={styles.removeLargeIconContainer}
-                      onPress={() => removeImage(0)}
+                      onPress={() => removeImagePrice(0)}
                     >
                       <FontAwesome6 name="xmark" size={16} color="white" />
                     </TouchableOpacity>
                   )}
                 </TouchableOpacity>
+                <View style={styles.imageList}>
+                  {imagePrice.slice(1).map((imageUri, index) => (
+                    <View key={index} style={styles.imageWrapper}>
+                      <Image
+                        style={styles.smallImage}
+                        source={{ uri: imageUri }}
+                      />
+                      <TouchableOpacity
+                        style={styles.removeIconContainer}
+                        onPress={() => removeImagePrice(index + 1)}
+                      >
+                        <FontAwesome6 name="xmark" size={16} color="white" />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
 
                 <View style={styles.inputContainer}>
                   <TextInput
