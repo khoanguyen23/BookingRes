@@ -7,7 +7,9 @@ import {
   Pressable,
   Image,
   ScrollView,
+  Clipboard,
 } from "react-native";
+
 import React, {
   useState,
   useEffect,
@@ -39,6 +41,27 @@ const AddRes = () => {
   const [longitude, setLongitude] = useState(null);
   const [modalVisible, setModalVisible] = useState(true);
   const [images, setImages] = useState([]);
+  const [urls, setUrls] = useState([]);
+  const [inputUrl, setInputUrl] = useState("");
+
+  const handlePaste = async () => {
+    const clipboardContent = await Clipboard.getString();
+    if (clipboardContent) {
+      setUrls([...urls, clipboardContent]);
+      setInputUrl("");
+    }
+  };
+
+  const handleAddUrl = () => {
+    if (inputUrl) {
+      setUrls([...urls, inputUrl]);
+      setInputUrl("");
+    }
+  };
+
+  const handleChangeText = (text) => {
+    setInputUrl(text);
+  };
 
   const FooterComponent = ({}) => {
     return (
@@ -264,20 +287,73 @@ const AddRes = () => {
                   ))}
                 </View>
 
+                <Text className="text-xl mb-4">Add Restaurant</Text>
+                <TouchableOpacity
+                  onPress={pickImages}
+                  className="border-dashed border-2 border-indigo-600 p-2"
+                >
+                  <Image
+                    style={styles.tinyLogo}
+                    source={{
+                      uri:
+                        images.length > 0
+                          ? images[0]
+                          : "https://t4.ftcdn.net/jpg/04/81/13/43/360_F_481134373_0W4kg2yKeBRHNEklk4F9UXtGHdub3tYk.jpg",
+                    }}
+                  />
+                  {images.length > 0 && (
+                    <TouchableOpacity
+                      style={styles.removeLargeIconContainer}
+                      onPress={() => removeImage(0)}
+                    >
+                      <FontAwesome6 name="xmark" size={16} color="white" />
+                    </TouchableOpacity>
+                  )}
+                </TouchableOpacity>
+
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="Paste URL here"
+                    value={inputUrl}
+                    onChangeText={handleChangeText}
+                  />
+                  <TouchableOpacity onPress={handlePaste} style={styles.button}>
+                    <Text style={styles.buttonText}>Paste</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={handleAddUrl}
+                    style={styles.button}
+                  >
+                    <Text style={styles.buttonText}>Add</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View className="flex flex-row space-x-2">
+                  {urls.length > 0 ? (
+                    urls.map((url, index) => (
+                      <Image
+                        key={index}
+                        source={{ uri: url }}
+                        style={styles.smallImage}
+                        resizeMode="cover"
+                      />
+                    ))
+                  ) : (
+                    <Text style={styles.placeholder}>
+                      Images will appear here
+                    </Text>
+                  )}
+                </View>
                 <View className="mt-10" style={{}}>
                   {/* <Text>Phần ở dưới</Text> */}
-                
 
                   <View className="space-y-4 grid">
-                    <TextInput
-                      mode="outlined"
-                      label="Name"
-                    />
+                    <TextInput mode="outlined" label="Name" />
 
-                  
                     <TextInput
                       mode="outlined"
-                      label='Description'
+                      label="Description"
                       multiline={true}
                     />
                     <TextInput
@@ -431,5 +507,40 @@ const styles = StyleSheet.create({
     height: 25,
     justifyContent: "center",
     alignItems: "center",
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  textInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  button: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 5,
+    marginLeft: 5,
+  },
+  buttonText: {
+    color: '#fff',
+  },
+  imageContainer: {
+    width: '100%',
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    marginBottom: 20,
+  },
+  placeholder: {
+    marginTop: 20,
+    color: '#888',
+    textAlign: 'center',
   },
 });
