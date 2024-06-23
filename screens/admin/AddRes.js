@@ -30,6 +30,7 @@ import { ActionSheet, Cell } from "@nutui/nutui-react-native";
 import * as ImagePicker from "expo-image-picker";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { pickImages } from "../../utils/pickImage";
+import ImageUploader from "../../utils/uploadImage";
 
 const AddRes = () => {
   const bottomSheetRef = useRef(null);
@@ -42,7 +43,7 @@ const AddRes = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [modalVisible, setModalVisible] = useState(true);
-  
+
   const [images, setImages] = useState([]);
   const [imagesPrice, setImagesPrice] = useState([]);
 
@@ -52,85 +53,18 @@ const AddRes = () => {
   const [inputUrl, setInputUrl] = useState("");
   const [inputUrlPrice, setInputUrlPrice] = useState("");
 
- 
-
-  const handleChangeText = (text) => {
-    setInputUrl(text);
-  };
-  const handleChangeTextPrice = (text) => {
-    setInputUrlPrice(text);
-  };
-
-  const handlePaste = async () => {
-    const clipboardContent = await Clipboard.getString();
-    if (clipboardContent) {
-      setUrls([...urls, clipboardContent]);
-      setInputUrl("");
-    }
-  };
-  const handlePastePrice = async () => {
-    const clipboardContent = await Clipboard.getString();
-    if (clipboardContent) {
-      setUrlsImagePrice([...urlsImagePrice, clipboardContent]);
-      setInputUrlPrice("");
-    }
-  };
-
-  const handleAddUrl = () => {
-    if (inputUrl) {
-      setUrls([...urls, inputUrl]);
-      setInputUrl("");
-    }
-  };
-  const handleAddUrlPrice = () => {
-    if (inputUrlPrice) {
-      setUrlsImagePrice([...urlsImagePrice, inputUrlPrice]);
-      setInputUrlPrice("");
-    }
-  };
-  const handlePickImages = async () => {
+  const handlePickImages = async (
+    imageState,
+    setImagesCallback,
+    allowMultipleSelection = false
+  ) => {
     try {
-      const result = await pickImages(images); // Pass `true` for allowsMultipleSelection
-
+      const result = await pickImages(imageState, allowMultipleSelection);
       if (result.length > 0) {
-        setImages(result);
+        setImagesCallback(result);
       }
     } catch (error) {
       console.log("Error picking images:", error);
-    }
-  };
-  const handlePickImagesPrice = async () => {
-    try {
-      const result = await pickImages(imagesPrice,true); // Pass `true` for allowsMultipleSelection
-
-      if (result.length > 0) {
-        setImagesPrice(result);
-      }
-    } catch (error) {
-      console.log("Error picking images:", error);
-    }
-  };
-
-  const removeImage = (index) => {
-    if (index < images.length) {
-      // Xóa hình ảnh từ mảng images
-      setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-    } else {
-      // Xóa URL từ mảng urls
-      const updatedUrls = [...urls];
-      updatedUrls.splice(index - images.length, 1); // Tính chỉ mục đúng trong mảng urls
-      setUrls(updatedUrls);
-    }
-  };
-  const removeImagePrice = (index) => {
-    if (index < imagesPrice.length) {
-      // Xóa hình ảnh từ mảng images
-      setImagesPrice((prevImages) => prevImages.filter((_, i) => i !== index));
-    } else {
-      // Xóa URL từ mảng urls
-      const updatedUrls = [...urlsImagePrice];
-      updatedUrls.splice(index - imagesPrice.length, 1); // Tính chỉ mục đúng trong mảng urls
-      setUrlsImagePrice(updatedUrls);
     }
   };
 
@@ -154,7 +88,6 @@ const AddRes = () => {
     );
   };
 
-  
   const handlePickImagesAlbum = async () => {
     try {
       const result = await pickImages(true); // Pass `true` for allowsMultipleSelection
@@ -166,8 +99,6 @@ const AddRes = () => {
       console.log("Error picking images:", error);
     }
   };
-
- 
 
   const SearchIcon = () => (
     <View className="">
@@ -228,12 +159,6 @@ const AddRes = () => {
           >
             <Text style={styles.textStyle}>Add infomation restaurant</Text>
           </Pressable>
-          {/* <TouchableOpacity className="bg-slate-100 p-3 m-3 flex flex-row justify-between rounded">
-            <Text className="text-base font-bold text-emerald-500">
-              Tiếp theo
-            </Text>
-            <AntDesign name="arrowright" size={24} color="#21BF73" />
-          </TouchableOpacity> */}
           <View style={{ flex: 1 }}>
             <GooglePlacesAutocomplete
               onPress={(data, details = null) => {
@@ -292,142 +217,34 @@ const AddRes = () => {
             <ScrollView style={styles.centeredView}>
               <View style={styles.modalView}>
                 {/* Image of Restaurant */}
-                <Text className="text-xl mb-4">Image Restaurant</Text>
-                <TouchableOpacity
-                  onPress={handlePickImages}
-                  className="border-dashed border-2 border-indigo-600 p-2"
-                >
-                  <Image
-                    style={styles.tinyLogo}
-                    source={{
-                      uri:
-                        images.length > 0
-                          ? images[0]
-                          : urls.length > 0
-                          ? urls[0]
-                          : "https://t4.ftcdn.net/jpg/04/81/13/43/360_F_481134373_0W4kg2yKeBRHNEklk4F9UXtGHdub3tYk.jpg",
-                    }}
-                  />
-                  {(images.length > 0 || urls.length > 0) && (
-                    <TouchableOpacity
-                      style={styles.removeLargeIconContainer}
-                      onPress={() => removeImage(0)}
-                    >
-                      <FontAwesome6 name="xmark" size={16} color="white" />
-                    </TouchableOpacity>
-                  )}
-                  
-                </TouchableOpacity>
-                <View style={styles.imageList}>
-                  {[...images, ...urls].slice(1).map((item, index) => (
-                    <View key={index} style={styles.imageWrapper}>
-                      <Image style={styles.smallImage} source={{ uri: item }} />
-                      <TouchableOpacity
-                        style={styles.removeIconContainer}
-                        onPress={() => removeImage(index + 1)}
-                      >
-                        <FontAwesome6 name="xmark" size={16} color="white" />
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                </View>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder="Paste URL here"
-                    value={inputUrl}
-                    onChangeText={handleChangeText}
-                  />
-                  <TouchableOpacity onPress={handlePaste} style={styles.button}>
-                    <Text style={styles.buttonText}>Paste</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={handleAddUrl}
-                    style={styles.button}
-                  >
-                    <Text style={styles.buttonText}>Add</Text>
-                  </TouchableOpacity>
-                </View>
-
-              {/* Image Price */}
-                <Text className="text-xl mb-4">image price</Text>
-                <TouchableOpacity
-                  onPress={handlePickImagesPrice}
-                  className="border-dashed border-2 border-indigo-600 p-2"
-                >
-                  <Image
-                    style={styles.tinyLogo}
-                    source={{
-                      uri:
-                        imagesPrice.length > 0
-                          ? imagesPrice[0]
-                          : urlsImagePrice.length > 0
-                          ? urlsImagePrice[0]
-                          : "https://t4.ftcdn.net/jpg/04/81/13/43/360_F_481134373_0W4kg2yKeBRHNEklk4F9UXtGHdub3tYk.jpg",
-                    }}
-                  />
-                  {(imagesPrice.length > 0 || urlsImagePrice.length > 0) && (
-                    <TouchableOpacity
-                      style={styles.removeLargeIconContainer}
-                      onPress={() => removeImagePrice(0)}
-                    >
-                      <FontAwesome6 name="xmark" size={16} color="white" />
-                    </TouchableOpacity>
-                  )}
-                </TouchableOpacity>
-                <View style={styles.imageList}>
-                  {[...imagesPrice, ...urlsImagePrice].slice(1).map((item, index) => (
-                    <View key={index} style={styles.imageWrapper}>
-                      <Image style={styles.smallImage} source={{ uri: item }} />
-                      <TouchableOpacity
-                        style={styles.removeIconContainer}
-                        onPress={() => removeImagePrice(index + 1)}
-                      >
-                        <FontAwesome6 name="xmark" size={16} color="white" />
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                </View>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder="Paste URL here"
-                    value={inputUrlPrice}
-                    onChangeText={handleChangeTextPrice}
-                  />
-                  <TouchableOpacity onPress={handlePastePrice} style={styles.button}>
-                    <Text style={styles.buttonText}>Paste</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={handleAddUrlPrice}
-                    style={styles.button}
-                  >
-                    <Text style={styles.buttonText}>Add</Text>
-                  </TouchableOpacity>
-                </View>
-
-                {/* <View className="flex flex-row space-x-2">
-                  {urls.length > 0 ? (
-                    urls.map((url, index) => (
-                      <Image
-                        key={index}
-                        source={{ uri: url }}
-                        style={styles.smallImage}
-                        resizeMode="cover"
-                      />
-                    ))
-                  ) : (
-                    <Text style={styles.placeholder}>
-                      Images will appear here
-                    </Text>
-                  )}
-                </View> */}
+                <ImageUploader
+                  title="Image Restaurant"
+                  images={images}
+                  setImages={setImages}
+                  urls={urls}
+                  setUrls={setUrls}
+                  inputUrl={inputUrl}
+                  setInputUrl={setInputUrl}
+                  handlePickImages={handlePickImages}
+                  imageState={images}
+                  allowMultipleSelection={false} // Single image selection for restaurant images
+                />
+                {/* Image Price */}
+                <ImageUploader
+                  title="Image Price"
+                  images={imagesPrice}
+                  setImages={setImagesPrice}
+                  urls={urlsImagePrice}
+                  setUrls={setUrlsImagePrice}
+                  inputUrl={inputUrlPrice}
+                  setInputUrl={setInputUrlPrice}
+                  handlePickImages={handlePickImages}
+                  imageState={imagesPrice}
+                  allowMultipleSelection={true} // Multiple image selection for price images
+                />
                 <View className="mt-10" style={{}}>
-                  {/* <Text>Phần ở dưới</Text> */}
-
                   <View className="space-y-4 grid">
                     <TextInput mode="outlined" label="Name" />
-
                     <TextInput
                       mode="outlined"
                       label="Description"
@@ -517,11 +334,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-  tinyLogo: {
-    width: "100%",
-    height: 250,
-    objectFit: "cover",
-  },
   map: {
     flex: 1,
     width: "100%",
@@ -548,55 +360,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     width: 40,
   },
-  imageList: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    marginBottom: 20,
-  },
-  imageWrapper: {
-    margin: 5,
-    position: "relative",
-  },
-  smallImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 10,
-  },
-  removeIconContainer: {
-    position: "absolute",
-    top: -4,
-    left: -7,
-    backgroundColor: "red",
-    borderRadius: 50,
-    width: 15,
-    height: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  removeLargeIconContainer: {
-    position: "absolute",
-    top: 1,
-    left: 0,
-    backgroundColor: "red",
-    borderRadius: 50,
-    width: 25,
-    height: 25,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
-  },
-  textInput: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    padding: 10,
-    borderRadius: 5,
-    marginRight: 10,
   },
   button: {
     backgroundColor: "#4CAF50",
@@ -606,18 +373,5 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-  },
-  imageContainer: {
-    width: "100%",
-  },
-  image: {
-    width: "100%",
-    height: 200,
-    marginBottom: 20,
-  },
-  placeholder: {
-    marginTop: 20,
-    color: "#888",
-    textAlign: "center",
   },
 });
