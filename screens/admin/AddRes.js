@@ -29,7 +29,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { ActionSheet, Cell } from "@nutui/nutui-react-native";
 import * as ImagePicker from "expo-image-picker";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { pickImages } from "../../utils/uploadImage";
+import { pickImages } from "../../utils/pickImage";
 
 const AddRes = () => {
   const bottomSheetRef = useRef(null);
@@ -38,20 +38,41 @@ const AddRes = () => {
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
   }, []);
+
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [modalVisible, setModalVisible] = useState(true);
+  
   const [images, setImages] = useState([]);
+  const [imagesPrice, setImagesPrice] = useState([]);
+
   const [urls, setUrls] = useState([]);
   const [urlsImagePrice, setUrlsImagePrice] = useState([]);
+
   const [inputUrl, setInputUrl] = useState("");
-  const [imagePrice, setImagePrice] = useState([]);
+  const [inputUrlPrice, setInputUrlPrice] = useState("");
+
+ 
+
+  const handleChangeText = (text) => {
+    setInputUrl(text);
+  };
+  const handleChangeTextPrice = (text) => {
+    setInputUrlPrice(text);
+  };
 
   const handlePaste = async () => {
     const clipboardContent = await Clipboard.getString();
     if (clipboardContent) {
       setUrls([...urls, clipboardContent]);
       setInputUrl("");
+    }
+  };
+  const handlePastePrice = async () => {
+    const clipboardContent = await Clipboard.getString();
+    if (clipboardContent) {
+      setUrlsImagePrice([...urlsImagePrice, clipboardContent]);
+      setInputUrlPrice("");
     }
   };
 
@@ -61,9 +82,56 @@ const AddRes = () => {
       setInputUrl("");
     }
   };
+  const handleAddUrlPrice = () => {
+    if (inputUrlPrice) {
+      setUrlsImagePrice([...urlsImagePrice, inputUrlPrice]);
+      setInputUrlPrice("");
+    }
+  };
+  const handlePickImages = async () => {
+    try {
+      const result = await pickImages(images); // Pass `true` for allowsMultipleSelection
 
-  const handleChangeText = (text) => {
-    setInputUrl(text);
+      if (result.length > 0) {
+        setImages(result);
+      }
+    } catch (error) {
+      console.log("Error picking images:", error);
+    }
+  };
+  const handlePickImagesPrice = async () => {
+    try {
+      const result = await pickImages(imagesPrice,true); // Pass `true` for allowsMultipleSelection
+
+      if (result.length > 0) {
+        setImagesPrice(result);
+      }
+    } catch (error) {
+      console.log("Error picking images:", error);
+    }
+  };
+
+  const removeImage = (index) => {
+    if (index < images.length) {
+      // Xóa hình ảnh từ mảng images
+      setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    } else {
+      // Xóa URL từ mảng urls
+      const updatedUrls = [...urls];
+      updatedUrls.splice(index - images.length, 1); // Tính chỉ mục đúng trong mảng urls
+      setUrls(updatedUrls);
+    }
+  };
+  const removeImagePrice = (index) => {
+    if (index < imagesPrice.length) {
+      // Xóa hình ảnh từ mảng images
+      setImagesPrice((prevImages) => prevImages.filter((_, i) => i !== index));
+    } else {
+      // Xóa URL từ mảng urls
+      const updatedUrls = [...urlsImagePrice];
+      updatedUrls.splice(index - imagesPrice.length, 1); // Tính chỉ mục đúng trong mảng urls
+      setUrlsImagePrice(updatedUrls);
+    }
   };
 
   const FooterComponent = ({}) => {
@@ -86,28 +154,7 @@ const AddRes = () => {
     );
   };
 
-  const handlePickImages = async () => {
-    try {
-      const result = await pickImages(images,true); // Pass `true` for allowsMultipleSelection
-
-      if (result.length > 0) {
-        setImages(result);
-      }
-    } catch (error) {
-      console.log("Error picking images:", error);
-    }
-  };
-  const handlePickImagesPrice = async () => {
-    try {
-      const result = await pickImages(true); // Pass `true` for allowsMultipleSelection
-
-      if (result.length > 0) {
-        setImagePrice(result);
-      }
-    } catch (error) {
-      console.log("Error picking images:", error);
-    }
-  };
+  
   const handlePickImagesAlbum = async () => {
     try {
       const result = await pickImages(true); // Pass `true` for allowsMultipleSelection
@@ -120,20 +167,7 @@ const AddRes = () => {
     }
   };
 
-  const removeImage = (index) => {
-    if (index < images.length) {
-      // Xóa hình ảnh từ mảng images
-      setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-    } else {
-      // Xóa URL từ mảng urls
-      const updatedUrls = [...urls];
-      updatedUrls.splice(index - images.length, 1); // Tính chỉ mục đúng trong mảng urls
-      setUrls(updatedUrls);
-    }
-  };
-  const removeImagePrice = (index) => {
-    setImagePrice((prevImages) => prevImages.filter((_, i) => i !== index));
-  };
+ 
 
   const SearchIcon = () => (
     <View className="">
@@ -257,6 +291,7 @@ const AddRes = () => {
           >
             <ScrollView style={styles.centeredView}>
               <View style={styles.modalView}>
+                {/* Image of Restaurant */}
                 <Text className="text-xl mb-4">Image Restaurant</Text>
                 <TouchableOpacity
                   onPress={handlePickImages}
@@ -314,8 +349,7 @@ const AddRes = () => {
                   </TouchableOpacity>
                 </View>
 
-             
-
+              {/* Image Price */}
                 <Text className="text-xl mb-4">image price</Text>
                 <TouchableOpacity
                   onPress={handlePickImagesPrice}
@@ -325,12 +359,14 @@ const AddRes = () => {
                     style={styles.tinyLogo}
                     source={{
                       uri:
-                        imagePrice.length > 0
-                          ? imagePrice[0]
+                        imagesPrice.length > 0
+                          ? imagesPrice[0]
+                          : urlsImagePrice.length > 0
+                          ? urlsImagePrice[0]
                           : "https://t4.ftcdn.net/jpg/04/81/13/43/360_F_481134373_0W4kg2yKeBRHNEklk4F9UXtGHdub3tYk.jpg",
                     }}
                   />
-                  {imagePrice.length > 0 && (
+                  {(imagesPrice.length > 0 || urlsImagePrice.length > 0) && (
                     <TouchableOpacity
                       style={styles.removeLargeIconContainer}
                       onPress={() => removeImagePrice(0)}
@@ -340,12 +376,9 @@ const AddRes = () => {
                   )}
                 </TouchableOpacity>
                 <View style={styles.imageList}>
-                  {imagePrice.slice(1).map((imageUri, index) => (
+                  {[...imagesPrice, ...urlsImagePrice].slice(1).map((item, index) => (
                     <View key={index} style={styles.imageWrapper}>
-                      <Image
-                        style={styles.smallImage}
-                        source={{ uri: imageUri }}
-                      />
+                      <Image style={styles.smallImage} source={{ uri: item }} />
                       <TouchableOpacity
                         style={styles.removeIconContainer}
                         onPress={() => removeImagePrice(index + 1)}
@@ -355,26 +388,25 @@ const AddRes = () => {
                     </View>
                   ))}
                 </View>
-
                 <View style={styles.inputContainer}>
                   <TextInput
                     style={styles.textInput}
                     placeholder="Paste URL here"
-                    value={inputUrl}
-                    onChangeText={handleChangeText}
+                    value={inputUrlPrice}
+                    onChangeText={handleChangeTextPrice}
                   />
-                  <TouchableOpacity onPress={handlePaste} style={styles.button}>
+                  <TouchableOpacity onPress={handlePastePrice} style={styles.button}>
                     <Text style={styles.buttonText}>Paste</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={handleAddUrl}
+                    onPress={handleAddUrlPrice}
                     style={styles.button}
                   >
                     <Text style={styles.buttonText}>Add</Text>
                   </TouchableOpacity>
                 </View>
 
-                <View className="flex flex-row space-x-2">
+                {/* <View className="flex flex-row space-x-2">
                   {urls.length > 0 ? (
                     urls.map((url, index) => (
                       <Image
@@ -389,7 +421,7 @@ const AddRes = () => {
                       Images will appear here
                     </Text>
                   )}
-                </View>
+                </View> */}
                 <View className="mt-10" style={{}}>
                   {/* <Text>Phần ở dưới</Text> */}
 
