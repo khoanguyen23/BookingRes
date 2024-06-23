@@ -8,6 +8,7 @@ import {
   Image,
   ScrollView,
   Clipboard,
+  KeyboardAvoidingView,
 } from "react-native";
 
 import React, {
@@ -46,12 +47,15 @@ const AddRes = () => {
 
   const [images, setImages] = useState([]);
   const [imagesPrice, setImagesPrice] = useState([]);
+  const [imagesAlbum, setImagesAlbum] = useState([]);
 
   const [urls, setUrls] = useState([]);
   const [urlsImagePrice, setUrlsImagePrice] = useState([]);
+  const [urlsImageAlbum, setUrlsImageAlbum] = useState([]);
 
   const [inputUrl, setInputUrl] = useState("");
   const [inputUrlPrice, setInputUrlPrice] = useState("");
+  const [inputUrlAlbum, setInputUrlAlbum] = useState("");
 
   const handlePickImages = async (
     imageState,
@@ -86,18 +90,6 @@ const AddRes = () => {
         />
       </View>
     );
-  };
-
-  const handlePickImagesAlbum = async () => {
-    try {
-      const result = await pickImages(true); // Pass `true` for allowsMultipleSelection
-
-      if (result.length > 0) {
-        setImagePrice(result);
-      }
-    } catch (error) {
-      console.log("Error picking images:", error);
-    }
   };
 
   const SearchIcon = () => (
@@ -240,6 +232,19 @@ const AddRes = () => {
                   setInputUrl={setInputUrlPrice}
                   handlePickImages={handlePickImages}
                   imageState={imagesPrice}
+                  allowMultipleSelection={true} // Multiple image selection for price images
+                />
+                {/* Image Album */}
+                <ImageUploader
+                  title="Image Album"
+                  images={imagesAlbum}
+                  setImages={setImagesAlbum}
+                  urls={urlsImageAlbum}
+                  setUrls={setUrlsImageAlbum}
+                  inputUrl={inputUrlAlbum}
+                  setInputUrl={setInputUrlAlbum}
+                  handlePickImages={handlePickImages}
+                  imageState={imagesAlbum}
                   allowMultipleSelection={true} // Multiple image selection for price images
                 />
                 <View className="mt-10" style={{}}>
