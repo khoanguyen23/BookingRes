@@ -9,11 +9,14 @@ import {
 } from "react-native";
 import { API_URL } from "@env";
 import { Avatar } from "@rneui/themed";
+import { SpeedDial } from "@rneui/themed";
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -68,10 +71,40 @@ const Category = () => {
   );
 
   return (
-    <ScrollView style={{ flex: 1 }}>
-      <View className="flex flex-row flex-wrap justify-around">
+    <ScrollView style={{ flex: 1, position: "relative" }}>
+      <View className="flex flex-row flex-wrap justify-around h-[790]">
         {categories.map((item) => renderCategoryItem(item))}
       </View>
+      <SpeedDial
+        placement="right"
+        isOpen={open}
+        icon={{ name: "edit", color: "#fff" }}
+        openIcon={{ name: "close", color: "#fff" }}
+        onOpen={() => setOpen(!open)}
+        onClose={() => setOpen(!open)}
+        buttonStyle={{
+          backgroundColor: "rgba(111, 202, 186, 1)",
+        }}
+      >
+        <SpeedDial.Action
+          icon={{ name: "add", color: "#fff" }}
+          title="Add"
+          buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
+          onPress={() => console.log("Add Something")}
+        />
+        <SpeedDial.Action
+          icon={{ name: "delete", color: "#fff" }}
+          buttonStyle={{ backgroundColor: "rgba(214, 61, 57, 1)" }}
+          title="Delete"
+          onPress={() => console.log("Delete Something")}
+        />
+        <SpeedDial.Action
+          icon={{ name: "edit", color: "#fff" }}
+          buttonStyle={{ backgroundColor: "rgba(255, 193, 7, 1)" }}
+          title="Edit"
+          onPress={() => console.log("Edit Something")}
+        />
+      </SpeedDial>
     </ScrollView>
   );
 };
