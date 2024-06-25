@@ -32,6 +32,7 @@
     "expo-location": "~16.1.0",
     "expo-status-bar": "~1.6.0",
     "formik": "^2.4.5",
+    "galio-framework": "^0.8.0",
     "geolib": "^3.3.4",
     "haversine-distance": "^1.2.1",
     "install": "^0.13.0",

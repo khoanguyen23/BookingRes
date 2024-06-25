@@ -28,6 +28,10 @@ import DetailOrders from "../screens/admin/DetailOrders";
 import ResAdmin from "../screens/admin/ResAdmin";
 import OrdersStackNavigator from "./ordersStackNavigator";
 import ResAdminStackNavigator from "./resAdminStackNavigator";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Category from "../screens/admin/Category";
+
+
 const Drawer = createDrawerNavigator();
 
 const CustomDrawerContent = (props) => {
@@ -83,7 +87,7 @@ const AdminTabNavigator = () => {
         options={{
           headerTitleAlign: "center",
           drawerIcon: ({ color, size }) => (
-            <AntDesign name="home" size={size} color={color} />
+            <MaterialIcons name="dashboard" size={size} color={color} />
           ),
         }}
       />
@@ -93,7 +97,7 @@ const AdminTabNavigator = () => {
         options={{
           headerTitleAlign: "center",
           drawerIcon: ({ color, size }) => (
-            <AntDesign name="home" size={size} color={color} />
+            <MaterialCommunityIcons name="account" size={24} color={color} />
           ),
           headerLeft: ({ onPress, tintColor }) => (
             <TouchableOpacity
@@ -129,9 +133,9 @@ const AdminTabNavigator = () => {
         component={ResAdminStackNavigator}
         options={{
           drawerIcon: ({ color, size }) => (
-            <AntDesign name="home" size={size} color={color} />
-            ),
-            headerShown: false,
+            <Ionicons name="restaurant" size={24} color={color} />
+          ),
+          headerShown: false,
           // Thêm dòng này nếu bạn muốn hiển thị tiêu đề "Home"
         }}
       />
@@ -139,6 +143,19 @@ const AdminTabNavigator = () => {
         name="OrderTab"
         component={OrdersStackNavigator}
         options={{
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="order-bool-descending-variant" size={24} color={{color}} />
+          ),
+          headerShown: false,
+        }}
+      />
+      <Drawer.Screen
+        name="Category"
+        component={Category}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <MaterialIcons name="category" size={24} color={color} />
+          ),
           headerShown: false,
         }}
       />

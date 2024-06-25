@@ -4,7 +4,7 @@ import React from "react";
 const HomeAdminCard = ({ title, iconUri, borderColor, bgColor, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress}>
-      <View className="w-[120] h-[180] bg-white items-center justify-center border border-[#DDDDDD] rounded-lg">
+      <View className="w-[120] h-[180] bg-white items-center justify-center border border-[#DDDDDD] rounded-lg mt-2">
         <View
           style={{
             borderColor: borderColor,
