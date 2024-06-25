@@ -1,21 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, TextInput, TouchableOpacity, Text, Alert } from "react-native";
+import { View, TouchableOpacity, Text, Alert } from "react-native";
 import React from "react";
-import HomeScreen from "../screens/Home";
-import Statistical from "../screens/admin/Statistical";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import SearchScreen from "../screens/SearchScreen";
-import * as Icon from "react-native-feather";
-
-import AccountScreen from "../screens/Account";
-import { FontAwesome } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeAdmin from "../screens/admin/HomeAdmin";
-import Restaurants from "../screens/admin/Restaurants";
-
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -23,9 +12,6 @@ import {
 } from "@react-navigation/drawer";
 import Customers from "../screens/admin/Customers";
 import { useNavigation } from "@react-navigation/native";
-import Orders from "../screens/admin/Orders";
-import DetailOrders from "../screens/admin/DetailOrders";
-import ResAdmin from "../screens/admin/ResAdmin";
 import OrdersStackNavigator from "./ordersStackNavigator";
 import ResAdminStackNavigator from "./resAdminStackNavigator";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
