@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { API_URL } from "@env";
-import { Avatar } from "@rneui/themed";
+import { Avatar, Button } from "@rneui/themed";
 import { SpeedDial } from "@rneui/themed";
 
 const Category = () => {
@@ -16,10 +16,16 @@ const Category = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null); // State for selected category for deletion
+  const [isDeleteMode, setIsDeleteMode] = useState(false); // State to toggle delete mode
 
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  const toggleDeleteMode = () => {
+    setIsDeleteMode(!isDeleteMode);
+  };
 
   async function fetchCategories() {
     try {
@@ -49,7 +55,7 @@ const Category = () => {
         <Text>{error}</Text>
         <Button
           buttonStyle={styles.retryButton}
-          onPress={fetchAllRestaurants}
+          onPress={fetchCategories}
           title="Retry"
         />
       </View>
@@ -58,7 +64,12 @@ const Category = () => {
 
   const renderCategoryItem = (item) => (
     <TouchableOpacity key={item.id}>
-      <View className="w-[120] h-[140] bg-white items-center justify-center border border-[#DDDDDD] rounded-lg mt-2">
+      <View
+        style={[
+          selectedCategory === item.id && isDeleteMode ? styles.selected : null,
+        ]}
+        className="w-[120] h-[140] bg-white items-center justify-center border border-[#DDDDDD] rounded-lg mt-2"
+      >
         <Avatar
           avatarStyle={{ objectFit: "cover" }}
           size={100}
@@ -71,12 +82,60 @@ const Category = () => {
   );
 
   return (
-    <ScrollView style={{ flex: 1, position: "relative" }}>
-      <View className="flex flex-row flex-wrap justify-around h-[790]">
+    <View style={{ flex: 1 }}>
+      <View
+        className={`flex flex-row justify-around ${
+          isDeleteMode ? "hidden" : ""
+        }`}
+      >
+        <Button
+          title="Select to delete"
+          loading={false}
+          loadingProps={{ size: "small", color: "white" }}
+          buttonStyle={{
+            backgroundColor: "rgba(214, 61, 57, 1)",
+            borderRadius: 5,
+          }}
+          containerStyle={{
+            height: 50,
+            width: 150,
+            marginTop: 20,
+          }}
+        />
+        <Button
+          title="Delete all"
+          loading={false}
+          loadingProps={{ size: "small", color: "white" }}
+          buttonStyle={{
+            backgroundColor: "rgba(214, 61, 57, 1)",
+            borderRadius: 5,
+          }}
+          containerStyle={{
+            marginTop: 20,
+            height: 50,
+            width: 150,
+          }}
+        />
+        <Button
+          title="cancel"
+          loading={false}
+          loadingProps={{ size: "small", color: "white" }}
+          buttonStyle={{
+            backgroundColor: "rgba(214, 61, 57, 1)",
+            borderRadius: 5,
+          }}
+          containerStyle={{
+            marginTop: 20,
+            height: 50,
+            width: 70,
+          }}
+          onPress={() => setIsDeleteMode(!isDeleteMode)}
+        />
+      </View>
+      <View className="flex flex-row flex-wrap justify-around h-screen">
         {categories.map((item) => renderCategoryItem(item))}
       </View>
       <SpeedDial
-        placement="right"
         isOpen={open}
         icon={{ name: "edit", color: "#fff" }}
         openIcon={{ name: "close", color: "#fff" }}
@@ -96,7 +155,10 @@ const Category = () => {
           icon={{ name: "delete", color: "#fff" }}
           buttonStyle={{ backgroundColor: "rgba(214, 61, 57, 1)" }}
           title="Delete"
-          onPress={() => console.log("Delete Something")}
+          onPress={() => {
+            toggleDeleteMode();
+            setOpen(!open);
+          }}
         />
         <SpeedDial.Action
           icon={{ name: "edit", color: "#fff" }}
@@ -105,7 +167,7 @@ const Category = () => {
           onPress={() => console.log("Edit Something")}
         />
       </SpeedDial>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -120,5 +182,10 @@ const styles = StyleSheet.create({
   retryButton: {
     marginTop: 10,
     backgroundColor: "#FF6347",
+  },
+  selected: {
+    borderColor: "red",
+    borderWidth: 2,
+    margin: 4,
   },
 });
