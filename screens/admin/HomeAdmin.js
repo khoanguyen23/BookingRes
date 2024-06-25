@@ -42,7 +42,7 @@ const HomeAdmin = () => {
           iconUri="https://res.cloudinary.com/dc5xcbmvp/image/upload/v1719304124/icons8-restaurant-menu-100_c30g2b.png"
           borderColor="#7277FC"
           bgColor="#E1E2FE"
-          onPress={() => navigation.navigate("OrderTab")}
+          onPress={() => navigation.navigate("Category")}
         />
 
         <HomeAdminCard

@@ -156,7 +156,7 @@ const AdminTabNavigator = () => {
           drawerIcon: ({ color, size }) => (
             <MaterialIcons name="category" size={24} color={color} />
           ),
-          headerShown: false,
+          // headerShown: false,
         }}
       />
     </Drawer.Navigator>
