@@ -74,6 +74,7 @@
     "react-native-table-component": "^1.2.2",
     "react-native-tabs-section-list": "^1.0.1",
     "react-native-vector-icons": "^10.1.0",
+    "react-native-virtualized-view": "^1.0.0",
     "react-native-webview": "13.2.2",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
     "tailwindcss": "3.3.2",

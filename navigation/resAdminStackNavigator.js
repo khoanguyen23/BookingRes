@@ -4,6 +4,7 @@ import AddRes from "../screens/admin/AddRes";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import ResInfo from "../screens/admin/ResInfo";
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,16 @@ const ResAdminStackNavigator = () => {
       <Stack.Screen
         name="AddRes"
         component={AddRes}
+        options={{
+          headerStyle: { backgroundColor: "#1C212D" },
+          headerTitleAlign: "center",
+          headerTitle: "Thêm nhà hàng",
+          headerTintColor: "#fff",
+        }}
+      />
+      <Stack.Screen
+        name="ResInfo"
+        component={ResInfo}
         options={{
           headerStyle: { backgroundColor: "#1C212D" },
           headerTitleAlign: "center",

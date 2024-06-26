@@ -34,8 +34,7 @@ import { pickImages } from "../../utils/pickImage";
 import ImageUploader from "../../utils/uploadImage";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-const AddRes = () => {
-  const navigation = useNavigation();
+const ResInfo = () => {
   const bottomSheetRef = useRef(null);
   const [refresh, setRefresh] = useState(0);
   const snapPoints = useMemo(() => ["20%", "40%", "60%", "85%", "90%"], []);
@@ -73,114 +72,9 @@ const AddRes = () => {
       console.log("Error picking images:", error);
     }
   };
-
-  
-
   return (
-    <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        //specify our coordinates.
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      />
-
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={1}
-        snapPoints={snapPoints}
-        enablePanDownToClose={false}
-        onChange={handleSheetChanges}
-        style={styles.sheetContainer}
-        handleIndicatorStyle={styles.sheetHandleIndicator}
-        backgroundStyle={{ backgroundColor: "#FFFFFF" }}
-        // footerComponent={() => <FooterComponent />}
-      >
-        <View style={{ flex: 1 }}>
-          <View style={{ flex: 0.1 }}>
-            <View className="flex-row items-center justify-between p-3 bg-[#f7f4f4] rounded-lg ml-3 mr-3 mt-2">
-              <View className="flex-row items-center space-x-4">
-                <View className="bg-[#21BF73] w-10 h-10 rounded-lg items-center justify-center">
-                  <Feather name="navigation" size={24} color="white" />
-                </View>
-                <Text className="text-lg">Get my current location</Text>
-              </View>
-              <AntDesign name="right" size={24} color="#B4B4BC" />
-            </View>
-          </View>
-          <View className="p-4 mt-2">
-            <Text className="text-base">Restaurant address selected : </Text>
-            <Text className="text-base mt-2">Longitude: {longitude}</Text>
-            <Text className="text-base mt-2">Latitude: {latitude}</Text>
-          </View>
-          <Pressable
-            style={[styles.button, styles.buttonOpen]}
-            onPress={() => navigation.navigate("ResInfo")}
-            // onPress={() => setModalVisible(true)}
-          >
-            <Text style={styles.textStyle}>Add infomation restaurant</Text>
-          </Pressable>
-          <View style={{ flex: 1 }}>
-            <GooglePlacesAutocomplete
-              onPress={(data, details = null) => {
-                if (details) {
-                  console.log("Selected Address:", data.description);
-                  console.log("Latitude:", details.geometry.location.lat);
-                  console.log("Longitude:", details.geometry.location.lng);
-                  setLatitude(details.geometry.location.lat);
-                  setLongitude(details.geometry.location.lng);
-                }
-              }}
-              fetchDetails={true}
-              query={{
-                key: GOOGLE_MAPS_API_KEY,
-                language: "en",
-              }}
-              textInputProps={{
-                InputComp: TextInput,
-                mode: "outlined",
-                label: "type address...",
-                style: { width: "100%", backgroundColor: "#EFEFF0" },
-                activeOutlineColor: "red",
-                outlineStyle: { borderRadius: 12, borderWidth: 0 },
-              }}
-              styles={{
-                container: styles.autoCompleteContainer,
-              }}
-              // renderHeaderComponent={() => (
-              //   <View style={{ padding: 10, backgroundColor: "#9DDEF0", marginTop : 5, borderRadius: 10 }}>
-              //     <Text>Kết quả tìm kiếm</Text>
-              //   </View>
-              // )}
-              renderRow={(data, index) => (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    paddingVertical: 2,
-                  }}
-                >
-                  <Entypo name="location-pin" size={24} color="black" />
-                  <Text style={{ marginLeft: 10 }}>{data.description}</Text>
-                </View>
-              )}
-            />
-          </View>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <ScrollView style={styles.centeredView}>
-              <View style={styles.modalView}>
+    <ScrollView>
+        <View style={styles.modalView}>
                 {/* Image of Restaurant */}
                 <ImageUploader
                   title="Image Restaurant"
@@ -271,15 +165,11 @@ const AddRes = () => {
                   </Pressable>
                 </View>
               </View>
-            </ScrollView>
-          </Modal>
-        </View>
-      </BottomSheet>
-    </View>
-  );
-};
+    </ScrollView>
+  )
+}
 
-export default AddRes;
+export default ResInfo
 
 const styles = StyleSheet.create({
   container: {
@@ -289,9 +179,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    margin: 10,
+    
     backgroundColor: "white",
-    borderRadius: 20,
+    // borderRadius: 20,
     padding: 35,
     // alignItems: "center",
     shadowColor: "#000",
