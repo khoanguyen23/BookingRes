@@ -14,6 +14,7 @@ import ImageUploader from "../../utils/uploadImage";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 const ResInfo = () => {
+  const navigation = useNavigation();
 
   const [images, setImages] = useState([]);
   const [imagesPrice, setImagesPrice] = useState([]);
@@ -113,14 +114,14 @@ const ResInfo = () => {
 
         <View className="flex flex-row mt-4 justify-center">
           <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={() => setModalVisible(!modalVisible)}
+            style={[styles.button]}
+            onPress={() => navigation.goBack()}
           >
-            <Text style={styles.textStyle}>Close</Text>
+            <Text style={styles.textStyle}>Turn back</Text>
           </Pressable>
           <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={() => setModalVisible(!modalVisible)}
+            style={[styles.button]}
+            onPress={() => navigation}
           >
             <Text style={styles.textStyle}>Add Restaurant</Text>
           </Pressable>
@@ -144,9 +145,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
   },
   textStyle: {
     color: "white",
