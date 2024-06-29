@@ -64,19 +64,11 @@ const LoginPage = ({ navigation }) => {
         await AsyncStorage.setItem("authToken", response.data.token);
 
         if (isAdmin) {
-          // If admin, navigate to the admin screen
           navigation.replace("Admin");
         } else {
-          // If not admin, navigate to the main screen
           navigation.replace("Main");
         }
-      } else {
-        // Handle other status codes if needed
-        Alert.alert("Lỗi", "Hãy kiểm tra lại thông tin");
       }
-    } catch (error) {
-      // console.error("Error during login:", error);
-      Alert.alert("Lỗi", "Hãy kiểm tra lại thông tin");
     } finally {
       setLoader(false);
     }
