@@ -23,6 +23,8 @@ import { FontAwesome6 } from "@expo/vector-icons";
 
 const ResInfo = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { longitude, latitude } = route.params || {};
 
   const [images, setImages] = useState([]);
   const [imagesPrice, setImagesPrice] = useState([]);
@@ -122,6 +124,13 @@ const ResInfo = () => {
   return (
     <ScrollView>
       <View style={styles.modalView}>
+       {longitude && latitude && (
+          <View style={styles.modalView}>
+            <Text className="text-base">Restaurant address selected :</Text>
+            <Text className="text-base mt-2">Longitude: {longitude}</Text>
+            <Text className="text-base mt-2">Latitude: {latitude}</Text>
+          </View>
+        )}
         {/* Image of Restaurant */}
         <ImageUploader
           title="Image Restaurant"

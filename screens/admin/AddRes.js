@@ -63,7 +63,7 @@ const AddRes = () => {
           </View>
           <Pressable
             style={styles.button}
-            onPress={() => navigation.navigate("ResInfo")}
+            onPress={() => navigation.navigate("ResInfo", { longitude, latitude })}
           >
             <Text className="text-center text-white font-bold text-base">
               CONTINUE
