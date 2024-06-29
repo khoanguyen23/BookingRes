@@ -34,6 +34,7 @@ const MapCenter = () => {
   const navigation = useNavigation();
   const [location, setLocation] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedAddress, setSelectedAddress] = useState("loading...");
   const [markerCoordinate, setMarkerCoordinate] = useState(null);
   const [selectedLatitude, setSelectedLatitude] = useState(null);
@@ -123,8 +124,10 @@ const MapCenter = () => {
         currentPosition.coords.latitude,
         currentPosition.coords.longitude
       );
+      setLoading(false);
     } else {
       console.error("Quyền truy cập vị trí không được cấp");
+      setLoading(false);
     }
   }
 
@@ -242,105 +245,114 @@ const MapCenter = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchBox}>
-        <Text style={{ flex: 1 }} numberOfLines={1} ellipsizeMode="tail">
-          {searchAddress}
-        </Text>
-        <Ionicons name="location-sharp" size={24} color="red" />
-        {/* <Button title="Tìm kiếm" onPress={handleSearch} /> */}
-      </View>
-      {location && location.coords && (
-        <MapView
-          ref={mapRef}
-          style={styles.map}
-          initialRegion={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
-          }}
-          onPress={(event) => {
-            const { latitude, longitude } = event.nativeEvent.coordinate;
-            setMarkerCoordinate({ latitude, longitude });
-            fetchDataFromServer(latitude, longitude);
-          }}
-          onRegionChangeComplete={handleRegionChangeComplete}
-        >
-          {markerCoordinate && (
-            <>
-              <Marker coordinate={markerCoordinate}>
-                <Animated.View style={styles.markerWrap}>
-                  <Animated.View
-                    style={[
-                      styles.ring,
-                      { opacity: opacityAnimationRef },
-                      { transform: [{ scale: scaleAnimationRef }] },
-                    ]}
-                  />
-                  <View style={styles.marker} />
-                </Animated.View>
-              </Marker>
-              {nearbyRestaurants.map((restaurant) => (
-                <Marker
-                  key={restaurant._id}
-                  coordinate={{
-                    latitude: restaurant.location.coordinates[1],
-                    longitude: restaurant.location.coordinates[0],
-                  }}
-                  title={restaurant.name}
-                >
-                  <Image
-                    source={require("../assets/img/restaurant.png")}
-                    style={{ width: 40, height: 40 }}
-                    resizeMode="cover"
-                  />
-                </Marker>
-              ))}
-            </>
-          )}
-        </MapView>
-      )}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>Latitude: {selectedLatitude}</Text>
-            <Text style={styles.modalText}>Longitude: {selectedLongitude}</Text>
-            <Button title="Convert to Address" onPress={convertToAddress} />
-            <Text style={styles.modalText}>
-              Converted Address: {selectedAddress}
+ {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text>Đang tải...</Text>
+        </View>
+      ) : (
+        <>
+          <View style={styles.searchBox}>
+            <Text style={{ flex: 1 }} numberOfLines={1} ellipsizeMode="tail">
+              {searchAddress}
             </Text>
-            <Button title="Close" onPress={() => setModalVisible(false)} />
+            <Ionicons name="location-sharp" size={24} color="red" />
+            {/* <Button title="Tìm kiếm" onPress={handleSearch} /> */}
           </View>
-        </View>
-      </Modal>
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={1}
-        snapPoints={snapPoints}
-        enablePanDownToClose={false}
-        onChange={handleSheetChanges}
-        style={styles.sheetContainer}
-        handleIndicatorStyle={styles.sheetHandleIndicator}
-      >
-        <View
-          style={styles.contentContainer}
-          className="rounded-tl-lg rounded-tr-lg"
-        >
-          <ListRes
-            nearbyRestaurants={nearbyRestaurants}
-            navigation={navigation}
-            refresh={refresh}
-          />
-        </View>
-      </BottomSheet>
-      <View style={[styles.redView, showRedView && styles.showRedView]} />
+          {location && location.coords && (
+            <MapView
+              ref={mapRef}
+              style={styles.map}
+              initialRegion={{
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.005,
+                longitudeDelta: 0.005,
+              }}
+              onPress={(event) => {
+                const { latitude, longitude } = event.nativeEvent.coordinate;
+                setMarkerCoordinate({ latitude, longitude });
+                fetchDataFromServer(latitude, longitude);
+              }}
+              onRegionChangeComplete={handleRegionChangeComplete}
+            >
+              {markerCoordinate && (
+                <>
+                  <Marker coordinate={markerCoordinate}>
+                    <Animated.View style={styles.markerWrap}>
+                      <Animated.View
+                        style={[
+                          styles.ring,
+                          { opacity: opacityAnimationRef },
+                          { transform: [{ scale: scaleAnimationRef }] },
+                        ]}
+                      />
+                      <View style={styles.marker} />
+                    </Animated.View>
+                  </Marker>
+                  {nearbyRestaurants.map((restaurant) => (
+                    <Marker
+                      key={restaurant._id}
+                      coordinate={{
+                        latitude: restaurant.location.coordinates[1],
+                        longitude: restaurant.location.coordinates[0],
+                      }}
+                      title={restaurant.name}
+                    >
+                      <Image
+                        source={require("../assets/img/restaurant.png")}
+                        style={{ width: 40, height: 40 }}
+                        resizeMode="cover"
+                      />
+                    </Marker>
+                  ))}
+                </>
+              )}
+            </MapView>
+          )}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(false);
+            }}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalText}>Latitude: {selectedLatitude}</Text>
+                <Text style={styles.modalText}>Longitude: {selectedLongitude}</Text>
+                <Button title="Convert to Address" onPress={convertToAddress} />
+                <Text style={styles.modalText}>
+                  Converted Address: {selectedAddress}
+                </Text>
+                <Button title="Close" onPress={() => setModalVisible(false)} />
+              </View>
+            </View>
+          </Modal>
+          <BottomSheet
+            ref={bottomSheetRef}
+            index={1}
+            snapPoints={snapPoints}
+            enablePanDownToClose={false}
+            onChange={handleSheetChanges}
+            style={styles.sheetContainer}
+            handleIndicatorStyle={styles.sheetHandleIndicator}
+          >
+            <View
+              style={styles.contentContainer}
+              className="rounded-tl-lg rounded-tr-lg"
+            >
+              <ListRes
+                nearbyRestaurants={nearbyRestaurants}
+                navigation={navigation}
+                refresh={refresh}
+              />
+            </View>
+          </BottomSheet>
+          <View style={[styles.redView, showRedView && styles.showRedView]} />
+        </>
+      )}
     </View>
   );
 };
