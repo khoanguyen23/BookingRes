@@ -19,6 +19,7 @@ import { MultipleSelectList } from "react-native-dropdown-select-list";
 import { API_URL } from "@env";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ActionSheet, Cell } from "@nutui/nutui-react-native";
+import { FontAwesome6 } from "@expo/vector-icons";
 
 const ResInfo = () => {
   const navigation = useNavigation();
@@ -113,6 +114,10 @@ const ResInfo = () => {
       console.log("Error picking images:", error);
     }
   };
+
+  const removeTime = (index) => {
+    setTimes(times.filter((_, i) => i !== index));
+  };
   // console.log("pick select categories", categories)
   return (
     <ScrollView>
@@ -177,51 +182,56 @@ const ResInfo = () => {
                 onChange={onChange}
               />
             )}
-            <View className="border p-2 rounded-lg border-slate-500">
-              <ScrollView>
-                <View className="flex-row flex-wrap items-center justify-around">
-                  {times.map((time, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      style={{
-                        backgroundColor: "#D0D0D0",
-                        padding: 10,
-                        // width: "25%",
-                        alignItems: "center",
-                        borderRadius: 20,
-                        borderColor: "#D0D0D0",
-                        borderWidth: 1.5,
-                        marginTop: 5,
-                        color: "#666666",
-                        fontWeight: "bold",
-                        fontSize: 17,
-                        marginRight: 7,
-                      }}
-                    >
-                      <Text
+            {times.length > 0 && (
+              <View className="border p-2 rounded-lg border-slate-500">
+                <ScrollView>
+                  <View className="flex-row flex-wrap items-center justify-around">
+                    {times.map((time, index) => (
+                      <TouchableOpacity
+                        key={index}
                         style={{
+                          position: "relative",
+                          backgroundColor: "#D0D0D0",
+                          padding: 10,
+                          alignItems: "center",
+                          borderRadius: 20,
+                          borderColor: "#D0D0D0",
+                          borderWidth: 1.5,
+                          marginTop: 5,
                           color: "#666666",
                           fontWeight: "bold",
                           fontSize: 17,
+                          marginRight: 7,
                         }}
                       >
-                        {formatTime(time)}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </ScrollView>
-            </View>
-            <TextInput
-              mode="outlined"
-              label="Outlined input"
-              placeholder="Type something"
-            />
-            <TextInput
-              mode="outlined"
-              label="Outlined input"
-              placeholder="Type something"
-            />
+                        <TouchableOpacity
+                          onPress={() => removeTime(index)}
+                          style={{
+                            position: "absolute",
+                            top: -5,
+                            left: -5,
+                            zIndex: 1,
+                          }}
+                        >
+                          <FontAwesome6 name="xmark" size={16} color="red" />
+                        </TouchableOpacity>
+                        <Text
+                          style={{
+                            color: "#666666",
+                            fontWeight: "bold",
+                            fontSize: 17,
+                          }}
+                        >
+                          {formatTime(time)}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </ScrollView>
+              </View>
+            )}
+
+            <TextInput mode="outlined" label="Opening Time" />
           </View>
 
           <View className="mt-4">
@@ -236,15 +246,15 @@ const ResInfo = () => {
         </View>
 
         <View className="flex flex-row mt-4 justify-center">
-          <Pressable
+          <TouchableOpacity
             style={[styles.button]}
             onPress={() => navigation.goBack()}
           >
             <Text style={styles.textStyle}>Turn back</Text>
-          </Pressable>
-          <Pressable style={[styles.button]} onPress={() => navigation}>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button]} onPress={() => navigation}>
             <Text style={styles.textStyle}>Add Restaurant</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
