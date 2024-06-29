@@ -44,7 +44,7 @@ const ResInfo = () => {
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedTime) => {
-    if (selectedTime) {
+    if (event.type === "set" && selectedTime) {
       setTimes([...times, selectedTime]);
     }
     setShow(Platform.OS === "ios");
@@ -177,36 +177,40 @@ const ResInfo = () => {
                 onChange={onChange}
               />
             )}
-            <View style={styles.modalView}>
-              {times.map((time, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={{
-                    backgroundColor: "#D0D0D0",
-                    padding: 10,
-                    width: "25%",
-                    alignItems: "center",
-                    borderRadius: 20,
-                    borderColor: "#D0D0D0",
-                    borderWidth: 1.5,
-                    marginTop: 5,
-                    color: "#666666",
-                    fontWeight: "bold",
-                    fontSize: 17,
-                    marginRight: 7,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#666666",
-                      fontWeight: "bold",
-                      fontSize: 17,
-                    }}
-                  >
-                    {formatTime(time)}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+            <View className="border p-2 rounded-lg border-slate-500">
+              <ScrollView>
+                <View className="flex-row flex-wrap items-center justify-around">
+                  {times.map((time, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={{
+                        backgroundColor: "#D0D0D0",
+                        padding: 10,
+                        // width: "25%",
+                        alignItems: "center",
+                        borderRadius: 20,
+                        borderColor: "#D0D0D0",
+                        borderWidth: 1.5,
+                        marginTop: 5,
+                        color: "#666666",
+                        fontWeight: "bold",
+                        fontSize: 17,
+                        marginRight: 7,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: "#666666",
+                          fontWeight: "bold",
+                          fontSize: 17,
+                        }}
+                      >
+                        {formatTime(time)}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </ScrollView>
             </View>
             <TextInput
               mode="outlined"
