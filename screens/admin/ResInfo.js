@@ -7,6 +7,7 @@ import {
   ScrollView,
   Clipboard,
   Button,
+  Platform,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { TextInput } from "react-native-paper";
@@ -17,6 +18,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
 import { API_URL } from "@env";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { ActionSheet, Cell } from "@nutui/nutui-react-native";
 
 const ResInfo = () => {
   const navigation = useNavigation();
@@ -38,17 +40,29 @@ const ResInfo = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [time, setTime] = useState(new Date());
+  const [times, setTimes] = useState([]);
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedTime) => {
-    const currentTime = selectedTime || time;
+    if (selectedTime) {
+      setTimes([...times, selectedTime]);
+    }
     setShow(Platform.OS === "ios");
-    setTime(currentTime);
   };
 
   const showTimepicker = () => {
     setShow(true);
+  };
+
+  const formatTime = (date) => {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // Giờ 0 phải chuyển thành 12
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    const strTime = hours + ":" + minutes + " " + ampm;
+    return strTime;
   };
 
   async function fetchCategories() {
@@ -147,22 +161,53 @@ const ResInfo = () => {
             <TextInput mode="outlined" label="Name" />
             <TextInput mode="outlined" label="Description" multiline={true} />
             <TextInput mode="outlined" label="Address" multiline={true} />
-            <TextInput
-              mode="outlined"
-              label="Outlined input"
-              placeholder="Type something"
-            />
-            <Button onPress={showTimepicker} title="Show Time Picker" />
+            <TouchableOpacity
+              onPress={showTimepicker}
+              className="border p-3 rounded border-slate-500"
+            >
+              <Text className="text-base">Pick a time</Text>
+            </TouchableOpacity>
             {show && (
               <DateTimePicker
                 testID="dateTimePicker"
-                value={time}
+                value={new Date()}
                 mode="time"
                 is24Hour={true}
                 display="default"
                 onChange={onChange}
               />
             )}
+            <View style={styles.modalView}>
+              {times.map((time, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={{
+                    backgroundColor: "#D0D0D0",
+                    padding: 10,
+                    width: "25%",
+                    alignItems: "center",
+                    borderRadius: 20,
+                    borderColor: "#D0D0D0",
+                    borderWidth: 1.5,
+                    marginTop: 5,
+                    color: "#666666",
+                    fontWeight: "bold",
+                    fontSize: 17,
+                    marginRight: 7,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#666666",
+                      fontWeight: "bold",
+                      fontSize: 17,
+                    }}
+                  >
+                    {formatTime(time)}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
             <TextInput
               mode="outlined"
               label="Outlined input"
@@ -174,6 +219,7 @@ const ResInfo = () => {
               placeholder="Type something"
             />
           </View>
+
           <View className="mt-4">
             <SelectList
               setSelected={(val) => setSelected(val)}

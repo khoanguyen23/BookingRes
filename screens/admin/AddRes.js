@@ -1,15 +1,5 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable
-} from "react-native";
-import React, {
-  useState,
-  useRef,
-  useCallback,
-  useMemo,
-} from "react";
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import React, { useState, useRef, useCallback, useMemo } from "react";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import { TextInput } from "react-native-paper";
@@ -31,7 +21,6 @@ const AddRes = () => {
 
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-
 
   return (
     <View style={styles.container}>
@@ -76,7 +65,9 @@ const AddRes = () => {
             style={styles.button}
             onPress={() => navigation.navigate("ResInfo")}
           >
-            <Text className="text-center text-white font-bold text-base">Add infomation restaurant</Text>
+            <Text className="text-center text-white font-bold text-base">
+              CONTINUE
+            </Text>
           </Pressable>
           <View style={{ flex: 1 }}>
             <GooglePlacesAutocomplete
@@ -166,6 +157,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#4CAF50",
     padding: 10,
     borderRadius: 5,
-    marginLeft: 5,
+    marginLeft: 10,
+    marginRight: 10,
   },
 });
