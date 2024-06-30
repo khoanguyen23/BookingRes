@@ -46,6 +46,11 @@ const ResInfo = () => {
   const [times, setTimes] = useState([]);
   const [show, setShow] = useState(false);
 
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [address, setAddress] = useState("");
+  const [openingHours, setOpeningHours] = useState("");
+
   const onChange = (event, selectedTime) => {
     if (event.type === "set" && selectedTime) {
       setTimes([...times, selectedTime]);
@@ -71,17 +76,12 @@ const ResInfo = () => {
   async function fetchCategories() {
     try {
       const response = await fetch(`${API_URL}/categories`);
-
       const data = await response.json();
-      console.log(data);
       let newArray = data.map((item) => {
         return { key: item._id, value: item.name };
       });
-      console.log("new array: ", newArray);
       setCategories(newArray);
-
       setLoading(false);
-      // console.log("categories:", data);
     } catch (error) {
       setError("Error fetching categories");
       setLoading(false);
@@ -91,16 +91,6 @@ const ResInfo = () => {
   useEffect(() => {
     fetchCategories();
   }, []);
-
-  const data = [
-    { key: "1", value: "Mobiles", disabled: true },
-    { key: "2", value: "Appliances" },
-    { key: "3", value: "Cameras" },
-    { key: "4", value: "Computers", disabled: true },
-    { key: "5", value: "Vegetables" },
-    { key: "6", value: "Diary Products" },
-    { key: "7", value: "Drinks" },
-  ];
 
   const handlePickImages = async (
     imageState,
@@ -120,11 +110,77 @@ const ResInfo = () => {
   const removeTime = (index) => {
     setTimes(times.filter((_, i) => i !== index));
   };
-  // console.log("pick select categories", categories)
+
+  const uploadImage = async (imageUri) => {
+    const formData = new FormData();
+    formData.append("file", {
+      uri: imageUri,
+      type: "image/jpeg",
+      name: "upload.jpg",
+    });
+    formData.append("upload_preset", process.env.CLOUDINARY_UPLOAD_PRESET_RES);
+
+    const response = await fetch(process.env.CLOUDINARY_UPLOAD_URL, {
+      method: "POST",
+      body: formData,
+    });
+    const data = await response.json();
+    return data.secure_url;
+  };
+
+  const handleAddRestaurant = async () => {
+    try {
+      const imageUrls = await Promise.all(
+        images.map((image) => uploadImage(image))
+      );
+      const imagePriceUrls = await Promise.all(
+        imagesPrice.map((image) => uploadImage(image))
+      );
+      const imageAlbumUrls = await Promise.all(
+        imagesAlbum.map((image) => uploadImage(image))
+      );
+
+      const restaurantData = {
+        name,
+        description,
+        image: imageUrls[0],
+        address,
+        location: {
+          type: "Point",
+          coordinates: [longitude, latitude],
+        },
+        rating: 4, // Default rating
+        type: selected,
+        bookingHours: times.map((time) => formatTime(time)),
+        imagePrice: imagePriceUrls.map((url) => ({ image: url })),
+        album: imageAlbumUrls.map((url) => ({ image: url })),
+        openingHours,
+      };
+
+      const response = await fetch(`${API_URL}/restaurants`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(restaurantData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Restaurant added successfully", data);
+        navigation.goBack();
+      } else {
+        console.error("Failed to add restaurant");
+      }
+    } catch (error) {
+      console.error("Error adding restaurant:", error);
+    }
+  };
+
   return (
     <ScrollView>
       <View style={styles.modalView}>
-       {longitude && latitude && (
+        {longitude && latitude && (
           <View style={styles.modalView}>
             <Text className="text-base">Restaurant address selected :</Text>
             <Text className="text-base mt-2">Longitude: {longitude}</Text>
@@ -172,9 +228,26 @@ const ResInfo = () => {
         />
         <View className="mt-10" style={{}}>
           <View className="space-y-4 grid">
-            <TextInput mode="outlined" label="Name" />
-            <TextInput mode="outlined" label="Description" multiline={true} />
-            <TextInput mode="outlined" label="Address" multiline={true} />
+            <TextInput
+              mode="outlined"
+              label="Name"
+              value={name}
+              onChangeText={setName}
+            />
+            <TextInput
+              mode="outlined"
+              label="Description"
+              multiline={true}
+              value={description}
+              onChangeText={setDescription}
+            />
+            <TextInput
+              mode="outlined"
+              label="Address"
+              multiline={true}
+              value={address}
+              onChangeText={setAddress}
+            />
             <TouchableOpacity
               onPress={showTimepicker}
               className="border p-3 rounded border-slate-500"
@@ -207,64 +280,65 @@ const ResInfo = () => {
                           borderColor: "#D0D0D0",
                           borderWidth: 1.5,
                           marginTop: 5,
-                          color: "#666666",
-                          fontWeight: "bold",
-                          fontSize: 17,
-                          marginRight: 7,
+                          color: "#333333",
+                          textAlign: "center",
+                          marginBottom: 5,
                         }}
+                        onPress={() => removeTime(index)}
                       >
-                        <TouchableOpacity
-                          onPress={() => removeTime(index)}
+                        <Text>{formatTime(time)}</Text>
+                        <View
                           style={{
                             position: "absolute",
                             top: -5,
-                            left: -5,
-                            zIndex: 1,
+                            right: -5,
+                            width: 20,
+                            height: 20,
+                            backgroundColor: "#999999",
+                            borderRadius: 10,
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
-                          <FontAwesome6 name="xmark" size={16} color="red" />
-                        </TouchableOpacity>
-                        <Text
-                          style={{
-                            color: "#666666",
-                            fontWeight: "bold",
-                            fontSize: 17,
-                          }}
-                        >
-                          {formatTime(time)}
-                        </Text>
+                          <Text style={{ color: "#fff" }}>X</Text>
+                        </View>
                       </TouchableOpacity>
                     ))}
                   </View>
                 </ScrollView>
               </View>
             )}
-
-            <TextInput mode="outlined" label="Opening Time" />
-          </View>
-
-          <View className="mt-4">
-            <SelectList
-              setSelected={(val) => setSelected(val)}
-              data={categories}
-              save="value"
-              // onSelect={() => alert(selected)}
-              label="Categories"
+            <TextInput
+              mode="outlined"
+              label="Opening Hours"
+              value={openingHours}
+              onChangeText={setOpeningHours}
             />
           </View>
         </View>
-
-        <View className="flex flex-row mt-4 justify-center">
-          <TouchableOpacity
-            style={[styles.button]}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.textStyle}>Turn back</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.button]} onPress={() => navigation}>
-            <Text style={styles.textStyle}>Add Restaurant</Text>
-          </TouchableOpacity>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text>Type:</Text>
+          {error && <Text style={{ color: "red" }}>{error}</Text>}
+          {loading ? (
+            <Text>Loading...</Text>
+          ) : (
+            <SelectList setSelected={setSelected} data={categories} />
+          )}
         </View>
+        <TouchableOpacity
+          onPress={handleAddRestaurant}
+          style={{
+            padding: 15,
+            borderRadius: 10,
+            backgroundColor: "#333333",
+            alignItems: "center",
+            marginTop: 20,
+          }}
+        >
+          <Text style={{ color: "#fff" }}>Add Restaurant</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
