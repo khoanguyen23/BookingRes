@@ -119,31 +119,54 @@ const ResInfo = () => {
       name: "upload.jpg",
     });
     formData.append("upload_preset", process.env.CLOUDINARY_UPLOAD_PRESET_RES);
-
-    const response = await fetch(process.env.CLOUDINARY_UPLOAD_URL, {
-      method: "POST",
-      body: formData,
-    });
-    const data = await response.json();
-    return data.secure_url;
+  
+    try {
+      const response = await axios.post(
+        process.env.CLOUDINARY_UPLOAD_URL,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Cloudinary response:", response.data); // Log the entire response data
+      if (response.data.secure_url) {
+        console.log("Image uploaded successfully:", response.data.secure_url);
+        return response.data.secure_url;
+      } else {
+        console.error("Failed to upload image:", response.data);
+        return null;
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      return null;
+    }
   };
 
   const handleAddRestaurant = async () => {
     try {
+      console.log("Images to upload:", images);
       const imageUrls = await Promise.all(
         images.map((image) => uploadImage(image))
       );
+      console.log("Uploaded image URLs:", imageUrls);
+  
       const imagePriceUrls = await Promise.all(
         imagesPrice.map((image) => uploadImage(image))
       );
       const imageAlbumUrls = await Promise.all(
         imagesAlbum.map((image) => uploadImage(image))
       );
-
+  
+      const filteredImageUrls = imageUrls.filter((url) => url !== null);
+      const filteredImagePriceUrls = imagePriceUrls.filter((url) => url !== null);
+      const filteredImageAlbumUrls = imageAlbumUrls.filter((url) => url !== null);
+  
       const restaurantData = {
         name,
         description,
-        image: imageUrls[0],
+        image: filteredImageUrls[0],
         address,
         location: {
           type: "Point",
@@ -152,11 +175,11 @@ const ResInfo = () => {
         rating: 4, // Default rating
         type: selected,
         bookingHours: times.map((time) => formatTime(time)),
-        imagePrice: imagePriceUrls.map((url) => ({ image: url })),
-        album: imageAlbumUrls.map((url) => ({ image: url })),
+        imagePrice: filteredImagePriceUrls.map((url) => ({ image: url })),
+        album: filteredImageAlbumUrls.map((url) => ({ image: url })),
         openingHours,
       };
-
+  
       const response = await fetch(`${API_URL}/restaurants`, {
         method: "POST",
         headers: {
@@ -164,7 +187,7 @@ const ResInfo = () => {
         },
         body: JSON.stringify(restaurantData),
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         console.log("Restaurant added successfully", data);
@@ -176,6 +199,7 @@ const ResInfo = () => {
       console.error("Error adding restaurant:", error);
     }
   };
+  
 
   return (
     <ScrollView>
@@ -317,7 +341,8 @@ const ResInfo = () => {
           </View>
         </View>
         <View
-         className="mt-4"
+          className="mt-4"
+          // style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           {/* <Text>Type:</Text> */}
           {error && <Text style={{ color: "red" }}>{error}</Text>}
