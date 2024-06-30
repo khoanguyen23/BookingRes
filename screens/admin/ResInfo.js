@@ -20,6 +20,7 @@ import { API_URL } from "@env";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ActionSheet, Cell } from "@nutui/nutui-react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
+import axios from "axios";
 
 const ResInfo = () => {
   const navigation = useNavigation();
