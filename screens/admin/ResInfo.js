@@ -317,9 +317,9 @@ const ResInfo = () => {
           </View>
         </View>
         <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+         className="mt-4"
         >
-          <Text>Type:</Text>
+          {/* <Text>Type:</Text> */}
           {error && <Text style={{ color: "red" }}>{error}</Text>}
           {loading ? (
             <Text>Loading...</Text>
