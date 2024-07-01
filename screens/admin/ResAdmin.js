@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,19 +7,18 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
+  Alert
 } from "react-native";
 import { Button } from "@rneui/themed";
-import React, { useEffect, useState } from "react";
 import axios from "axios";
-import RestaurantUI from "../../components/ResHorUI";
+import { Swipeable } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 import { API_URL } from "@env";
-import { Ionicons, AntDesign, Entypo } from "@expo/vector-icons";
-import { useNavigation, useRoute } from "@react-navigation/native";
 
 const ResAdmin = () => {
   const [restaurants, setRestaurants] = useState([]);
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -35,6 +35,43 @@ const ResAdmin = () => {
       setLoading(false);
       console.error("Error fetching restaurants:", error);
     }
+  };
+
+  const deleteRestaurant = async (id) => {
+    try {
+      await axios.delete(`${API_URL}/restaurants/${id}`);
+      setRestaurants(restaurants.filter((restaurant) => restaurant._id !== id));
+    } catch (error) {
+      console.error("Error deleting restaurant:", error);
+    }
+  };
+
+  const confirmDelete = (id) => {
+    Alert.alert(
+      "Xác nhận xóa",
+      "Bạn có chắc chắn muốn xóa nhà hàng này?",
+      [
+        {
+          text: "Hủy",
+          style: "cancel"
+        },
+        {
+          text: "OK",
+          onPress: () => deleteRestaurant(id)
+        }
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const renderRightActions = (id) => {
+    return (
+      <View style={styles.deleteButtonContainer}>
+        <TouchableOpacity style={styles.deleteButton} onPress={() => confirmDelete(id)}>
+          <Text style={styles.deleteButtonText}>Delete</Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   const truncateText = (text, maxLength) => {
@@ -71,25 +108,29 @@ const ResAdmin = () => {
       <FlatList
         data={restaurants}
         renderItem={({ item }) => (
-          <View className="p-4 flex flex-row space-x-2 m-2" style={styles.resContainer}>
-            <View>
-              <Image
-                source={{ uri: item.image }}
-                style={{ width: 100, height: 100, borderRadius: 5, objectFit:"cover" }}
-              />
+          <Swipeable
+            renderRightActions={() => renderRightActions(item._id)}
+          >
+            <View className="p-4 flex flex-row space-x-2 m-2" style={styles.resContainer}>
+              <View>
+                <Image
+                  source={{ uri: item.image }}
+                  style={{ width: 100, height: 100, borderRadius: 5, objectFit: "cover" }}
+                />
+              </View>
+              <View className="">
+                <Text className="text-lg" style={{ maxWidth: 270 }}>
+                  {item.name}
+                </Text>
+                <Text numberOfLines={1} ellipsizeMode="tail" className="mt-2 text-sm text-[#8f8a8a]">
+                  {truncateText(item.address, 40)}
+                </Text>
+                <Text className="mt-2 text-sm text-orange-700 font-semibold">
+                  Đánh giá: {item.rating}
+                </Text>
+              </View>
             </View>
-            <View className="">
-              <Text className="text-lg" style={{ maxWidth: 270 }}>
-                {item.name}
-              </Text>
-              <Text numberOfLines={1} ellipsizeMode="tail" className="mt-2 text-sm text-[#8f8a8a]">
-                {truncateText(item.address, 40)}
-              </Text>
-              <Text className="mt-2 text-sm text-orange-700 font-semibold">
-                Đánh giá: {item.rating}
-              </Text>
-            </View>
-          </View>
+          </Swipeable>
         )}
         keyExtractor={(item) => item._id}
       />
@@ -132,5 +173,24 @@ const styles = StyleSheet.create({
   retryButton: {
     marginTop: 10,
     backgroundColor: "#FF6347",
+  },
+  deleteButtonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "red",
+    width: 100,
+    height: "100%",
+    borderRadius: 5,
+    marginVertical: 8,
+    marginRight: 4,
+  },
+  deleteButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+  },
+  deleteButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
