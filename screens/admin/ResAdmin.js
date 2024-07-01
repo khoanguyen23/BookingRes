@@ -75,7 +75,7 @@ const ResAdmin = () => {
             <View>
               <Image
                 source={{ uri: item.image }}
-                style={{ width: 100, height: 100, borderRadius: 5 }}
+                style={{ width: 100, height: 100, borderRadius: 5, objectFit:"cover" }}
               />
             </View>
             <View className="">
