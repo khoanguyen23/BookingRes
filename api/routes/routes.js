@@ -22,6 +22,7 @@ router.put("/change-password/:userId", UserController.changePassword);
 // Restaurant Routes
 router.post("/restaurants", RestaurantController.createRestaurant);
 router.patch("/restaurants/:restaurantId", RestaurantController.updateRestaurant); // Route for updating restaurant
+router.delete("/restaurants/:restaurantId", RestaurantController.deleteRestaurant); // Route for deleting restaurant
 router.get("/restaurants", RestaurantController.getAllRestaurants);
 router.get("/restaurants/:restaurantId", RestaurantController.getRestaurantsById);
 router.get("/restaurants/categories/:categoryId", RestaurantController.getRestaurantsByCategory);

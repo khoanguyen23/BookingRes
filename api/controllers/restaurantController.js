@@ -85,6 +85,21 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
+  deleteRestaurant: async (req, res) => {
+    const restaurantId = req.params.restaurantId;
+
+    try {
+      const deletedRestaurant = await Restaurant.findByIdAndDelete(restaurantId);
+
+      if (!deletedRestaurant) {
+        return res.status(404).json({ message: "Nhà hàng không tồn tại" });
+      }
+
+      res.status(200).json({ message: "Xóa nhà hàng thành công", restaurant: deletedRestaurant });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
   addSuggestion: async (req, res) => {
     const { restaurantId } = req.params;
     const { title } = req.body;
