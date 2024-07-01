@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "red",
     width: 100,
-    height: "100%",
+    height: "89%",
     borderRadius: 5,
     marginVertical: 8,
     marginRight: 4,
