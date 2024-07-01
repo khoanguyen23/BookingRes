@@ -19,8 +19,11 @@ import jwt_decode from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Banner from "../components/Banner";
+import { Skeleton, Stack } from "@rneui/themed";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function HomeScreen({ navigation, route }) {
+  const [isLoading, setIsLoading] = useState(true);
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -39,23 +42,11 @@ export default function HomeScreen({ navigation, route }) {
     try {
       const response = await axios.get(`${API_URL}/api/featured`);
       setFeaturedData(response.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Failed to fetch featured data:", error);
     }
   };
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/featured`);
-      const textResponse = await response.text();
-      console.log('Raw response:', textResponse);
-      const data = JSON.parse(textResponse);
-      setFeaturedData(data);
-    } catch (error) {
-      console.error('Error fetching featured data:', error);
-    }
-  };
-
 
   const fetchAddress = async () => {
     try {
@@ -86,6 +77,7 @@ export default function HomeScreen({ navigation, route }) {
       const response = await axios.get(`${API_URL}/categories`);
       const fetchedCategories = response.data;
       setCategories(fetchedCategories);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -93,11 +85,9 @@ export default function HomeScreen({ navigation, route }) {
 
   useEffect(() => {
     fetchFeaturedData();
-    // fetchData();
     fetchAddress();
     fetchCategories();
   }, []);
-
 
   return (
     <SafeAreaView className="bg-white">
@@ -185,23 +175,132 @@ export default function HomeScreen({ navigation, route }) {
         }}
       >
         <Text className="font-bold text-xl pl-4 mt-2">Danh mục</Text>
-        <Categories categories={categories}/>
-        <Banner images={bannerImages} />
-        <View className="mt-5">
-          {featuredData.map((item, index) => {
-            if (item.title) {
-              return (
-                <FeaturedRow
-                  key={index}
-                  title={item.title} 
-                  restaurants={item.restaurants}
-                  subTitle={item.subTitle}
-                  layout={item.layout}
-                />
-              );
-            }
-          })}
-        </View>
+        {/* skeleton category */}
+        {/* <View className="flex flex-row space-x-7 p-5">
+          <Skeleton
+            circle
+            LinearGradientComponent={LinearGradient}
+            animation="wave"
+            width={65}
+            height={65}
+          />
+          <Skeleton
+            circle
+            LinearGradientComponent={LinearGradient}
+            animation="wave"
+            width={65}
+            height={65}
+          />
+          <Skeleton
+            circle
+            LinearGradientComponent={LinearGradient}
+            animation="wave"
+            width={65}
+            height={65}
+          />
+          <Skeleton
+            circle
+            LinearGradientComponent={LinearGradient}
+            animation="wave"
+            width={65}
+            height={65}
+          />
+        </View> */}
+        {/* category */}
+        {isLoading ? (
+          <View className="flex flex-row space-x-7 p-5">
+            <Skeleton
+              circle
+              LinearGradientComponent={LinearGradient}
+              animation="wave"
+              width={65}
+              height={65}
+            />
+            <Skeleton
+              circle
+              LinearGradientComponent={LinearGradient}
+              animation="wave"
+              width={65}
+              height={65}
+            />
+            <Skeleton
+              circle
+              LinearGradientComponent={LinearGradient}
+              animation="wave"
+              width={65}
+              height={65}
+            />
+            <Skeleton
+              circle
+              LinearGradientComponent={LinearGradient}
+              animation="wave"
+              width={65}
+              height={65}
+            />
+          </View>
+        ) : (
+          <Categories categories={categories} />
+        )}
+        {/* skeleton banner */}
+        {isLoading ? (
+          <View className="flex flex-row space-x-7 mt-4">
+            <Skeleton
+              LinearGradientComponent={LinearGradient}
+              animation="wave"
+              width={"100%"}
+              height={150}
+            />
+          </View>
+        ) : (
+          <Banner images={bannerImages} />
+        )}
+
+        {isLoading ? (
+          <>
+            <View className="flex flex-row space-x-7 mt-4 p-2">
+              <Skeleton
+                LinearGradientComponent={LinearGradient}
+                animation="wave"
+                width={"100%"}
+                height={120}
+              />
+            </View>
+            <View className="flex flex-row space-x-7 mt-2 p-2">
+              <Skeleton
+                LinearGradientComponent={LinearGradient}
+                animation="wave"
+                width={"50%"}
+                height={120}
+              />
+              <Skeleton
+                LinearGradientComponent={LinearGradient}
+                animation="wave"
+                width={"50%"}
+                height={120}
+              />
+            </View>
+          </>
+        ) : (
+          <View className="mt-5">
+            {featuredData.map((item, index) => {
+              if (item.title) {
+                return (
+                  <FeaturedRow
+                    key={index}
+                    title={item.title}
+                    restaurants={item.restaurants}
+                    subTitle={item.subTitle}
+                    layout={item.layout}
+                  />
+                );
+              }
+            })}
+          </View>
+        )}
+
+        {/* skeleton features */}
+
+        {/* features */}
       </ScrollView>
     </SafeAreaView>
   );
