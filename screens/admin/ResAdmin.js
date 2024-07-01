@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
-  Alert
+  Alert,
 } from "react-native";
 import { Button } from "@rneui/themed";
 import axios from "axios";
@@ -19,6 +19,8 @@ const ResAdmin = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [swipedId, setSwipedId] = useState(null);
+  const swipeableRef = useRef(null);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -53,12 +55,12 @@ const ResAdmin = () => {
       [
         {
           text: "Hủy",
-          style: "cancel"
+          style: "cancel",
         },
         {
           text: "OK",
-          onPress: () => deleteRestaurant(id)
-        }
+          onPress: () => deleteRestaurant(id),
+        },
       ],
       { cancelable: false }
     );
@@ -67,7 +69,10 @@ const ResAdmin = () => {
   const renderRightActions = (id) => {
     return (
       <View style={styles.deleteButtonContainer}>
-        <TouchableOpacity style={styles.deleteButton} onPress={() => confirmDelete(id)}>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => confirmDelete(id)}
+        >
           <Text style={styles.deleteButtonText}>Delete</Text>
         </TouchableOpacity>
       </View>
@@ -79,6 +84,13 @@ const ResAdmin = () => {
       return text.substring(0, maxLength - 3) + "...";
     }
     return text;
+  };
+
+  const closePreviousSwipe = (id) => {
+    if (swipedId && swipedId !== id && swipeableRef.current) {
+      swipeableRef.current.close();
+    }
+    setSwipedId(id);
   };
 
   if (loading) {
@@ -109,20 +121,36 @@ const ResAdmin = () => {
         data={restaurants}
         renderItem={({ item }) => (
           <Swipeable
+            ref={(ref) => {
+              if (swipedId === item._id) swipeableRef.current = ref;
+            }}
+            onSwipeableWillOpen={() => closePreviousSwipe(item._id)}
             renderRightActions={() => renderRightActions(item._id)}
           >
-            <View className="p-4 flex flex-row space-x-2 m-2" style={styles.resContainer}>
+            <View
+              className="p-4 flex flex-row space-x-2 m-2"
+              style={styles.resContainer}
+            >
               <View>
                 <Image
                   source={{ uri: item.image }}
-                  style={{ width: 100, height: 100, borderRadius: 5, objectFit: "cover" }}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 5,
+                    objectFit: "cover",
+                  }}
                 />
               </View>
               <View className="">
                 <Text className="text-lg" style={{ maxWidth: 270 }}>
                   {item.name}
                 </Text>
-                <Text numberOfLines={1} ellipsizeMode="tail" className="mt-2 text-sm text-[#8f8a8a]">
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  className="mt-2 text-sm text-[#8f8a8a]"
+                >
                   {truncateText(item.address, 40)}
                 </Text>
                 <Text className="mt-2 text-sm text-orange-700 font-semibold">
