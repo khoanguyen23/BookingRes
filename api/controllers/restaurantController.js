@@ -51,6 +51,40 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
+  updateRestaurant: async (req, res) => {
+    const restaurantId = req.params.restaurantId;
+    const updateFields = req.body; // Lấy tất cả các trường cần cập nhật từ req.body
+
+    try {
+      // Kiểm tra nếu type (loại nhà hàng) được cung cấp, hãy xác minh nó
+      if (updateFields.type) {
+        const category = await Category.findById(updateFields.type);
+        if (!category) {
+          return res.status(400).json({ message: "Loại nhà hàng không hợp lệ" });
+        }
+      }
+
+      // Nếu có trường location, hãy xử lý riêng lẻ
+      if (updateFields.location && updateFields.location.coordinates) {
+        updateFields.location.type = "Point";
+      }
+
+      // Cập nhật nhà hàng với các trường được cung cấp
+      const updatedRestaurant = await Restaurant.findByIdAndUpdate(
+        restaurantId,
+        { $set: updateFields }, // Sử dụng $set để chỉ cập nhật các trường được cung cấp
+        { new: true } // Trả về bản ghi mới sau khi cập nhật
+      );
+
+      if (!updatedRestaurant) {
+        return res.status(404).json({ message: "Nhà hàng không tồn tại" });
+      }
+
+      res.status(200).json(updatedRestaurant);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
   addSuggestion: async (req, res) => {
     const { restaurantId } = req.params;
     const { title } = req.body;
