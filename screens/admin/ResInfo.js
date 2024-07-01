@@ -192,7 +192,7 @@ const ResInfo = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Restaurant added successfully", data);
-        navigation.goBack();
+        navigation.navigate("ResAdmin");
       } else {
         console.error("Failed to add restaurant");
       }
