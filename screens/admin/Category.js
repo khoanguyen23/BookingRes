@@ -63,10 +63,10 @@ const Category = () => {
   }
 
   const renderCategoryItem = (item) => (
-    <TouchableOpacity key={item.id}>
+    <TouchableOpacity key={item._id}>
       <View
         style={[
-          selectedCategory === item.id && isDeleteMode ? styles.selected : null,
+          selectedCategory === item._id && isDeleteMode ? styles.selected : null,
         ]}
         className="w-[120] h-[140] bg-white items-center justify-center border border-[#DDDDDD] rounded-lg mt-2"
       >
