@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  ScrollView,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
@@ -16,8 +15,8 @@ const Category = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null); // State for selected category for deletion
-  const [isDeleteMode, setIsDeleteMode] = useState(false); // State to toggle delete mode
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -85,7 +84,7 @@ const Category = () => {
     <View style={{ flex: 1 }}>
       <View
         className={`flex flex-row justify-around ${
-          isDeleteMode ? "hidden" : ""
+          !isDeleteMode ? "hidden" : ""
         }`}
       >
         <Button
@@ -157,7 +156,7 @@ const Category = () => {
           title="Delete"
           onPress={() => {
             toggleDeleteMode();
-            setOpen(!open);
+            setOpen(false);
           }}
         />
         <SpeedDial.Action
