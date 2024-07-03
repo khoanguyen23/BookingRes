@@ -1,23 +1,20 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  TextInput,
-  Alert,
-  StyleSheet,
-} from "react-native";
+import { View, Text, ScrollView, Alert, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Avatar, Button, Overlay } from "@rneui/themed";
 import axios from "axios";
 import { API_URL } from "@env";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { TextInput } from "react-native-paper";
+import { CheckBox } from "@rneui/themed";
 
 const Customers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDeleteVisible, setIsDeleteVisible] = useState(false);
-  const [isEditVisible, setIsEditVisible] = useState(false);
+  const [isEditVisible, setIsEditVisible] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [editData, setEditData] = useState({ name: "", email: "" });
+  const [selectedIndex, setIndex] = React.useState(0);
 
   useEffect(() => {
     fetchUsers();
@@ -74,7 +71,10 @@ const Customers = () => {
 
   const confirmEditUser = async () => {
     try {
-      const response = await axios.put(`${API_URL}/admin/${selectedUserId}`, editData);
+      const response = await axios.put(
+        `${API_URL}/admin/${selectedUserId}`,
+        editData
+      );
       if (response.status === 200) {
         fetchUsers();
         Alert.alert("Success", "User updated successfully");
@@ -97,7 +97,7 @@ const Customers = () => {
 
   const AVATAR_DEFAULT =
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png";
-  console.log(users);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
@@ -189,18 +189,48 @@ const Customers = () => {
         overlayStyle={styles.editOverlay}
       >
         <Text style={styles.overlayTitle}>Edit User</Text>
+
         <TextInput
-          style={styles.input}
-          placeholder="Name"
+          className="mt-2"
+          mode="outlined"
+          label="Name"
+          left={<TextInput.Icon icon="rename-box" color="#18181B" size={30} />}
           value={editData.name}
+          outlineColor="#E4E4E7"
+          activeOutlineColor="black"
           onChangeText={(text) => setEditData({ ...editData, name: text })}
         />
+
         <TextInput
-          style={styles.input}
-          placeholder="Email"
+          className="mt-4"
+          mode="outlined"
+          label="Email"
           value={editData.email}
+          outlineColor="#E4E4E7"
+          activeOutlineColor="black"
+          left={<TextInput.Icon icon="email-edit" color="#18181B" size={30} />}
           onChangeText={(text) => setEditData({ ...editData, email: text })}
         />
+        <View className="flex flex-row mt-4 space-x-4">
+          <View className="flex flex-row items-center border p-2 rounded-md border-[#E4E4E7]">
+            <Text className="text-base">Admin</Text>
+            <CheckBox
+              checked={selectedIndex === 0}
+              onPress={() => setIndex(0)}
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+            />
+          </View>
+          <View className="flex flex-row items-center border p-2 rounded-md border-[#E4E4E7]">
+            <Text className="text-base">User</Text>
+            <CheckBox
+              checked={selectedIndex === 1}
+              onPress={() => setIndex(1)}
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+            />
+          </View>
+        </View>
         <View style={styles.overlayActions}>
           <Button
             buttonStyle={styles.cancelButton}
