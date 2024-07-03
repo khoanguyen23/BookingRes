@@ -14,7 +14,7 @@ import { API_URL } from "@env";
 const Customers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
 
   useEffect(() => {
