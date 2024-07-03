@@ -12,6 +12,7 @@ const GeospatialController = require("../controllers/geospatialController");
 const ChatController = require("../controllers/chatController");
 const AdminController = require("../controllers/adminController");
 
+
 router.post("/register", UserController.register);
 router.get("/verify/:token", UserController.verifyEmail);
 router.post("/login", UserController.login);
@@ -62,8 +63,6 @@ router.get("/admin", AdminController.getAllUsers);
 router.delete("/admin/:userId", AdminController.deleteUser);
 router.put("/users/:userId", AdminController.editUser);
 
-router.delete("/admin/restaurants/:restaurantId", AdminController.deleteRestaurant);
-router.put('/admin/restaurants/:restaurantId', AdminController.updateRestaurant);
 
 // chat routes 
 router.get('/api/chat', ChatController.getAllChats);
