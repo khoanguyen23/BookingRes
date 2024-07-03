@@ -61,7 +61,7 @@ router.get('/:userId/favoriteRestaurants', UserController.getFavoriteRestaurants
 // admin routes
 router.get("/admin", AdminController.getAllUsers);
 router.delete("/admin/:userId", AdminController.deleteUser);
-router.put("/users/:userId", AdminController.editUser);
+router.put('/admin/:userId', AdminController.editUser); // Route cho editUser
 
 
 // chat routes 

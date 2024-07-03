@@ -1,6 +1,5 @@
 const User = require("../models/user");
-const Restaurant = require("../models/restaurant");
-const Category = require("../models/category");
+
 
 const adminController = {
   getAllUsers: async (req, res) => {
@@ -27,41 +26,26 @@ const adminController = {
   },
 
   editUser: async (req, res) => {
-    const { userId } = req.params;
-    const { username, email, role } = req.body;
+    const { userId } = req.params; // Lấy userId từ params
+    const updatedData = req.body; // Lấy dữ liệu cần cập nhật từ body
 
     try {
-      // Find the user by ID
-      const user = await User.findById(userId);
+      // Tìm và cập nhật user bằng id
+      const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
+        new: true, // Trả về tài liệu đã được cập nhật
+        runValidators: true, // Chạy validators để đảm bảo dữ liệu hợp lệ
+      });
 
-      // If the user doesn't exist, return a 404 response
-      if (!user) {
+      if (!updatedUser) {
         return res.status(404).json({ message: "Không tìm thấy người dùng" });
       }
 
-      // Update user properties if provided in the request body
-      if (username) {
-        user.username = username;
-      }
-
-      if (email) {
-        user.email = email;
-      }
-
-      if (role) {
-        user.role = role;
-      }
-
-      // Save the updated user
-      await user.save();
-
-      res
-        .status(200)
-        .json({ message: "Chỉnh sửa thành công", updatedUser: user });
+      res.status(200).json({ message: "Chỉnh sửa thành công", updatedUser });
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ error: err.message });
     }
   },
+
 };
 
 module.exports = adminController;
