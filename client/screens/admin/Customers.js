@@ -93,7 +93,7 @@ const Customers = () => {
                   </Text>
                 </View>
                 <Text style={styles.userName}>{user.name}</Text>
-                <Text style={styles.userMobile}>{user.mobileNo}</Text>
+
               </View>
             </View>
             <View style={styles.userActions}>
@@ -185,6 +185,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 16,
     fontWeight: "bold",
+    width: 150,
   },
   userMobile: {
     color: "#ABABAB",
