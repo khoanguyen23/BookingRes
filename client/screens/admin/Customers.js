@@ -14,8 +14,10 @@ import { API_URL } from "@env";
 const Customers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isDeleteVisible, setIsDeleteVisible] = useState(false);
+  const [isEditVisible, setIsEditVisible] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [editData, setEditData] = useState({ name: "", email: "" });
 
   useEffect(() => {
     fetchUsers();
@@ -38,7 +40,7 @@ const Customers = () => {
 
   const handleDeleteUser = (userId) => {
     setSelectedUserId(userId);
-    setIsVisible(true);
+    setIsDeleteVisible(true);
   };
 
   const confirmDeleteUser = async () => {
@@ -54,13 +56,42 @@ const Customers = () => {
       console.error("Error deleting user:", error);
       Alert.alert("Error", "Failed to delete user");
     } finally {
-      setIsVisible(false);
+      setIsDeleteVisible(false);
       setSelectedUserId(null);
     }
   };
 
   const cancelDeleteUser = () => {
-    setIsVisible(false);
+    setIsDeleteVisible(false);
+    setSelectedUserId(null);
+  };
+
+  const handleEditUser = (user) => {
+    setSelectedUserId(user._id);
+    setEditData({ name: user.name, email: user.email });
+    setIsEditVisible(true);
+  };
+
+  const confirmEditUser = async () => {
+    try {
+      const response = await axios.put(`${API_URL}/admin/${selectedUserId}`, editData);
+      if (response.status === 200) {
+        fetchUsers();
+        Alert.alert("Success", "User updated successfully");
+      } else {
+        Alert.alert("Error", "Failed to update user");
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      Alert.alert("Error", "Failed to update user");
+    } finally {
+      setIsEditVisible(false);
+      setSelectedUserId(null);
+    }
+  };
+
+  const cancelEditUser = () => {
+    setIsEditVisible(false);
     setSelectedUserId(null);
   };
 
@@ -93,12 +124,12 @@ const Customers = () => {
                   </Text>
                 </View>
                 <Text style={styles.userName}>{user.name}</Text>
-
               </View>
             </View>
             <View style={styles.userActions}>
               <Button
                 buttonStyle={styles.editButton}
+                onPress={() => handleEditUser(user)}
                 radius={"md"}
                 size="lg"
                 color="#20C0ED"
@@ -119,8 +150,9 @@ const Customers = () => {
         ))}
       </View>
 
+      {/* Delete Overlay */}
       <Overlay
-        isVisible={isVisible}
+        isVisible={isDeleteVisible}
         onBackdropPress={cancelDeleteUser}
         overlayStyle={styles.overlay}
       >
@@ -146,6 +178,47 @@ const Customers = () => {
             color="#DB4C3F"
           >
             OK
+          </Button>
+        </View>
+      </Overlay>
+
+      {/* Edit Overlay */}
+      <Overlay
+        isVisible={isEditVisible}
+        onBackdropPress={cancelEditUser}
+        overlayStyle={styles.editOverlay}
+      >
+        <Text style={styles.overlayTitle}>Edit User</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Name"
+          value={editData.name}
+          onChangeText={(text) => setEditData({ ...editData, name: text })}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={editData.email}
+          onChangeText={(text) => setEditData({ ...editData, email: text })}
+        />
+        <View style={styles.overlayActions}>
+          <Button
+            buttonStyle={styles.cancelButton}
+            onPress={cancelEditUser}
+            radius={"lg"}
+            size="lg"
+            color="#999"
+          >
+            Cancel
+          </Button>
+          <Button
+            buttonStyle={styles.confirmButton}
+            onPress={confirmEditUser}
+            radius={"lg"}
+            size="lg"
+            color="#20C0ED"
+          >
+            Save
           </Button>
         </View>
       </Overlay>
@@ -222,6 +295,17 @@ const styles = StyleSheet.create({
   confirmButton: {
     width: 100,
     backgroundColor: "#DB4C3F",
+  },
+  editOverlay: {
+    borderRadius: 15,
+    padding: 20,
+    width: 300,
+  },
+  input: {
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+    marginBottom: 20,
+    paddingBottom: 5,
   },
 });
 
