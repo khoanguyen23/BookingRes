@@ -14,6 +14,8 @@ import { API_URL } from "@env";
 const Customers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isVisible, setIsVisible] = useState(true);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -34,9 +36,14 @@ const Customers = () => {
     }
   };
 
-  const handleDeleteUser = async (userId) => {
+  const handleDeleteUser = (userId) => {
+    setSelectedUserId(userId);
+    setIsVisible(true);
+  };
+
+  const confirmDeleteUser = async () => {
     try {
-      const response = await axios.delete(`${API_URL}/admin/${userId}`);
+      const response = await axios.delete(`${API_URL}/admin/${selectedUserId}`);
       if (response.status === 200) {
         fetchUsers();
         Alert.alert("Success", "User deleted successfully");
@@ -46,7 +53,15 @@ const Customers = () => {
     } catch (error) {
       console.error("Error deleting user:", error);
       Alert.alert("Error", "Failed to delete user");
+    } finally {
+      setIsVisible(false);
+      setSelectedUserId(null);
     }
+  };
+
+  const cancelDeleteUser = () => {
+    setIsVisible(false);
+    setSelectedUserId(null);
   };
 
   const AVATAR_DEFAULT =
@@ -103,6 +118,37 @@ const Customers = () => {
           </View>
         ))}
       </View>
+
+      <Overlay
+        isVisible={isVisible}
+        onBackdropPress={cancelDeleteUser}
+        overlayStyle={styles.overlay}
+      >
+        <Text style={styles.overlayTitle}>Confirm Delete</Text>
+        <Text className="text-base text-center">
+          Are you sure you want to delete this user?
+        </Text>
+        <View className="flex flex-row mt-7 justify-center">
+          <Button
+            buttonStyle={styles.cancelButton}
+            onPress={cancelDeleteUser}
+            radius={"lg"}
+            size="lg"
+            color="#999"
+          >
+            Cancel
+          </Button>
+          <Button
+            buttonStyle={styles.confirmButton}
+            onPress={confirmDeleteUser}
+            radius={"lg"}
+            size="lg"
+            color="#DB4C3F"
+          >
+            OK
+          </Button>
+        </View>
+      </Overlay>
     </ScrollView>
   );
 };
@@ -152,20 +198,29 @@ const styles = StyleSheet.create({
   },
   deleteButton: {},
   overlay: {
+    borderRadius: 15,
     padding: 20,
     width: 300,
   },
   overlayTitle: {
     fontSize: 18,
     marginBottom: 10,
+    textAlign: "center",
+    fontWeight: "bold",
   },
-  input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingHorizontal: 10,
+  overlayActions: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 20,
+  },
+  cancelButton: {
+    width: 100,
+    marginRight: 10,
+    backgroundColor: "#999",
+  },
+  confirmButton: {
+    width: 100,
+    backgroundColor: "#DB4C3F",
   },
 });
 
