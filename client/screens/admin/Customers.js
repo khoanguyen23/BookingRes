@@ -6,6 +6,7 @@ import { API_URL } from "@env";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TextInput } from "react-native-paper";
 import { CheckBox } from "@rneui/themed";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Customers = () => {
   const [users, setUsers] = useState([]);
@@ -188,7 +189,19 @@ const Customers = () => {
         onBackdropPress={cancelEditUser}
         overlayStyle={styles.editOverlay}
       >
-        <Text style={styles.overlayTitle}>Edit User</Text>
+        <Button
+          ViewComponent={LinearGradient} // Don't forget this!
+          linearGradientProps={{
+            colors: ["#FF9800", "#F44336"],
+            start: { x: 0, y: 0.5 },
+            end: { x: 1, y: 0.5 },
+          }}
+          buttonStyle={{
+            borderRadius: 5,
+          }}
+        >
+          Edit User
+        </Button>
 
         <TextInput
           className="mt-2"
@@ -324,7 +337,7 @@ const styles = StyleSheet.create({
   },
   confirmButton: {
     width: 100,
-    backgroundColor: "#DB4C3F",
+    // backgroundColor: "#DB4C3F",
   },
   editOverlay: {
     borderRadius: 15,
