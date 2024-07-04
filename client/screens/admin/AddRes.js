@@ -6,7 +6,13 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React, { useState, useRef, useCallback, useMemo, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+  useEffect,
+} from "react";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import { TextInput } from "react-native-paper";
@@ -37,24 +43,32 @@ const AddRes = () => {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
-    console.log('Image URL updated:', image); // Kiểm tra URL ảnh khi `image` thay đổi
+    console.log("Image URL updated:", image); // Kiểm tra URL ảnh khi `image` thay đổi
   }, [image]);
 
   const CustomCallout = ({ title, description, image }) => {
-    console.log('Displaying image URL in CustomCallout:', image); // Kiểm tra URL ảnh
+    // console.log("Displaying image URL in CustomCallout:", image); // Kiểm tra URL ảnh
     return (
       <View style={styles.calloutContainer}>
+        <Text style={styles.calloutTitle}>{title}</Text>
         {image ? (
-          <Image source={{ uri: image }}  style={styles.calloutImage} />
+          <Text>
+         
+            <Image
+              source={{ uri: image }}
+              // width={200}
+              // height={250}
+              style={styles.calloutImage}
+              resizeMode="cover"
+            />
+          </Text>
         ) : (
           <Text>Image not available</Text>
         )}
-        <Text style={styles.calloutTitle}>{title}</Text>
         <Text style={styles.calloutDescription}>{description}</Text>
       </View>
     );
   };
-  
 
   const getPhotoUrl = async (placeId) => {
     try {
@@ -72,7 +86,7 @@ const AddRes = () => {
       if (photos && photos.length > 0) {
         const photoReference = photos[0].photo_reference;
         const photoUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${GOOGLE_MAPS_API_KEY}`;
-        console.log("Photo URL:", photoUrl); // Thêm dòng này để kiểm tra URL
+        // console.log("Photo URL:", photoUrl); // Thêm dòng này để kiểm tra URL
         return photoUrl;
       }
       return null; // Trả về null nếu không có ảnh
@@ -106,7 +120,7 @@ const AddRes = () => {
               style={{ width: 40, height: 40 }}
               resizeMode="cover"
             />
-            <Callout>
+            <Callout style={{ flex: -1, position: "absolute" , width:200, bottom:-200 }}>
               <CustomCallout
                 title={"Selected Location"}
                 description={address}
@@ -173,8 +187,8 @@ const AddRes = () => {
                   setLongitude(details.geometry.location.lng);
                   try {
                     const photoUrl = await getPhotoUrl(placeId);
-      console.log('Selected photo URL:', photoUrl); // Kiểm tra URL ảnh nhận được
-      setImage(photoUrl); // Cập nhật ảnh trong state
+                    // console.log("Selected photo URL:", photoUrl); // Kiểm tra URL ảnh nhận được
+                    setImage(photoUrl); // Cập nhật ảnh trong state
                   } catch (error) {
                     console.error("Failed to get photo URL:", error);
                   }
@@ -294,7 +308,7 @@ const styles = StyleSheet.create({
     width: 200,
     padding: 10,
     backgroundColor: "#FFFFFF",
-    borderRadius: 10,
+    borderRadius: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
@@ -311,8 +325,8 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   calloutImage: {
-    width: 100,
-    height: 100,
+    height: 200,
+    width: 200,
     borderRadius: 5,
     marginBottom: 5,
   },
