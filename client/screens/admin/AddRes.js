@@ -10,7 +10,8 @@ import React, { useState, useRef, useCallback, useMemo } from "react";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import { TextInput } from "react-native-paper";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Callout } from "react-native-maps";
+
 import BottomSheet from "@gorhom/bottom-sheet";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
@@ -32,6 +33,16 @@ const AddRes = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [address, setAddress] = useState("");
+  const [image, setImage] = useState("https://cdn-icons-png.flaticon.com/512/6643/6643359.png");
+
+  const CustomCallout = ({ title, description, image }) => (
+    <View style={styles.calloutContainer}>
+      {image && <Image source={{ uri: image }} style={styles.calloutImage} />}
+      <Text style={styles.calloutTitle}>{title}</Text>
+      <Text style={styles.calloutDescription}>{description}</Text>
+    </View>
+  );
+  
 
   return (
     <View style={styles.container}>
@@ -51,14 +62,20 @@ const AddRes = () => {
               latitude: latitude,
               longitude: longitude,
             }}
-            title="Selected Location"
-            description={address}
+           
           >
-            <Image
+             <Image
               source={require("../../assets/img/restaurant.png")}
               style={{ width: 40, height: 40 }}
               resizeMode="cover"
+              />
+            <Callout>
+            <CustomCallout
+              title={"Selected Location"}
+              description={address}
+              image={image}
             />
+          </Callout>
           </Marker>
         )}
       </MapView>
@@ -235,5 +252,31 @@ const styles = StyleSheet.create({
     top: "30%", // Đặt ở giữa theo chiều dọc
     marginTop: -12, // Điều chỉnh để biểu tượng nằm chính xác ở giữa
     zIndex: 1000,
+  },
+  calloutContainer: {
+    width: 200,
+    padding: 10,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  calloutTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  calloutDescription: {
+    fontSize: 14,
+    color: "#666",
+  },
+  calloutImage: {
+    width: "100%",
+    height: 100,
+    borderRadius: 5,
+    marginBottom: 5,
   },
 });
