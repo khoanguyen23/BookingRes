@@ -11,7 +11,7 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import { TextInput } from "react-native-paper";
 import MapView, { Marker, Callout } from "react-native-maps";
-import axios from 'axios';
+import axios from "axios";
 import BottomSheet from "@gorhom/bottom-sheet";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
@@ -35,17 +35,20 @@ const AddRes = () => {
   const [address, setAddress] = useState("");
   const [image, setImage] = useState(null);
 
-  const CustomCallout = ({ title, description, image }) => (
-    <View style={styles.calloutContainer}>
-      {image ? (
-        <Image source={{ uri: image }} style={styles.calloutImage} />
-      ) : (
-        <Text>Image not available</Text>
-      )}
-      <Text style={styles.calloutTitle}>{title}</Text>
-      <Text style={styles.calloutDescription}>{description}</Text>
-    </View>
-  );
+  const CustomCallout = ({ title, description, image }) => {
+    console.log('Displaying image URL in CustomCallout:', image); // Kiểm tra URL ảnh
+    return (
+      <View style={styles.calloutContainer}>
+        {image ? (
+          <Image source={{ uri: image }} style={styles.calloutImage} />
+        ) : (
+          <Text>Image not available</Text>
+        )}
+        <Text style={styles.calloutTitle}>{title}</Text>
+        <Text style={styles.calloutDescription}>{description}</Text>
+      </View>
+    );
+  };
   
 
   const getPhotoUrl = async (placeId) => {
@@ -59,11 +62,13 @@ const AddRes = () => {
           },
         }
       );
-  
+
       const photos = response.data.result.photos;
       if (photos && photos.length > 0) {
         const photoReference = photos[0].photo_reference;
-        return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${GOOGLE_MAPS_API_KEY}`;
+        const photoUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${GOOGLE_MAPS_API_KEY}`;
+        console.log("Photo URL:", photoUrl); // Thêm dòng này để kiểm tra URL
+        return photoUrl;
       }
       return null; // Trả về null nếu không có ảnh
     } catch (error) {
@@ -71,8 +76,6 @@ const AddRes = () => {
       return null;
     }
   };
-  
-  
 
   return (
     <View style={styles.container}>
@@ -92,20 +95,19 @@ const AddRes = () => {
               latitude: latitude,
               longitude: longitude,
             }}
-           
           >
-             <Image
+            <Image
               source={require("../../assets/img/restaurant.png")}
               style={{ width: 40, height: 40 }}
               resizeMode="cover"
-              />
-            <Callout>
-            <CustomCallout
-              title={"Selected Location"}
-              description={address}
-              image={image}
             />
-          </Callout>
+            <Callout>
+              <CustomCallout
+                title={"Selected Location"}
+                description={address}
+                image={image}
+              />
+            </Callout>
           </Marker>
         )}
       </MapView>
@@ -176,11 +178,11 @@ const AddRes = () => {
                   setLongitude(details.geometry.location.lng);
                   try {
                     const photoUrl = await getPhotoUrl(placeId);
-                    setImage(photoUrl); // Cập nhật ảnh trong state
+      console.log('Selected photo URL:', photoUrl); // Kiểm tra URL ảnh nhận được
+      setImage(photoUrl); // Cập nhật ảnh trong state
                   } catch (error) {
                     console.error("Failed to get photo URL:", error);
                   }
-              
 
                   mapRef.current.animateToRegion(
                     {
