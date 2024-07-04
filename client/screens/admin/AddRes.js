@@ -11,7 +11,7 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import { TextInput } from "react-native-paper";
 import MapView, { Marker, Callout } from "react-native-maps";
-
+import axios from 'axios';
 import BottomSheet from "@gorhom/bottom-sheet";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
@@ -33,15 +33,45 @@ const AddRes = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [address, setAddress] = useState("");
-  const [image, setImage] = useState("https://cdn-icons-png.flaticon.com/512/6643/6643359.png");
+  const [image, setImage] = useState(null);
 
   const CustomCallout = ({ title, description, image }) => (
     <View style={styles.calloutContainer}>
-      {image && <Image source={{ uri: image }} style={styles.calloutImage} />}
+      {image ? (
+        <Image source={{ uri: image }} style={styles.calloutImage} />
+      ) : (
+        <Text>Image not available</Text>
+      )}
       <Text style={styles.calloutTitle}>{title}</Text>
       <Text style={styles.calloutDescription}>{description}</Text>
     </View>
   );
+  
+
+  const getPhotoUrl = async (placeId) => {
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/place/details/json`,
+        {
+          params: {
+            place_id: placeId,
+            key: GOOGLE_MAPS_API_KEY,
+          },
+        }
+      );
+  
+      const photos = response.data.result.photos;
+      if (photos && photos.length > 0) {
+        const photoReference = photos[0].photo_reference;
+        return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${GOOGLE_MAPS_API_KEY}`;
+      }
+      return null; // Trả về null nếu không có ảnh
+    } catch (error) {
+      console.error("Error fetching photo URL:", error);
+      return null;
+    }
+  };
+  
   
 
   return (
@@ -135,14 +165,22 @@ const AddRes = () => {
           </Pressable> */}
           <View style={{ flex: 1 }}>
             <GooglePlacesAutocomplete
-              onPress={(data, details = null) => {
+              onPress={async (data, details = null) => {
                 if (details) {
+                  const placeId = details.place_id;
                   console.log("Selected Address:", data.description);
                   console.log("Latitude:", details.geometry.location.lat);
                   console.log("Longitude:", details.geometry.location.lng);
                   setAddress(data.description);
                   setLatitude(details.geometry.location.lat);
                   setLongitude(details.geometry.location.lng);
+                  try {
+                    const photoUrl = await getPhotoUrl(placeId);
+                    setImage(photoUrl); // Cập nhật ảnh trong state
+                  } catch (error) {
+                    console.error("Failed to get photo URL:", error);
+                  }
+              
 
                   mapRef.current.animateToRegion(
                     {
