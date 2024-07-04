@@ -42,6 +42,12 @@ const AddRes = () => {
           longitudeDelta: 0.0421,
         }}
       />
+      <TouchableOpacity
+        style={[styles.myLocationIcon, styles.shadow]}
+        className="flex items-center justify-center"
+      >
+        <MaterialIcons name="my-location" size={40} color="#22BF73" />
+      </TouchableOpacity>
 
       <BottomSheet
         ref={bottomSheetRef}
@@ -190,5 +196,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 2,
+  },
+  myLocationIcon: {
+    position: "absolute",
+    width: 50,
+    height: 50,
+    right: 10,
+    top: "30%", // Đặt ở giữa theo chiều dọc
+    marginTop: -12, // Điều chỉnh để biểu tượng nằm chính xác ở giữa
+    zIndex: 1000,
   },
 });
