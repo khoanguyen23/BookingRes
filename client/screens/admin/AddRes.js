@@ -20,6 +20,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const AddRes = () => {
   const navigation = useNavigation();
+  const mapRef = useRef(null);
   const bottomSheetRef = useRef(null);
   const [refresh, setRefresh] = useState(0);
   const snapPoints = useMemo(() => ["20%", "40%", "60%", "85%", "90%"], []);
@@ -34,6 +35,7 @@ const AddRes = () => {
   return (
     <View style={styles.container}>
       <MapView
+        ref={mapRef}
         style={styles.map}
         initialRegion={{
           latitude: 37.78825,
@@ -106,6 +108,16 @@ const AddRes = () => {
                   setAddress(data.description);
                   setLatitude(details.geometry.location.lat);
                   setLongitude(details.geometry.location.lng);
+
+                  mapRef.current.animateToRegion(
+                    {
+                      latitude: details.geometry.location.lat,
+                      longitude: details.geometry.location.lng,
+                      latitudeDelta: 0.005, // Điều chỉnh delta để zoom đến mức mong muốn
+                      longitudeDelta: 0.005,
+                    },
+                    1000
+                  );
                 }
               }}
               fetchDetails={true}
