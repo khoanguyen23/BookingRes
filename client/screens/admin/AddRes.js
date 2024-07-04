@@ -9,7 +9,7 @@ import React, { useState, useRef, useCallback, useMemo } from "react";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import { TextInput } from "react-native-paper";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import BottomSheet from "@gorhom/bottom-sheet";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
@@ -43,7 +43,18 @@ const AddRes = () => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-      />
+      >
+        {latitude && longitude && (
+          <Marker
+            coordinate={{
+              latitude: latitude,
+              longitude: longitude,
+            }}
+            title="Selected Location"
+            description={address}
+          />
+        )}
+      </MapView>
       <TouchableOpacity
         style={[styles.myLocationIcon, styles.shadow]}
         className="flex items-center justify-center"
