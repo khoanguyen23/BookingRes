@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Pressable,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import React, { useState, useRef, useCallback, useMemo } from "react";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -52,7 +53,13 @@ const AddRes = () => {
             }}
             title="Selected Location"
             description={address}
-          />
+          >
+            <Image
+              source={require("../../assets/img/restaurant.png")}
+              style={{ width: 40, height: 40 }}
+              resizeMode="cover"
+            />
+          </Marker>
         )}
       </MapView>
       <TouchableOpacity
