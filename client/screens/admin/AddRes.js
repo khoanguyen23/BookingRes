@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React, { useState, useRef, useCallback, useMemo } from "react";
+import React, { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import { TextInput } from "react-native-paper";
@@ -19,6 +19,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { Avatar } from "@rneui/themed";
 
 const AddRes = () => {
   const navigation = useNavigation();
@@ -35,12 +36,16 @@ const AddRes = () => {
   const [address, setAddress] = useState("");
   const [image, setImage] = useState(null);
 
+  useEffect(() => {
+    console.log('Image URL updated:', image); // Kiểm tra URL ảnh khi `image` thay đổi
+  }, [image]);
+
   const CustomCallout = ({ title, description, image }) => {
     console.log('Displaying image URL in CustomCallout:', image); // Kiểm tra URL ảnh
     return (
       <View style={styles.calloutContainer}>
         {image ? (
-          <Image source={{ uri: image }} style={styles.calloutImage} />
+          <Image source={{ uri: image }}  style={styles.calloutImage} />
         ) : (
           <Text>Image not available</Text>
         )}
@@ -155,16 +160,6 @@ const AddRes = () => {
               <Text className="ml-3 text-base">{address}</Text>
             </View>
           )}
-          {/* <Pressable
-            style={styles.button}
-            onPress={() =>
-              navigation.navigate("ResInfo", { longitude, latitude })
-            }
-          >
-            <Text className="text-center text-white font-bold text-base">
-              CONTINUE
-            </Text>
-          </Pressable> */}
           <View style={{ flex: 1 }}>
             <GooglePlacesAutocomplete
               onPress={async (data, details = null) => {
@@ -184,15 +179,17 @@ const AddRes = () => {
                     console.error("Failed to get photo URL:", error);
                   }
 
-                  mapRef.current.animateToRegion(
-                    {
-                      latitude: details.geometry.location.lat,
-                      longitude: details.geometry.location.lng,
-                      latitudeDelta: 0.005, // Điều chỉnh delta để zoom đến mức mong muốn
-                      longitudeDelta: 0.005,
-                    },
-                    1000
-                  );
+                  if (mapRef.current) {
+                    mapRef.current.animateToRegion(
+                      {
+                        latitude: details.geometry.location.lat,
+                        longitude: details.geometry.location.lng,
+                        latitudeDelta: 0.005,
+                        longitudeDelta: 0.005,
+                      },
+                      1000
+                    );
+                  }
                 }
               }}
               fetchDetails={true}
@@ -314,7 +311,7 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   calloutImage: {
-    width: "100%",
+    width: 100,
     height: 100,
     borderRadius: 5,
     marginBottom: 5,
