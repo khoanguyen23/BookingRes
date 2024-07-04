@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState, useRef, useCallback, useMemo } from "react";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "@env";
@@ -9,6 +15,8 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import Entypo from "@expo/vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const AddRes = () => {
   const navigation = useNavigation();
@@ -21,6 +29,7 @@ const AddRes = () => {
 
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const [address, setAddress] = useState("");
 
   return (
     <View style={styles.container}>
@@ -42,33 +51,45 @@ const AddRes = () => {
         onChange={handleSheetChanges}
         style={styles.sheetContainer}
         handleIndicatorStyle={styles.sheetHandleIndicator}
-        backgroundStyle={{ backgroundColor: "#FFFFFF" }}
+        backgroundStyle={{ backgroundColor: "#FAFAFA" }}
       >
         <View style={{ flex: 1 }}>
           <View style={{ flex: 0.1 }}>
-            <View className="flex-row items-center justify-between p-3 bg-[#f7f4f4] rounded-lg ml-3 mr-3 mt-2">
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("ResInfo", { longitude, latitude })
+              }
+              style={styles.shadow}
+              className="flex-row items-center justify-between p-3 bg-[#f7f4f4] rounded-lg ml-3 mr-3 mt-2"
+            >
               <View className="flex-row items-center space-x-4">
                 <View className="bg-[#21BF73] w-10 h-10 rounded-lg items-center justify-center">
                   <Feather name="navigation" size={24} color="white" />
                 </View>
-                <Text className="text-lg">Get my current location</Text>
+                <Text className="text-lg">
+                  Get location & Continue fill info
+                </Text>
               </View>
               <AntDesign name="right" size={24} color="#B4B4BC" />
+            </TouchableOpacity>
+          </View>
+
+          {address.length > 0 && (
+            <View className="flex flex-row p-3 rounded-lg ml-3 mr-3 mt-10">
+              <FontAwesome6 name="location-dot" size={24} color="#22BF73" />
+              <Text className="ml-3 text-base">{address}</Text>
             </View>
-          </View>
-          <View className="p-4 mt-2">
-            <Text className="text-base">Restaurant address selected : </Text>
-            <Text className="text-base mt-2">Longitude: {longitude}</Text>
-            <Text className="text-base mt-2">Latitude: {latitude}</Text>
-          </View>
-          <Pressable
+          )}
+          {/* <Pressable
             style={styles.button}
-            onPress={() => navigation.navigate("ResInfo", { longitude, latitude })}
+            onPress={() =>
+              navigation.navigate("ResInfo", { longitude, latitude })
+            }
           >
             <Text className="text-center text-white font-bold text-base">
               CONTINUE
             </Text>
-          </Pressable>
+          </Pressable> */}
           <View style={{ flex: 1 }}>
             <GooglePlacesAutocomplete
               onPress={(data, details = null) => {
@@ -76,6 +97,7 @@ const AddRes = () => {
                   console.log("Selected Address:", data.description);
                   console.log("Latitude:", details.geometry.location.lat);
                   console.log("Longitude:", details.geometry.location.lng);
+                  setAddress(data.description);
                   setLatitude(details.geometry.location.lat);
                   setLongitude(details.geometry.location.lng);
                 }
@@ -159,5 +181,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginLeft: 10,
     marginRight: 10,
+  },
+  shadow: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   },
 });
