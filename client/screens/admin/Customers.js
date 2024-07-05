@@ -8,11 +8,12 @@ import { TextInput } from "react-native-paper";
 import { CheckBox } from "@rneui/themed";
 import { LinearGradient } from 'expo-linear-gradient';
 
+
 const Customers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDeleteVisible, setIsDeleteVisible] = useState(false);
-  const [isEditVisible, setIsEditVisible] = useState(true);
+  const [isEditVisible, setIsEditVisible] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [editData, setEditData] = useState({ name: "", email: "" });
   const [selectedIndex, setIndex] = React.useState(0);

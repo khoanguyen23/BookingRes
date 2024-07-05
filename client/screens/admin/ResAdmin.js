@@ -127,7 +127,7 @@ const ResAdmin = () => {
             onSwipeableWillOpen={() => closePreviousSwipe(item._id)}
             renderRightActions={() => renderRightActions(item._id)}
           >
-            <View
+            <TouchableOpacity
               className="p-4 flex flex-row space-x-2 m-2"
               style={styles.resContainer}
             >
@@ -157,7 +157,7 @@ const ResAdmin = () => {
                   Đánh giá: {item.rating}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           </Swipeable>
         )}
         keyExtractor={(item) => item._id}

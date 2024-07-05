@@ -5,10 +5,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  TextInput,
 } from "react-native";
 import { API_URL } from "@env";
-import { Avatar, Button } from "@rneui/themed";
+import { Avatar, Button, Icon, Overlay } from "@rneui/themed";
 import { SpeedDial } from "@rneui/themed";
+import Entypo from "@expo/vector-icons/Entypo";
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
@@ -17,7 +19,8 @@ const Category = () => {
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
-
+  const [visible, setVisible] = useState(false);
+  const [categoryName, setCategoryName] = useState('');
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -26,13 +29,17 @@ const Category = () => {
     setIsDeleteMode(!isDeleteMode);
   };
 
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+
   async function fetchCategories() {
     try {
       const response = await fetch(`${API_URL}/categories`);
       const data = await response.json();
       setCategories(data);
       setLoading(false);
-      console.log("categories:", data);
+      // console.log("categories:", data);
     } catch (error) {
       setError("Error fetching categories");
       setLoading(false);
@@ -65,7 +72,9 @@ const Category = () => {
     <TouchableOpacity key={item._id}>
       <View
         style={[
-          selectedCategory === item._id && isDeleteMode ? styles.selected : null,
+          selectedCategory === item._id && isDeleteMode
+            ? styles.selected
+            : null,
         ]}
         className="w-[120] h-[140] bg-white items-center justify-center border border-[#DDDDDD] rounded-lg mt-2"
       >
@@ -134,6 +143,36 @@ const Category = () => {
       <View className="flex flex-row flex-wrap justify-around h-screen">
         {categories.map((item) => renderCategoryItem(item))}
       </View>
+      <Overlay 
+      isVisible={visible}
+      onBackdropPress={toggleOverlay}
+      overlayStyle={styles.overlay}
+    >
+      <Text style={styles.title}>Add Category</Text>
+      <View style={styles.imageContainer}>
+        <Icon name="image" size={70} color="black" />
+      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Category Name"
+        value={categoryName}
+        onChangeText={setCategoryName}
+      />
+      <Button
+        title="Save"
+        onPress={() => {
+          // Xử lý lưu danh mục
+          toggleOverlay();
+        }}
+        buttonStyle={styles.button}
+      />
+      <Button
+        title="Cancel"
+        onPress={toggleOverlay}
+        buttonStyle={styles.cancelButton}
+        type="outline"
+      />
+    </Overlay>
       <SpeedDial
         isOpen={open}
         icon={{ name: "edit", color: "#fff" }}
@@ -148,7 +187,10 @@ const Category = () => {
           icon={{ name: "add", color: "#fff" }}
           title="Add"
           buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
-          onPress={() => console.log("Add Something")}
+          onPress={() => {
+            setOpen(false);
+            toggleOverlay();
+          }}
         />
         <SpeedDial.Action
           icon={{ name: "delete", color: "#fff" }}
@@ -186,5 +228,41 @@ const styles = StyleSheet.create({
     borderColor: "red",
     borderWidth: 2,
     margin: 4,
+  },
+  overlay: {
+    width: '90%',
+    padding: 20,
+    borderRadius: 10,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  imageContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+    borderColor: '#3498db',
+    borderWidth: 2,
+    borderStyle: 'dashed',
+    padding: 20,
+    borderRadius: 10,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  button: {
+    backgroundColor: '#3498db',
+    marginBottom: 10,
+  },
+  cancelButton: {
+    borderColor: '#3498db',
+    color: '#3498db',
   },
 });
