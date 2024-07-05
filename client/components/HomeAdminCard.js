@@ -1,10 +1,11 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
+import { StyleSheet } from "react-native";
 
 const HomeAdminCard = ({ title, iconUri, borderColor, bgColor, onPress }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View className="w-[120] h-[180] bg-white items-center justify-center border border-[#DDDDDD] rounded-lg mt-2">
+    <TouchableOpacity onPress={onPress} style={styles.shadow}>
+      <View className="w-[120] h-[180] items-center justify-center border border-[#DDDDDD] rounded-lg">
         <View
           style={{
             borderColor: borderColor,
@@ -32,3 +33,16 @@ const HomeAdminCard = ({ title, iconUri, borderColor, bgColor, onPress }) => {
 };
 
 export default HomeAdminCard;
+
+const styles = StyleSheet.create({
+  shadow: {
+    marginTop:20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+});
