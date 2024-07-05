@@ -1,13 +1,37 @@
-import { View } from "react-native";
-import React from "react";
+import { Text, View } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import HomeAdminCard from "../../components/HomeAdminCard";
+import { UserType } from "../../UserContext";
+import { API_URL } from "@env";
 
 const HomeAdmin = () => {
+  const { userId, user } = useContext(UserType); // Get userId and user from context
   const navigation = useNavigation();
+  const [info, setInfo] = useState([])
+  const [error, setError] = useState(null);
 
+  console.log("User ID:", userId); // Add a label to the console log for clarity
+  console.log("User:", user);
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  async function getUser()  {
+    try {
+      const response = await fetch(`${API_URL}/address/${userId}`);
+      const data = await response.json();
+      setInfo(data);
+    } catch (error) {
+      setError("Error fetching categories");
+    }
+  }
   return (
     <View style={{ flex: 1 }}>
+      <View>
+        <Text>Hello {info.name} </Text>
+      </View>
       <View className="flex flex-row flex-wrap justify-around">
         <HomeAdminCard
           title="Analytics"

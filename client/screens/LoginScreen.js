@@ -18,6 +18,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@env";
 import { decode as base64Decode } from "base-64";
+import { UserType } from "../UserContext"; // Import the context
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -32,6 +33,7 @@ const LoginPage = ({ navigation }) => {
   const animation = useRef(null);
   const [loader, setLoader] = useState(false);
   const [obsecureText, setObsecureText] = useState(true);
+  const { setUserId, updateUser } = useContext(UserType); // Destructure the setUserId and updateUser functions from context
 
   const inValidForm = () => {
     Alert.alert("Không hợp lệ", "Hãy nhập vào đầy đủ các trường dữ liệu", [
@@ -62,6 +64,10 @@ const LoginPage = ({ navigation }) => {
         const isAdmin = payload.admin;
 
         await AsyncStorage.setItem("authToken", response.data.token);
+
+        // Set user data in context
+        setUserId(payload.userId);
+        updateUser(payload);
 
         if (isAdmin) {
           navigation.replace("Admin");
