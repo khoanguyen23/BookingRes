@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ScrollView, Text, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -9,9 +10,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Avatar } from "@rneui/themed";
 import { StyleSheet } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
+import jwt_decode from "jwt-decode";
+import axios from "axios";
 
 const HomeAdmin = () => {
-  const { userId, user } = useContext(UserType); // Get userId and user from context
+  const { userId, setUserId, user, updateUser } = useContext(UserType);
+  const [address, setAddress] = useState([]);
   const navigation = useNavigation();
   const [info, setInfo] = useState([]);
   const [error, setError] = useState(null);
@@ -19,19 +23,46 @@ const HomeAdmin = () => {
   console.log("User ID:", userId); // Add a label to the console log for clarity
   console.log("User:", user);
 
+  // useEffect(() => {
+  //   getUser();
+  // }, []);
+
+  // async function getUser() {
+  //   try {
+  //     const response = await fetch(`${API_URL}/address/${userId}`);
+  //     const data = await response.json();
+  //     setInfo(data);
+  //   } catch (error) {
+  //     setError("Error fetching categories");
+  //   }
+  // }
+
+  const fetchAddress = async () => {
+    try {
+      const token = await AsyncStorage.getItem("authToken");
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.userId;
+      setUserId(userId);
+      await fetchAddressData(userId);
+    } catch (error) {
+      console.log("Error fetching address", error);
+    }
+  };
   useEffect(() => {
-    getUser();
+    fetchAddress();
   }, []);
 
-  async function getUser() {
+  const fetchAddressData = async (userId) => {
     try {
-      const response = await fetch(`${API_URL}/address/${userId}`);
-      const data = await response.json();
-      setInfo(data);
+      const response = await axios.get(`${API_URL}/address/${userId}`);
+      const addressData = response.data;
+      updateUser(addressData);
+      console.log(addressData, "user fetch");
     } catch (error) {
-      setError("Error fetching categories");
+      console.log(`${API_URL} /address/${userId}`);
+      console.log("Error fetching address data", error);
     }
-  }
+  };
   const data = [
     { value: 300, label: "M" }, // Monday
     { value: 150, label: "T" }, // Tuesday
@@ -73,7 +104,7 @@ const HomeAdmin = () => {
           <View className="p-4 flex flex-row justify-between">
             <View>
               <Text className="text-[#0B36A6] text-2xl">
-                Hello {info.name}
+                Hello {user?.name}
                 <Entypo name="hand" size={24} color="#FFE3C6" />
               </Text>
               <Text className="text-xl">Welcome to Dashboard</Text>
