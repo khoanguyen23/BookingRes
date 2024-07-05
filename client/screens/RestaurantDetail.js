@@ -12,7 +12,6 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-
 import MenuTab from "./MenuTab";
 import NetworkImage from "../components/NetworkImage";
 import {  SIZES } from "../constants/theme";
@@ -187,7 +186,7 @@ export default function RestaurantDetail() {
           }}
         ></View>
 
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1}}>
           <MenuTab
             item={item}
             handlePresentModalPress={handlePresentModalPress}

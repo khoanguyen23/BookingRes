@@ -15,8 +15,10 @@ import { TabbedHeaderList } from "react-native-sticky-parallax-header";
 import Colors from "../constants/Colors";
 import screenStyles from "../constants/screenStyles";
 import { useNavigation } from "@react-navigation/native";
+import MapView, { Marker, Callout } from "react-native-maps";
+import Octicons from "@expo/vector-icons/Octicons";
 
-const FirstRoute = ({ item, handlePresentModalPress}) => {
+const FirstRoute = ({ item, handlePresentModalPress }) => {
   const navigation = useNavigation();
   const handleItemSelect = (selectedItem) => {
     navigation.navigate("Order", {
@@ -107,6 +109,8 @@ const SecondRoute = ({ item }) => (
         ))}
       </View>
     </View>
+    {/* divider */}
+    <View className="bg-[#E0E0E0] w-full h-3"></View>
   </ScrollView>
 );
 const ThirdRoute = ({ item }) => (
@@ -123,13 +127,110 @@ const ThirdRoute = ({ item }) => (
         ))}
       </View>
     </View>
+    {/* divider */}
+    <View className="bg-[#E0E0E0] w-full h-3"></View>
   </ScrollView>
 );
 const FourRoute = ({ item }) => (
-  <View style={{ flex: 1, backgroundColor: "#673ab7" }}>
-    <Text>{item.description}</Text>
+  <View>
+    <View style={{ flex: 1, backgroundColor: "#fafafa", padding: 15 }}>
+      <Text className="text-lg font-semibold ml-2 mb-5">Chỉ đường</Text>
+      <View className="flex flex-row justify-center items-center space-x-2">
+        <Octicons name="location" size={24} color="black" />
+        <Text className="text-base text-slate-600">{item.address}</Text>
+      </View>
+      <Text>
+        {"("} Nhấn vào ảnh bản đồ để xem chỉ đường, nhấn vào icon chia sẻ để
+        chia sẻ vị trí cho mọi người{")"}
+      </Text>
+      <View className="mt-4 p-4">
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        ></MapView>
+      </View>
+    </View>
+    <View className="bg-[#E0E0E0] w-full h-3"></View>
   </View>
 );
+
+const FifthRoute = ({ item }) => (
+  <View className="">
+    <View className="ml-4 mb-5">
+      <Text className="text-lg font-bold">Giờ hoạt động</Text>
+      {/* <Text>{item.openingHours}</Text> */}
+      <View className="flex flex-row justify-between mt-4">
+        <View className="space-y-2">
+          <Text className="text-base font-semibold text-[#232323]">
+            Chủ nhật
+          </Text>
+          <Text className="text-base font-semibold text-[#232323]">Thứ 2</Text>
+          <Text className="text-base font-semibold text-[#232323]">Thứ 3</Text>
+          <Text className="text-base font-semibold text-[#232323]">Thứ 4</Text>
+          <Text className="text-base font-semibold text-[#232323]">Thứ 5</Text>
+          <Text className="text-base font-semibold text-[#232323]">Thứ 6</Text>
+          <Text className="text-base font-semibold text-[#232323]">Thứ 7</Text>
+        </View>
+        <View className="mr-4 space-y-2 mt-3">
+          {Array.from({ length: 7 }).map((_, index) => (
+            <Text className="text-base" key={index}>
+              {item.openingHours}
+            </Text>
+          ))}
+        </View>
+      </View>
+    </View>
+    <View className="bg-[#E0E0E0] w-full h-3"></View>
+  </View>
+);
+const SixthRoute = ({ item }) => {
+  const tags = [
+    "Món Âu",
+    "Hải sản",
+    "Buffet",
+    "Sang trọng",
+    "Quận 2",
+    "Gợi ý cho bạn",
+    "Sắp xếp gợi ý",
+    "Mức giá 250K - 500K",
+  ];
+  return (
+    <View className="mb-[200]">
+      <View className="p-4">
+        <Text className="text-lg font-bold">
+          Giới thiệu nhà hàng {item.name}
+        </Text>
+        <Text className="text-[#222222] mt-2 text-base">
+          {item.description}
+        </Text>
+      </View>
+      <View className="bg-[#E0E0E0] w-full h-3"></View>
+      <View className="p-4">
+        <Text className="text-2xl font-bold relative">TAGS :</Text>
+        <View className="absolute w-16 h-[6] bottom-3 left-4 bg-[#E63837]"></View>
+      </View>
+      <View className="p-4">
+        <View className="flex flex-row flex-wrap">
+          {tags.map((tag, index) => (
+            <View
+              key={index}
+              className="bg-[#F2F2F2] p-2 m-1 rounded-lg"
+              style={styles.shadow}
+            >
+              <Text className="text-lg font-semibold">{tag}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+      <View className="bg-[#E0E0E0] w-full h-3"></View>
+    </View>
+  );
+};
 
 const renderScene = (props) => {
   const { route, jumpTo } = props;
@@ -142,6 +243,10 @@ const renderScene = (props) => {
       return <ThirdRoute {...props} />;
     case "four":
       return <FourRoute {...props} />;
+    case "fifth":
+      return <FifthRoute {...props} />;
+    case "sixth":
+      return <SixthRoute {...props} />;
     default:
       return null;
   }
@@ -158,7 +263,9 @@ const MenuTab = ({ item }) => {
     { key: "first", title: "Ưu đãi" },
     { key: "second", title: "Bảng giá" },
     { key: "third", title: "Ảnh" },
-    { key: "four", title: "Thông tin" },
+    { key: "four", title: "Chỉ đường" },
+    { key: "fifth", title: "Giờ hoạt động" },
+    { key: "sixth", title: "Chi tiết" },
   ]);
 
   const sections = routes.map((route) => ({
@@ -207,5 +314,19 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     marginLeft: 5,
+  },
+  map: {
+    flex: 1,
+    width: "100%",
+    height: 250,
+  },
+  shadow: {
+    backgroundColor: "#f2f2f2",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   },
 });
