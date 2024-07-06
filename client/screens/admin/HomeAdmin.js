@@ -94,7 +94,7 @@ const HomeAdmin = () => {
 
   const [selectedWeek, setSelectedWeek] = useState(null); // State để lưu tuần đã chọn
   const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ["25%", "72%"], []);
+  const snapPoints = useMemo(() => ["25%", "68%"], []);
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
   }, []);
