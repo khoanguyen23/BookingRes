@@ -1,6 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ScrollView, Text, View } from "react-native";
-import React, { useContext, useEffect, useState, useCallback } from "react";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 import { useNavigation } from "@react-navigation/native";
 import HomeAdminCard from "../../components/HomeAdminCard";
 import { UserType } from "../../UserContext";
@@ -11,6 +17,9 @@ import { Avatar } from "@rneui/themed";
 import { LineChart } from "react-native-gifted-charts";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import Calendar from "../../components/Calendar";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
 const HomeAdmin = () => {
   const { userId, setUserId, user, updateUser } = useContext(UserType);
@@ -83,6 +92,8 @@ const HomeAdmin = () => {
     { value: 90, dataPointText: "90" },
   ];
 
+
+
   return (
     <ScrollView>
       <View style={{ flex: 1 }}>
@@ -100,8 +111,12 @@ const HomeAdmin = () => {
               </Text>
               <Text className="text-xl">Welcome to Dashboard</Text>
             </View>
-            <Avatar size={70} rounded source={{ uri: user.avatar }} />
+            <Avatar size={70} rounded source={{ uri: user?.avatar }} />
           </View>
+  
+          <TouchableOpacity className="border border-[#E4E4E4] p-4 w-72 m-3 rounded-md">
+            <Text className="text-base font-bold">Pick a date</Text>
+          </TouchableOpacity>
           <View
             style={{
               backgroundColor: "#fff",
@@ -204,6 +219,7 @@ const HomeAdmin = () => {
               onPress={() => navigation.navigate("OrderTab")}
             />
           </View>
+        
         </LinearGradient>
       </View>
     </ScrollView>
@@ -211,3 +227,15 @@ const HomeAdmin = () => {
 };
 
 export default HomeAdmin;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 24,
+    backgroundColor: 'grey',
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+});
