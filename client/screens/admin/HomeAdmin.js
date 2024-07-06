@@ -1,11 +1,18 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, {
   useContext,
   useEffect,
   useState,
   useCallback,
   useRef,
+  useMemo,
 } from "react";
 import { useNavigation } from "@react-navigation/native";
 import HomeAdminCard from "../../components/HomeAdminCard";
@@ -19,7 +26,14 @@ import jwt_decode from "jwt-decode";
 import axios from "axios";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Calendar from "../../components/Calendar";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import PopUp from "../../components/PopUp";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const HomeAdmin = () => {
   const { userId, setUserId, user, updateUser } = useContext(UserType);
@@ -92,7 +106,19 @@ const HomeAdmin = () => {
     { value: 90, dataPointText: "90" },
   ];
 
+  const [selectedWeek, setSelectedWeek] = useState(null); // State để lưu tuần đã chọn
 
+  const bottomSheetRef = useRef(null);
+  const snapPoints = useMemo(() => ["25%", "72%"], []);
+  const handleSheetChanges = useCallback((index) => {
+    console.log("handleSheetChanges", index);
+  }, []);
+  const handleSnapPress = useCallback((index) => {
+    bottomSheetRef.current?.snapToIndex(index);
+  }, []);
+  const handleClosePress = useCallback(() => {
+    bottomSheetRef.current?.close();
+  }, []);
 
   return (
     <ScrollView>
@@ -113,10 +139,8 @@ const HomeAdmin = () => {
             </View>
             <Avatar size={70} rounded source={{ uri: user?.avatar }} />
           </View>
-  
-          <TouchableOpacity className="border border-[#E4E4E4] p-4 w-72 m-3 rounded-md">
-            <Text className="text-base font-bold">Pick a date</Text>
-          </TouchableOpacity>
+
+          
           <View
             style={{
               backgroundColor: "#fff",
@@ -129,16 +153,30 @@ const HomeAdmin = () => {
             }}
             className="p-4 m-2"
           >
-            <Text
-              style={{ fontSize: 18, textAlign: "center", marginBottom: 10 }}
-            >
-              Last Week's Orders
-            </Text>
-            <Text
-              style={{ fontSize: 14, textAlign: "center", marginBottom: 20 }}
-            >
-              15 April - 21 April
-            </Text>
+            <View className="flex flex-row">
+              <TouchableOpacity  onPress={() => handleSnapPress(1)} className="flex flex-row items-center space-x-2 border border-[#e0e0e0] w-56 p-2 rounded-md">
+                {/* <Ionicons name="calendar-outline" size={24} color="black" />
+                <Text className="font-semibold">Tuần 23, 03/06 - 09/06</Text>
+                <AntDesign name="closecircle" size={18} color="black" /> */}
+                <Text className="text-base">Tuần này</Text>
+              </TouchableOpacity>
+              <View className="ml-2">
+                <Text className="text-base ml-6">Total Order</Text>
+                <View className="flex flex-row space-x-2 items-center ml-6">
+                  <Text className="text-2xl font-bold text-[#0B36A6]">5</Text>
+                  <Ionicons name="restaurant-sharp" size={20} color="#0B36A6" />
+                </View>
+              </View>
+            </View>
+            <View className="flex mt-2 space-x-2 items-end">
+              <View className=""></View>
+              <View className="flex flex-row space-x-2">
+                <Text className="text-orange-600 text-sm font-semibold">
+                  Tăng 5 đơn đặt bàn so với tuần trước
+                </Text>
+                <AntDesign name="infocirlceo" size={20} color="black" />
+              </View>
+            </View>
             <LineChart
               data={lineData}
               data2={lineData2}
@@ -219,9 +257,25 @@ const HomeAdmin = () => {
               onPress={() => navigation.navigate("OrderTab")}
             />
           </View>
-        
         </LinearGradient>
       </View>
+      {/* Bottom Sheet để chứa Calendar */}
+      <BottomSheet
+        index={-1}
+        ref={bottomSheetRef}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        backdropComponent={(props) => (
+          <BottomSheetBackdrop {...props} opacity={0.5} />
+        )}
+        backgroundStyle={{ backgroundColor: "#F2F1F6" }}
+      >
+        <Calendar />
+        <TouchableOpacity className="p-4 border rounded-md mx-2 mt-4">
+          <Text className="text-xl font-bold text-center">Apply</Text>
+        </TouchableOpacity>
+        {/* <PopUp buttonText="Xác nhận" onPress={handleClosePress} /> */}
+      </BottomSheet>
     </ScrollView>
   );
 };
@@ -232,10 +286,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    backgroundColor: 'grey',
+    backgroundColor: "grey",
   },
   contentContainer: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
+  },
+  resultContainer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  text: {
+    fontSize: 16,
+    textAlign: "center",
   },
 });

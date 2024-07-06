@@ -33,8 +33,6 @@ const HistoryOrder = () => {
   const userId = user._id;
   const [selectedContentType, setSelectedContentType] = useState("status");
   const [selectedStatus, setSelectedStatus] = useState("Tất cả");
-  const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ["25%", "55%"], []);
   const status = [
     "Tất cả",
     "Chờ xác nhận",
@@ -94,13 +92,20 @@ const HistoryOrder = () => {
     return new Date(dateString).toLocaleDateString("vi-VN", options);
   };
 
+  const bottomSheetRef = useRef(null);
+  const snapPoints = useMemo(() => ["25%", "55%"], []);
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
   }, []);
-
   const handleSnapPress = useCallback((index) => {
     bottomSheetRef.current?.snapToIndex(index);
   }, []);
+  const handleClosePress = useCallback(() => {
+    bottomSheetRef.current?.close();
+    if (selectedContentType === "status") {
+      filterOrdersByStatus(selectedStatus);
+    }
+  }, [selectedStatus, selectedContentType]);
 
   const filterOrdersByStatus = (status) => {
     if (status === "Tất cả") {
@@ -115,12 +120,7 @@ const HistoryOrder = () => {
     setSelectedStatus(status);
   };
 
-  const handleClosePress = useCallback(() => {
-    bottomSheetRef.current?.close();
-    if (selectedContentType === "status") {
-      filterOrdersByStatus(selectedStatus);
-    }
-  }, [selectedStatus, selectedContentType]);
+
 
   return (
     <View style={styles.container}>
