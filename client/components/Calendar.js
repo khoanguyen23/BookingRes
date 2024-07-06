@@ -1,20 +1,20 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import CalendarPicker from "react-native-calendar-picker";
 import moment from "moment";
 
-const Calendar = () => {
-  const [selectedWeek, setSelectedWeek] = useState(null);
+const Calendar = ({ setSelectedWeek, handleClosePress }) => {
+  const [internalSelectedWeek, setInternalSelectedWeek] = useState(null);
 
   const onDateChange = (date) => {
     const startOfWeek = moment(date).startOf("isoWeek");
     const endOfWeek = moment(date).endOf("isoWeek");
-    setSelectedWeek({ startOfWeek, endOfWeek });
+    setInternalSelectedWeek({ startOfWeek, endOfWeek });
   };
 
   const getCustomDatesStyles = (date) => {
-    if (!selectedWeek) return {};
-    const { startOfWeek, endOfWeek } = selectedWeek;
+    if (!internalSelectedWeek) return {};
+    const { startOfWeek, endOfWeek } = internalSelectedWeek;
 
     if (moment(date).isBetween(startOfWeek, endOfWeek, null, "[]")) {
       return {
@@ -25,8 +25,13 @@ const Calendar = () => {
     return {};
   };
 
+  const applySelection = () => {
+    setSelectedWeek(internalSelectedWeek);
+    handleClosePress();
+  };
+
   return (
-    <View className='mt-2'>
+    <View className="mt-2">
       <CalendarPicker
         onDateChange={onDateChange}
         customDatesStyles={getCustomDatesStyles}
@@ -37,12 +42,16 @@ const Calendar = () => {
       />
 
       <Text style={styles.text}>
-        {selectedWeek
-          ? `Tuần đã chọn: Từ ${selectedWeek.startOfWeek.format(
+        {internalSelectedWeek
+          ? `Tuần đã chọn: Từ ${internalSelectedWeek.startOfWeek.format(
               "DD/MM/YYYY"
-            )} đến ${selectedWeek.endOfWeek.format("DD/MM/YYYY")}`
+            )} đến ${internalSelectedWeek.endOfWeek.format("DD/MM/YYYY")}`
           : "Chọn một ngày để chọn tuần"}
       </Text>
+
+      <TouchableOpacity onPress={applySelection} className="p-4 border rounded-md mx-2 mt-4">
+        <Text className="text-xl font-bold text-center">Apply</Text>
+      </TouchableOpacity>
     </View>
   );
 };

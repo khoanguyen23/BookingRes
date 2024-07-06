@@ -39,11 +39,7 @@ const HomeAdmin = () => {
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
   const navigation = useNavigation();
-  const [info, setInfo] = useState([]);
   const [error, setError] = useState(null);
-
-  console.log("User ID:", userId);
-  console.log("User:", user);
 
   const fetchAddress = useCallback(async () => {
     try {
@@ -60,10 +56,6 @@ const HomeAdmin = () => {
     }
   }, [setUserId]);
 
-  useEffect(() => {
-    fetchAddress();
-  }, [fetchAddress]);
-
   const fetchAddressData = async (userId) => {
     try {
       const response = await axios.get(`${API_URL}/address/${userId}`);
@@ -76,15 +68,9 @@ const HomeAdmin = () => {
     }
   };
 
-  const data = [
-    { value: 300, label: "M" },
-    { value: 150, label: "T" },
-    { value: 200, label: "W" },
-    { value: 250, label: "T" },
-    { value: 300, label: "F" },
-    { value: 450, label: "S" },
-    { value: 350, label: "S" },
-  ];
+  useEffect(() => {
+    fetchAddress();
+  }, [fetchAddress]);
 
   const lineData = [
     { value: 5, dataPointText: "5" },
@@ -107,7 +93,6 @@ const HomeAdmin = () => {
   ];
 
   const [selectedWeek, setSelectedWeek] = useState(null); // State để lưu tuần đã chọn
-
   const bottomSheetRef = useRef(null);
   const snapPoints = useMemo(() => ["25%", "72%"], []);
   const handleSheetChanges = useCallback((index) => {
@@ -119,6 +104,18 @@ const HomeAdmin = () => {
   const handleClosePress = useCallback(() => {
     bottomSheetRef.current?.close();
   }, []);
+
+  const handleClearFilter = () => {
+    setSelectedWeek(null);
+  };
+  const formatSelectedWeek = () => {
+    if (!selectedWeek) return "Tuần này";
+    const { startOfWeek, endOfWeek } = selectedWeek;
+    const weekNumber = startOfWeek.week();
+    return `Tuần ${weekNumber}, ${startOfWeek.format(
+      "DD/MM"
+    )} - ${endOfWeek.format("DD/MM")}`;
+  };
 
   return (
     <ScrollView>
@@ -140,7 +137,6 @@ const HomeAdmin = () => {
             <Avatar size={70} rounded source={{ uri: user?.avatar }} />
           </View>
 
-          
           <View
             style={{
               backgroundColor: "#fff",
@@ -154,11 +150,23 @@ const HomeAdmin = () => {
             className="p-4 m-2"
           >
             <View className="flex flex-row">
-              <TouchableOpacity  onPress={() => handleSnapPress(1)} className="flex flex-row items-center space-x-2 border border-[#e0e0e0] w-56 p-2 rounded-md">
-                {/* <Ionicons name="calendar-outline" size={24} color="black" />
-                <Text className="font-semibold">Tuần 23, 03/06 - 09/06</Text>
-                <AntDesign name="closecircle" size={18} color="black" /> */}
-                <Text className="text-base">Tuần này</Text>
+            <TouchableOpacity
+                onPress={() =>
+                  selectedWeek ? handleClearFilter() : handleSnapPress(1)
+                }
+                className="flex flex-row items-center space-x-2 border border-[#e0e0e0] p-2 rounded-md"
+              >
+                {selectedWeek ? (
+                  <>
+                    <Ionicons name="calendar-outline" size={24} color="black" />
+                    <Text className="font-semibold">
+                      {formatSelectedWeek()}
+                    </Text>
+                    <AntDesign name="closecircle" size={18} color="black" />
+                  </>
+                ) : (
+                  <Text className="text-base">Tuần này</Text>
+                )}
               </TouchableOpacity>
               <View className="ml-2">
                 <Text className="text-base ml-6">Total Order</Text>
@@ -270,11 +278,10 @@ const HomeAdmin = () => {
         )}
         backgroundStyle={{ backgroundColor: "#F2F1F6" }}
       >
-        <Calendar />
-        <TouchableOpacity className="p-4 border rounded-md mx-2 mt-4">
+       <Calendar setSelectedWeek={setSelectedWeek} handleClosePress={handleClosePress} />
+        {/* <TouchableOpacity onPress={handleClosePress} className="p-4 border rounded-md mx-2 mt-4">
           <Text className="text-xl font-bold text-center">Apply</Text>
-        </TouchableOpacity>
-        {/* <PopUp buttonText="Xác nhận" onPress={handleClosePress} /> */}
+        </TouchableOpacity> */}
       </BottomSheet>
     </ScrollView>
   );
