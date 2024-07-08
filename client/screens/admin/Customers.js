@@ -193,7 +193,7 @@ const Customers = () => {
         <Button
           ViewComponent={LinearGradient} // Don't forget this!
           linearGradientProps={{
-            colors: ["#FF9800", "#F44336"],
+            colors: ["#36C2CE", "#478CCF","#77E4C8","#4535C1"],
             start: { x: 0, y: 0.5 },
             end: { x: 1, y: 0.5 },
           }}
