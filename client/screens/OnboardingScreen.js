@@ -77,21 +77,21 @@ const OnboardingScreen = ({ navigation }) => {
       <View style={styles.lottieContainer}>
         <LottieView
           style={[styles.lottie, styles.leftLottie]}
-          source={require("../assets/lottie/christmas.json")}
+          source={require("../assets/lottie/element.json")}
           autoPlay={true}
           loop={true}
         />
         <LottieView
           style={[styles.lottie, styles.rightLottie]}
-          source={require("../assets/lottie/christmas.json")}
+          source={require("../assets/lottie/element.json")}
           autoPlay={true}
           loop={true}
         />
       </View>
       <View style={styles.center}>
         <LottieView
-          style={{ width: 300, height: 300, marginTop: 70 }}
-          source={require("../assets/lottie/food-vlogger.json")}
+          style={{ width: 300, height: 420, marginTop: 70 }}
+          source={require("../assets/lottie/food-onboard.json")}
           autoPlay={true}
           loop={true}
         />
@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
   },
   lottieContainer: {
     flexDirection: "row",
+
   },
   logan: {
     position: "relative",
