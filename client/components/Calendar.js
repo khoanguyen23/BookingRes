@@ -1,15 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import CalendarPicker from "react-native-calendar-picker";
 import moment from "moment";
 
-const Calendar = ({ setSelectedWeek, handleClosePress }) => {
+const Calendar = ({ setSelectedWeek, handleClosePress, resetTrigger }) => {
   const [internalSelectedWeek, setInternalSelectedWeek] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null); // Thêm state để lưu ngày đã chọn
+
+  useEffect(() => {
+    if (resetTrigger) {
+      clearSelection();
+    }
+  }, [resetTrigger]);
 
   const onDateChange = (date) => {
+    setSelectedDate(date); // Cập nhật ngày đã chọn
     const startOfWeek = moment(date).startOf("isoWeek");
     const endOfWeek = moment(date).endOf("isoWeek");
     setInternalSelectedWeek({ startOfWeek, endOfWeek });
+  };
+
+  const clearSelection = () => {
+    setInternalSelectedWeek(null);
+    setSelectedDate(null); // Xóa ngày đã chọn
   };
 
   const getCustomDatesStyles = (date) => {
@@ -35,13 +48,14 @@ const Calendar = ({ setSelectedWeek, handleClosePress }) => {
       <CalendarPicker
         onDateChange={onDateChange}
         customDatesStyles={getCustomDatesStyles}
+        selectedStartDate={selectedDate} // Thiết lập ngày đã chọn
         startFromMonday={true}
-        todayBackgroundColor="#f2e6ff"
+        todayBackgroundColor="#577B8D"
         selectedDayColor="#7300e6"
         selectedDayTextColor="#FFFFFF"
       />
 
-      <Text style={styles.text}>
+      <Text style={styles.text} className="text-red-700">
         {internalSelectedWeek
           ? `Tuần đã chọn: Từ ${internalSelectedWeek.startOfWeek.format(
               "DD/MM/YYYY"
@@ -57,10 +71,6 @@ const Calendar = ({ setSelectedWeek, handleClosePress }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    // marginTop: 20,
-  },
   text: {
     marginTop: 10,
     fontSize: 16,

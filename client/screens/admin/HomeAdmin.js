@@ -93,8 +93,9 @@ const HomeAdmin = () => {
   ];
 
   const [selectedWeek, setSelectedWeek] = useState(null); // State để lưu tuần đã chọn
+  const [resetTrigger, setResetTrigger] = useState(false); // State để reset calendar
   const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ["25%", "72%"], []);
+  const snapPoints = useMemo(() => ["25%", "68%"], []);
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
   }, []);
@@ -115,6 +116,11 @@ const HomeAdmin = () => {
     return `Tuần ${weekNumber}, ${startOfWeek.format(
       "DD/MM"
     )} - ${endOfWeek.format("DD/MM")}`;
+  };
+
+  const resetSelectedWeek = () => {
+    setResetTrigger(true);
+    setTimeout(() => setResetTrigger(false), 100);
   };
 
   return (
@@ -150,10 +156,15 @@ const HomeAdmin = () => {
             className="p-4 m-2"
           >
             <View className="flex flex-row">
-            <TouchableOpacity
-                onPress={() =>
-                  selectedWeek ? handleClearFilter() : handleSnapPress(1)
-                }
+              <TouchableOpacity
+                onPress={() => {
+                  if (selectedWeek) {
+                    handleClearFilter();
+                    resetSelectedWeek(); // Reset tuần đã chọn
+                  } else {
+                    handleSnapPress(1);
+                  }
+                }}
                 className="flex flex-row items-center space-x-2 border border-[#e0e0e0] p-2 rounded-md"
               >
                 {selectedWeek ? (
@@ -278,10 +289,11 @@ const HomeAdmin = () => {
         )}
         backgroundStyle={{ backgroundColor: "#F2F1F6" }}
       >
-       <Calendar setSelectedWeek={setSelectedWeek} handleClosePress={handleClosePress} />
-        {/* <TouchableOpacity onPress={handleClosePress} className="p-4 border rounded-md mx-2 mt-4">
-          <Text className="text-xl font-bold text-center">Apply</Text>
-        </TouchableOpacity> */}
+        <Calendar
+          setSelectedWeek={setSelectedWeek}
+          handleClosePress={handleClosePress}
+          resetTrigger={resetTrigger}
+        />
       </BottomSheet>
     </ScrollView>
   );
