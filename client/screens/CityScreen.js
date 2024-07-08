@@ -21,12 +21,12 @@ const CityScreen = ({ navigation, route }) => {
 
   const handleApplyButton = () => {
     setSelectedCity(selectedCity);
-    navigation.navigate("Home", { selectedCity });
+    navigation.navigate("HomeScreen", { selectedCity });
   };
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 1, width: "100%", padding: 0, margin: 0 }}>
+      <View style={{ flex: 1, width: "100%"}}>
         {cities.map((city, index) => (
           <React.Fragment key={city}>
             <CheckBox
@@ -71,7 +71,7 @@ const CityScreen = ({ navigation, route }) => {
       </View>
       {isButtonVisible && (
         <Shadow style={styles.popupContainer}>
-          <View>
+          <View style={{flex: 1}}>
             <TouchableOpacity
               style={styles.applyButton}
               onPress={handleApplyButton}
@@ -100,12 +100,9 @@ const styles = StyleSheet.create({
     padding: 20,
     width: "90%",
     borderRadius: 10,
-    marginBottom: 50,
-    flexDirection: "row",
-    justifyContent: "space-between",
   },
   applyButtonText: {
-    width: "70%",
+    width: 300,
     color: "white",
     fontSize: 18,
     textAlign: "center",
@@ -114,7 +111,7 @@ const styles = StyleSheet.create({
   },
   popupContainer: {
     width: 600,
-    height: 200,
+    height:105,
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
     padding: 20,
