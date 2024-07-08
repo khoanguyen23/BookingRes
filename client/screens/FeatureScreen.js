@@ -164,7 +164,7 @@ const FeatureScreen = () => {
               {restaurants.map((item, index) => (
                 <View
                   key={item.id || index}
-                  className="flex flex-row pb-10 border-b-[1px] border-b-[#B7B7B7] w-[95%]"
+                  className="flex flex-row pb-10 border-b-[1px] border-b-[#B7B7B7] w-[95%] mt-2"
                 >
                   <View className="mr-2">
                     <Image

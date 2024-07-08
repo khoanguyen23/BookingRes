@@ -22,8 +22,8 @@ const ResHor = ({ route }) => {
             `${API_URL}/restaurants/categories/${selectedCategory}`
           );
           const data = await response.json();
-          console.log(data)
-          console.log(selectedCategory, "category")
+          // console.log(data)
+          // console.log(selectedCategory, "category")
 
           if (Array.isArray(data) && data.length > 0) {
             setRestaurantData(data);

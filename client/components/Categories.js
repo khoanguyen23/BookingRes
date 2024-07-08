@@ -38,7 +38,7 @@ export default function Categories({categories}) {
                 }}
                 onPress={() => {
                   setActiveCategory(category._id);
-                  console.log("Selected Category ID:", category._id);
+                  // console.log("Selected Category ID:", category._id);
                   navigation.navigate("Result", {
                     selectedCategory: category._id,
                     selectedCategoryName: category.name,
