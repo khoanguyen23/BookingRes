@@ -25,17 +25,17 @@ const ImageUploader = ({
   const handlePaste = async () => {
     const clipboardContent = await Clipboard.getString();
     if (clipboardContent) {
-      setUrls([...urls, clipboardContent]);
+      setUrls((prevUrls) => [...prevUrls, clipboardContent]);
       setInputUrl("");
     }
   };
-
+  
   const handleAddUrl = () => {
     if (inputUrl) {
-      setUrls([...urls, inputUrl]);
+      setUrls((prevUrls) => [...prevUrls, inputUrl]);
       setInputUrl("");
     }
-  };
+  }
 
   const removeImage = (index) => {
     if (index < images.length) {

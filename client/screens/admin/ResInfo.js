@@ -144,26 +144,33 @@ const ResInfo = () => {
   const handleAddRestaurant = async () => {
     try {
       console.log("Images to upload:", images);
+  
+      // Upload images selected from device
       const imageUrls = await Promise.all(
         images.map((image) => uploadImage(image))
       );
       console.log("Uploaded image URLs:", imageUrls);
-
+  
       const imagePriceUrls = await Promise.all(
         imagesPrice.map((image) => uploadImage(image))
       );
       const imageAlbumUrls = await Promise.all(
         imagesAlbum.map((image) => uploadImage(image))
       );
-
-      const filteredImageUrls = imageUrls.filter((url) => url !== null);
-      const filteredImagePriceUrls = imagePriceUrls.filter(
+  
+      // Combine uploaded URLs with URLs from clipboard directly
+      const combinedImageUrls = [...imageUrls, ...urls];
+      const combinedImagePriceUrls = [...imagePriceUrls, ...urlsImagePrice];
+      const combinedImageAlbumUrls = [...imageAlbumUrls, ...urlsImageAlbum];
+  
+      const filteredImageUrls = combinedImageUrls.filter((url) => url !== null);
+      const filteredImagePriceUrls = combinedImagePriceUrls.filter(
         (url) => url !== null
       );
-      const filteredImageAlbumUrls = imageAlbumUrls.filter(
+      const filteredImageAlbumUrls = combinedImageAlbumUrls.filter(
         (url) => url !== null
       );
-
+  
       const restaurantData = {
         name,
         description,
@@ -180,7 +187,7 @@ const ResInfo = () => {
         album: filteredImageAlbumUrls.map((url) => ({ image: url })),
         openingHours,
       };
-
+  
       const response = await fetch(`${API_URL}/restaurants`, {
         method: "POST",
         headers: {
@@ -188,7 +195,7 @@ const ResInfo = () => {
         },
         body: JSON.stringify(restaurantData),
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         console.log("Restaurant added successfully", data);
@@ -200,6 +207,7 @@ const ResInfo = () => {
       console.error("Error adding restaurant:", error);
     }
   };
+  
 
   return (
     <ScrollView>
