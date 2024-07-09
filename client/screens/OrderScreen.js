@@ -133,6 +133,21 @@ const OrderScreen = ({ navigation }) => {
     }
   };
 
+  const validateAndNavigate = () => {
+    if (!restaurant || !selectedDate || !bookingHours || !closestTime) {
+      alert("Please ensure all required fields are filled.");
+      return;
+    }
+  
+    navigation.navigate("BookingHours", {
+      restaurant,
+      selectedDate,
+      bookingHours,
+      closestTime,
+      onTimeChange: handleTimeChange,
+    });
+  };
+
   return (
     <>
       <ScrollView style={styles.container}>
@@ -206,19 +221,11 @@ const OrderScreen = ({ navigation }) => {
             <AntDesign name="clockcircleo" size={24} color="black" />
             <View className="flex-row justify-around  items-center w-9/12">
               <Text className="mr-14">Giờ đến :</Text>
-              <TouchableOpacity
-                className="flex-row items-center"
-                onPress={() => {
-                  navigation.navigate("BookingHours", {
-                    restaurant,
-                    selectedDate,
-                    bookingHours,
-                    closestTime,
-                    onTimeChange: handleTimeChange,
-                  });
-                }}
-              >
-                <Text className="relative">{selectedTime || closestTime}</Text>
+            <TouchableOpacity
+  className="flex-row items-center"
+  onPress={validateAndNavigate}
+>
+  <Text className="relative">{selectedTime || closestTime}</Text>
                 <MaterialIcons
                   style={{ position: "absolute", right: -100 }}
                   name="keyboard-arrow-down"
