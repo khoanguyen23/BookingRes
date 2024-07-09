@@ -25,7 +25,7 @@ const ResAdmin = () => {
 
   useEffect(() => {
     fetchAllRestaurants();
-  }, []);
+  }, [restaurants]);
 
   const fetchAllRestaurants = async () => {
     try {
