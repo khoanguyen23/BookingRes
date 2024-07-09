@@ -25,15 +25,21 @@ const ImageUploader = ({
   const handlePaste = async () => {
     const clipboardContent = await Clipboard.getString();
     if (clipboardContent) {
-      setUrls([...urls, clipboardContent]);
-      setInputUrl("");
+      const uploadedUrl = await uploadImage(clipboardContent); // Upload image from URL
+      if (uploadedUrl) {
+        setUrls([...urls, uploadedUrl]);
+        setInputUrl("");
+      }
     }
   };
 
-  const handleAddUrl = () => {
+  const handleAddUrl = async () => {
     if (inputUrl) {
-      setUrls([...urls, inputUrl]);
-      setInputUrl("");
+      const uploadedUrl = await uploadImage(inputUrl); // Upload image from URL
+      if (uploadedUrl) {
+        setUrls([...urls, uploadedUrl]);
+        setInputUrl("");
+      }
     }
   };
 
@@ -46,6 +52,7 @@ const ImageUploader = ({
       setUrls(updatedUrls);
     }
   };
+
   return (
     <View>
       <Text className="text-xl text-center mb-4 italic text-cyan-900 font-bold">{title}</Text>
@@ -105,6 +112,7 @@ const ImageUploader = ({
     </View>
   );
 };
+
 
 export default ImageUploader;
 

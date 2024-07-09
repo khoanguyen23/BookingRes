@@ -110,13 +110,17 @@ const ResInfo = () => {
 
   const uploadImage = async (imageUri) => {
     const formData = new FormData();
-    formData.append("file", {
-      uri: imageUri,
-      type: "image/jpeg",
-      name: "upload.jpg",
-    });
+    if (imageUri.startsWith("http")) {
+      formData.append("file", imageUri);
+    } else {
+      formData.append("file", {
+        uri: imageUri,
+        type: "image/jpeg",
+        name: "upload.jpg",
+      });
+    }
     formData.append("upload_preset", process.env.CLOUDINARY_UPLOAD_PRESET_RES);
-
+  
     try {
       const response = await axios.post(
         process.env.CLOUDINARY_UPLOAD_URL,
@@ -140,6 +144,7 @@ const ResInfo = () => {
       return null;
     }
   };
+  
 
   const handleAddRestaurant = async () => {
     try {
