@@ -3,10 +3,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Pressable,
   ScrollView,
-  Clipboard,
-  Button,
   Platform,
 } from "react-native";
 import React, { useState, useEffect } from "react";
@@ -15,11 +12,10 @@ import { pickImages } from "../../utils/pickImage";
 import ImageUploader from "../../utils/uploadImage";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { SelectList } from "react-native-dropdown-select-list";
-import { MultipleSelectList } from "react-native-dropdown-select-list";
 import { API_URL } from "@env";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { ActionSheet, Cell } from "@nutui/nutui-react-native";
-import { FontAwesome6 } from "@expo/vector-icons";
+import { AntDesign} from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import axios from "axios";
 
 const ResInfo = () => {
@@ -68,7 +64,7 @@ const ResInfo = () => {
     let minutes = date.getMinutes();
     const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12;
-    hours = hours ? hours : 12; // Giờ 0 phải chuyển thành 12
+    hours = hours ? hours : 12; 
     minutes = minutes < 10 ? "0" + minutes : minutes;
     const strTime = hours + ":" + minutes + " " + ampm;
     return strTime;
@@ -114,17 +110,13 @@ const ResInfo = () => {
 
   const uploadImage = async (imageUri) => {
     const formData = new FormData();
-    if (imageUri.startsWith("http")) {
-      formData.append("file", imageUri);
-    } else {
-      formData.append("file", {
-        uri: imageUri,
-        type: "image/jpeg",
-        name: "upload.jpg",
-      });
-    }
+    formData.append("file", {
+      uri: imageUri,
+      type: "image/jpeg",
+      name: "upload.jpg",
+    });
     formData.append("upload_preset", process.env.CLOUDINARY_UPLOAD_PRESET_RES);
-  
+
     try {
       const response = await axios.post(
         process.env.CLOUDINARY_UPLOAD_URL,
@@ -148,7 +140,6 @@ const ResInfo = () => {
       return null;
     }
   };
-  
 
   const handleAddRestaurant = async () => {
     try {
@@ -157,18 +148,22 @@ const ResInfo = () => {
         images.map((image) => uploadImage(image))
       );
       console.log("Uploaded image URLs:", imageUrls);
-  
+
       const imagePriceUrls = await Promise.all(
         imagesPrice.map((image) => uploadImage(image))
       );
       const imageAlbumUrls = await Promise.all(
         imagesAlbum.map((image) => uploadImage(image))
       );
-  
+
       const filteredImageUrls = imageUrls.filter((url) => url !== null);
-      const filteredImagePriceUrls = imagePriceUrls.filter((url) => url !== null);
-      const filteredImageAlbumUrls = imageAlbumUrls.filter((url) => url !== null);
-  
+      const filteredImagePriceUrls = imagePriceUrls.filter(
+        (url) => url !== null
+      );
+      const filteredImageAlbumUrls = imageAlbumUrls.filter(
+        (url) => url !== null
+      );
+
       const restaurantData = {
         name,
         description,
@@ -185,7 +180,7 @@ const ResInfo = () => {
         album: filteredImageAlbumUrls.map((url) => ({ image: url })),
         openingHours,
       };
-  
+
       const response = await fetch(`${API_URL}/restaurants`, {
         method: "POST",
         headers: {
@@ -193,7 +188,7 @@ const ResInfo = () => {
         },
         body: JSON.stringify(restaurantData),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         console.log("Restaurant added successfully", data);
@@ -205,19 +200,37 @@ const ResInfo = () => {
       console.error("Error adding restaurant:", error);
     }
   };
-  
 
   return (
     <ScrollView>
       <View style={styles.modalView}>
-        {longitude && latitude && (
+        {longitude && latitude ? (
           <View style={styles.modalView}>
             <Text className="text-base">Restaurant address selected :</Text>
             <Text className="text-base mt-2">Longitude: {longitude}</Text>
             <Text className="text-base mt-2">Latitude: {latitude}</Text>
           </View>
+        ) : (
+          <View className="border-dashed border p-4 border-red-400 mb-4">
+            <View className="flex flex-row space-x-2 items-center justify-center">
+              <AntDesign name="warning" size={30} color="red" />
+              <Text className="text-base text-red-600 font-bold">
+                Longitude and Latitude is missing !!!
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              className="flex flex-row mt-3 justify-center items-center bg-red-300 p-2 rounded-lg"
+            >
+              <Ionicons name="chevron-back" size={24} color="white" />
+              <Text className="font-bold text-white uppercase">
+                Turn back to fill
+              </Text>
+            </TouchableOpacity>
+          </View>
         )}
         {/* Image of Restaurant */}
+
         <ImageUploader
           title="Image Restaurant"
           images={images}

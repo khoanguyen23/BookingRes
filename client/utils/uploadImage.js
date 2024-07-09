@@ -25,21 +25,15 @@ const ImageUploader = ({
   const handlePaste = async () => {
     const clipboardContent = await Clipboard.getString();
     if (clipboardContent) {
-      const uploadedUrl = await uploadImage(clipboardContent); // Upload image from URL
-      if (uploadedUrl) {
-        setUrls([...urls, uploadedUrl]);
-        setInputUrl("");
-      }
+      setUrls([...urls, clipboardContent]);
+      setInputUrl("");
     }
   };
 
-  const handleAddUrl = async () => {
+  const handleAddUrl = () => {
     if (inputUrl) {
-      const uploadedUrl = await uploadImage(inputUrl); // Upload image from URL
-      if (uploadedUrl) {
-        setUrls([...urls, uploadedUrl]);
-        setInputUrl("");
-      }
+      setUrls([...urls, inputUrl]);
+      setInputUrl("");
     }
   };
 
@@ -52,10 +46,9 @@ const ImageUploader = ({
       setUrls(updatedUrls);
     }
   };
-
   return (
     <View>
-      <Text className="text-xl">{title}</Text>
+      <Text className="text-xl text-center mb-4 italic text-cyan-900 font-bold">{title}</Text>
       <TouchableOpacity
         onPress={() =>
           handlePickImages(imageState, setImages, allowMultipleSelection)
@@ -112,7 +105,6 @@ const ImageUploader = ({
     </View>
   );
 };
-
 
 export default ImageUploader;
 
