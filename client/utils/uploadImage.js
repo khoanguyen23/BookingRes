@@ -48,7 +48,7 @@ const ImageUploader = ({
   };
   return (
     <View>
-      <Text className="text-xl">{title}</Text>
+      <Text className="text-xl text-center mb-4 italic text-cyan-900 font-bold">{title}</Text>
       <TouchableOpacity
         onPress={() =>
           handlePickImages(imageState, setImages, allowMultipleSelection)
