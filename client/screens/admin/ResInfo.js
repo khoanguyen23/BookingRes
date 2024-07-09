@@ -59,14 +59,23 @@ const ResInfo = () => {
     setShow(true);
   };
 
+  const formatTimeAMPM = (date) => {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // Đổi giờ 0 thành 12 AM
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    const strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  };
+
   const formatTime = (date) => {
     let hours = date.getHours();
     let minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12;
-    hours = hours ? hours : 12; 
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    const strTime = hours + ":" + minutes + " " + ampm;
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    const strTime = hours + ':' + minutes;
     return strTime;
   };
 
@@ -337,7 +346,7 @@ const ResInfo = () => {
                         }}
                         onPress={() => removeTime(index)}
                       >
-                        <Text>{formatTime(time)}</Text>
+                        <Text>{formatTimeAMPM(time)}</Text>
                         <View
                           style={{
                             position: "absolute",
