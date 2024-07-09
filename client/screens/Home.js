@@ -5,6 +5,7 @@ import {
   StatusBar,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import Categories from "../components/Categories";
@@ -24,6 +25,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 export default function HomeScreen({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -38,13 +40,20 @@ export default function HomeScreen({ navigation, route }) {
     "https://pastaxi-manager.onepas.vn/Photo/ShowPhotoBannerVsSlide?Id=FC15E6C4-5E82-42E6-8A1D-C724DA4E6E36&2023-12-18%2016:12:30",
   ];
 
-  const fetchFeaturedData = async () => {
+  const fetchFeaturedData = async (retryCount = 3) => {
     try {
       const response = await axios.get(`${API_URL}/api/featured`);
       setFeaturedData(response.data);
       setIsLoading(false);
     } catch (error) {
-      console.error("Failed to fetch featured data:", error);
+      if (retryCount > 0) {
+        // console.warn(`Retrying... ${retryCount} attempts left`);
+        fetchFeaturedData(retryCount - 1);
+      } else {
+        // console.error("Failed to fetch featured data:", error);
+        setError("Failed to fetch featured data.");
+        setIsLoading(false);
+      }
     }
   };
 
@@ -56,7 +65,8 @@ export default function HomeScreen({ navigation, route }) {
       setUserId(userId);
       await fetchAddressData(userId);
     } catch (error) {
-      console.log("Error fetching address", error);
+      // console.log("Error fetching address", error);
+      setError("Failed to fetch address.");
     }
   };
 
@@ -65,22 +75,38 @@ export default function HomeScreen({ navigation, route }) {
       const response = await axios.get(`${API_URL}/address/${userId}`);
       const addressData = response.data;
       updateUser(addressData);
-      console.log(addressData, "user fetch");
+      // console.log(addressData, "user fetch");
     } catch (error) {
-      console.log(`${API_URL}/address/${userId}`);
-      console.log("Error fetching address data", error);
+      // console.log(`${API_URL}/address/${userId}`);
+      // console.log("Error fetching address data", error);
+      setError("Failed to fetch address data.");
     }
   };
 
-  const fetchCategories = async () => {
+  const fetchCategories = async (retryCount = 3) => {
     try {
       const response = await axios.get(`${API_URL}/categories`);
       const fetchedCategories = response.data;
       setCategories(fetchedCategories);
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching categories:", error);
+      if (retryCount > 0) {
+        // console.warn(`Retrying... ${retryCount} attempts left`);
+        fetchCategories(retryCount - 1);
+      } else {
+        // console.error("Error fetching categories:", error);
+        setError("Failed to fetch categories.");
+        setIsLoading(false);
+      }
     }
+  };
+
+  const handleRetry = () => {
+    setError(null);
+    setIsLoading(true);
+    fetchFeaturedData();
+    fetchAddress();
+    fetchCategories();
   };
 
   useEffect(() => {
@@ -176,37 +202,6 @@ export default function HomeScreen({ navigation, route }) {
       >
         <Text className="font-bold text-xl pl-4 mt-2">Danh mục</Text>
         {/* skeleton category */}
-        {/* <View className="flex flex-row space-x-7 p-5">
-          <Skeleton
-            circle
-            LinearGradientComponent={LinearGradient}
-            animation="wave"
-            width={65}
-            height={65}
-          />
-          <Skeleton
-            circle
-            LinearGradientComponent={LinearGradient}
-            animation="wave"
-            width={65}
-            height={65}
-          />
-          <Skeleton
-            circle
-            LinearGradientComponent={LinearGradient}
-            animation="wave"
-            width={65}
-            height={65}
-          />
-          <Skeleton
-            circle
-            LinearGradientComponent={LinearGradient}
-            animation="wave"
-            width={65}
-            height={65}
-          />
-        </View> */}
-        {/* category */}
         {isLoading ? (
           <View className="flex flex-row space-x-7 p-5">
             <Skeleton
@@ -298,9 +293,21 @@ export default function HomeScreen({ navigation, route }) {
           </View>
         )}
 
-        {/* skeleton features */}
-
-        {/* features */}
+        {error && (
+          <View style={{ alignItems: "center", marginTop: 20 }}>
+            <Text style={{ color: "red", marginBottom: 10 }}>{error}</Text>
+            <TouchableOpacity
+              onPress={handleRetry}
+              style={{
+                backgroundColor: "#DA4C40",
+                padding: 10,
+                borderRadius: 5,
+              }}
+            >
+              <Text style={{ color: "white" }}>Retry</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
