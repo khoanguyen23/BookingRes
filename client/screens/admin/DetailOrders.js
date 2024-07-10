@@ -24,6 +24,7 @@ const DetailOrders = () => {
   const route = useRoute();
   const { order, users, restaurants } = route.params;
   console.log(order, "order details");
+
   // console.log(order, "order");
   // console.log(restaurants, "suggest");
   const selectedItem = order?.orderItems[0]?.selectedItem;

@@ -171,13 +171,15 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   button: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#0F67B1",
     padding: 10,
     borderRadius: 5,
     marginLeft: 5,
   },
   buttonText: {
     color: "#fff",
+    fontWeight: "bold",
+
   },
   imageContainer: {
     width: "100%",

@@ -138,7 +138,7 @@ const HomeAdmin = () => {
                 Hello {user?.name}
                 <Entypo name="hand" size={24} color="#FFE3C6" />
               </Text>
-              <Text className="text-xl">Welcome to Dashboard</Text>
+              <Text className="text-xl italic">Welcome to Dashboard</Text>
             </View>
             <Avatar size={70} rounded source={{ uri: user?.avatar }} />
           </View>

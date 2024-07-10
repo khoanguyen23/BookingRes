@@ -222,10 +222,10 @@ const ResInfo = () => {
     <ScrollView>
       <View style={styles.modalView}>
         {longitude && latitude ? (
-          <View style={styles.modalView}>
-            <Text className="text-base">Restaurant address selected :</Text>
-            <Text className="text-base mt-2">Longitude: {longitude}</Text>
-            <Text className="text-base mt-2">Latitude: {latitude}</Text>
+          <View className="border-2 p-4 border-dashed border-indigo-600 mb-6">
+            <Text className="text-xl italic text-cyan-900 font-bold text-center">Restaurant address selected</Text>
+            <Text className="text-base mt-2 text-center font-semibold">Longitude: {longitude}</Text>
+            <Text className="text-base mt-2 text-center font-semibold">Latitude: {latitude}</Text>
           </View>
         ) : (
           <View className="border-dashed border p-4 border-red-400 mb-4">
@@ -393,12 +393,12 @@ const ResInfo = () => {
           style={{
             padding: 15,
             borderRadius: 10,
-            backgroundColor: "#333333",
+            backgroundColor: "#478CCF",
             alignItems: "center",
             marginTop: 20,
           }}
         >
-          <Text style={{ color: "#fff" }}>Add Restaurant</Text>
+          <Text className="text-xl font-semibold text-white italic">Add Restaurant</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
