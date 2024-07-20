@@ -131,33 +131,47 @@ const ThirdRoute = ({ item }) => (
     <View className="bg-[#E0E0E0] w-full h-3"></View>
   </ScrollView>
 );
-const FourRoute = ({ item }) => (
-  <View>
-    <View style={{ flex: 1, backgroundColor: "#fafafa", padding: 15 }}>
-      <Text className="text-lg font-semibold ml-2 mb-5">Chỉ đường</Text>
-      <View className="flex flex-row justify-center items-center space-x-2">
-        <Octicons name="location" size={24} color="black" />
-        <Text className="text-base text-slate-600">{item.address}</Text>
-      </View>
-      <Text>
-        {"("} Nhấn vào ảnh bản đồ để xem chỉ đường, nhấn vào icon chia sẻ để
-        chia sẻ vị trí cho mọi người{")"}
-      </Text>
-      <View className="mt-4 p-4">
+const FourRoute = ({ item }) => {
+  const { coordinates } = item.location;
+  return (
+    <View>
+      <View style={{ flex: 1, backgroundColor: "#fafafa", padding: 15 }}>
+        <Text className="text-lg font-semibold ml-2 mb-5">Chỉ đường</Text>
+        <View className="flex flex-row justify-center items-center space-x-2">
+          <Octicons name="location" size={24} color="black" />
+          <Text className="text-base text-slate-600">{item.address}</Text>
+        </View>
+        <Text>
+          {"("} Nhấn vào ảnh bản đồ để xem chỉ đường, nhấn vào icon chia sẻ để
+          chia sẻ vị trí cho mọi người{")"}
+        </Text>
+        <View className="mt-4 p-4">
         <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        ></MapView>
+            style={styles.map}
+            initialRegion={{
+              latitude: coordinates[1],
+              longitude: coordinates[0],
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}
+          >
+            <Marker
+              coordinate={{
+                latitude: coordinates[1],
+                longitude: coordinates[0],
+              }}
+            >
+              <Callout>
+                <Text>{item.name}</Text>
+              </Callout>
+            </Marker>
+          </MapView>
+        </View>
       </View>
+      <View className="bg-[#E0E0E0] w-full h-3"></View>
     </View>
-    <View className="bg-[#E0E0E0] w-full h-3"></View>
-  </View>
-);
+  );
+};
 
 const FifthRoute = ({ item }) => (
   <View className="">
