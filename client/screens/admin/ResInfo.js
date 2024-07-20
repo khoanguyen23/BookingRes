@@ -5,9 +5,10 @@ import {
   TouchableOpacity,
   ScrollView,
   Platform,
+  Modal,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { TextInput } from "react-native-paper";
+import { TextInput, Portal, Dialog, Button} from "react-native-paper";
 import { pickImages } from "../../utils/pickImage";
 import ImageUploader from "../../utils/uploadImage";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -47,6 +48,10 @@ const ResInfo = () => {
   const [description, setDescription] = useState("");
   const [address, setAddress] = useState("");
   const [openingHours, setOpeningHours] = useState("");
+
+  const [missingFields, setMissingFields] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const hideDialog = () => setVisible(false);
 
   const onChange = (event, selectedTime) => {
     if (event.type === "set" && selectedTime) {
@@ -151,6 +156,20 @@ const ResInfo = () => {
   };
 
   const handleAddRestaurant = async () => {
+
+    const fields = [];
+    if (!name) fields.push("Name");
+    if (!description) fields.push("Description");
+    if (!address) fields.push("Address");
+    if (!longitude || !latitude) fields.push("Location");
+    if (!selected) fields.push("Category");
+    if (images.length === 0 && urls.length === 0) fields.push("Image");
+    if (fields.length > 0) {
+      setMissingFields(fields);
+      setVisible(true);
+      return;
+    }
+
     try {
       console.log("Images to upload:", images);
   
@@ -401,6 +420,24 @@ const ResInfo = () => {
           <Text className="text-xl font-semibold text-white italic">Add Restaurant</Text>
         </TouchableOpacity>
       </View>
+      <Portal>
+          <Dialog visible={visible} onDismiss={hideDialog} >
+            <Dialog.Title>Alert</Dialog.Title>
+            <Dialog.Content>
+
+              <Text>Missing Fields:</Text>
+            {missingFields.map((field, index) => (
+              <Text key={index}>
+                {field}
+              </Text>
+            ))}
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={hideDialog}>Done</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+    
     </ScrollView>
   );
 };
@@ -420,6 +457,12 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
   textStyle: {
     color: "white",
     fontWeight: "bold",
@@ -434,4 +477,5 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
   },
+  
 });
