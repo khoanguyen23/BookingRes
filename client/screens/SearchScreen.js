@@ -63,12 +63,11 @@ const SearchScreen = ({ route }) => {
   };
 
   useEffect(() => {
-    // Trigger the search when the keyword changes
     handleSearch(keyword);
   }, [keyword]);
 
   return (
-    <ScrollView style={{ padding: 10 }}>
+    <ScrollView style={{ padding: 10, backgroundColor: "#FFFFFF" }}>
       <View
         style={{
           borderWidth: 2,
@@ -127,7 +126,7 @@ const SearchScreen = ({ route }) => {
       </View>
 
       <View>
-        <Text className="uppercase text-xl font-bold mt-6">Được đề xuất</Text>
+        <Text className="uppercase text-xl font-bold mt-3 p-3">Gợi ý</Text>
         {keyword.trim() !== "" ? (
           <ScrollView>
             {searchResults.map((restaurant, index) => (
@@ -202,19 +201,20 @@ const SearchScreen = ({ route }) => {
                   navigation.navigate("RestaurantDetail", { ...restaurant })
                 }
               >
-                <View className="m-2 p-2 mt-4 flex-row justify-between rounded-xl">
-                  <View className=" w-3/12 items-center">
+                <View className="flex flex-row rounded-lg">
+                  <View className="w-4/12 p-1">
                     <Image
                       source={{
                         uri: restaurant.image || "default_image_url",
                       }}
                       style={{
-                        width: 100,
-                        height: 100,
+                        width: "100%",
+                        height: 120,
                         borderRadius: 5,
+                        objectFit: "cover",
                       }}
                     />
-                    <View className="items-center w-2/3 mt-1">
+                    <View className="">
                       <View className="flex-row items-center">
                         <AntDesign name="star" size={24} color="#DDBC37" />
                         <Text className="ml-2">
@@ -235,18 +235,20 @@ const SearchScreen = ({ route }) => {
                     </View>
                   </View>
 
-                  <View className="w-9/12 ml-8">
-                    <Text className="text-lg text-gray-950 font-bold">
+                  <View className="w-8/12 p-2">
+                    <Text
+                      style={{ width: 250 }}
+                      className="text-lg text-gray-950 font-bold"
+                    >
                       {restaurant.name}
                     </Text>
-                    <View className="flex-row">
-                      <Text
-                        style={{ width: 200 }}
-                        className="text-gray-500 ml-1"
-                      >
-                        {restaurant.address}
-                      </Text>
-                    </View>
+
+                    <Text style={{ width: 250 }} className="text-gray-500 mt-2">
+                      {restaurant.address}
+                    </Text>
+                    <Text style={{ width: 250 }} className="text-[#E15241] mt-2 font-semibold text-base">
+                      {restaurant.promotions}
+                    </Text>
 
                     <View className=" mt-2">
                       <TouchableOpacity>

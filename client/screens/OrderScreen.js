@@ -20,6 +20,7 @@ import { Foundation } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { API_URL } from "@env";
 import { UserType } from "../UserContext";
+import { Button, Dialog, Portal } from "react-native-paper";
 
 const OrderScreen = ({ navigation }) => {
   const { params } = useRoute();
@@ -93,11 +94,11 @@ const OrderScreen = ({ navigation }) => {
   const submitOrder = async () => {
     try {
       if (!selectedDate) {
-        console.error("Selected date is null");
+        showDialog("Please select a date.");
         return;
       }
       if (!user || !restaurant) {
-        console.error("User or restaurant not found");
+        showDialog("User or restaurant not found");
         return;
       }
       const orderData = {
@@ -138,7 +139,7 @@ const OrderScreen = ({ navigation }) => {
       alert("Please ensure all required fields are filled.");
       return;
     }
-  
+
     navigation.navigate("BookingHours", {
       restaurant,
       selectedDate,
@@ -146,6 +147,18 @@ const OrderScreen = ({ navigation }) => {
       closestTime,
       onTimeChange: handleTimeChange,
     });
+  };
+  const [visible, setVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const showDialog = (message) => {
+    setErrorMessage(message);
+    setVisible(true);
+  };
+
+  const hideDialog = () => {
+    setVisible(false);
+    setErrorMessage("");
   };
 
   return (
@@ -221,11 +234,11 @@ const OrderScreen = ({ navigation }) => {
             <AntDesign name="clockcircleo" size={24} color="black" />
             <View className="flex-row justify-around  items-center w-9/12">
               <Text className="mr-14">Giờ đến :</Text>
-            <TouchableOpacity
-  className="flex-row items-center"
-  onPress={validateAndNavigate}
->
-  <Text className="relative">{selectedTime || closestTime}</Text>
+              <TouchableOpacity
+                className="flex-row items-center"
+                onPress={validateAndNavigate}
+              >
+                <Text className="relative">{selectedTime || closestTime}</Text>
                 <MaterialIcons
                   style={{ position: "absolute", right: -100 }}
                   name="keyboard-arrow-down"
@@ -345,6 +358,19 @@ const OrderScreen = ({ navigation }) => {
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
         />
+        <Portal>
+      <Dialog visible={visible} onDismiss={hideDialog} style={styles.dialog}>
+        <Dialog.Title style={styles.dialogTitle}>Alert</Dialog.Title>
+        <Dialog.Content>
+          <Text style={styles.dialogContent}>{errorMessage}</Text>
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={hideDialog} mode="contained" style={styles.dialogButton}>
+            Done
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
       </ScrollView>
       <View style={styles.popupContainer}>
         <TouchableOpacity style={styles.applyButton} onPress={submitOrder}>
@@ -383,5 +409,21 @@ const styles = StyleSheet.create({
     height: 120,
     justifyContent: "center",
     alignItems: "center",
+  },
+  dialog: {
+    backgroundColor: '#fff3cd',
+    borderWidth: 1,
+    borderColor: '#ffeeba',
+    borderRadius: 8,
+  },
+  dialogTitle: {
+    color: '#856404',
+    fontWeight: 'bold',
+  },
+  dialogContent: {
+    color: '#856404',
+  },
+  dialogButton: {
+    backgroundColor: '#856404',
   },
 });

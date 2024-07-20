@@ -91,7 +91,7 @@ export default function HomeScreen({ navigation, route }) {
       setIsLoading(false);
     } catch (error) {
       if (retryCount > 0) {
-        // console.warn(`Retrying... ${retryCount} attempts left`);
+        console.warn(`Retrying... ${retryCount} attempts left`);
         fetchCategories(retryCount - 1);
       } else {
         // console.error("Error fetching categories:", error);

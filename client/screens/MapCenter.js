@@ -213,6 +213,7 @@ const MapCenter = () => {
       })
     ).start();
   }, [opacityAnimationRef]);
+console.log(GOOGLE_MAPS_API_KEY, "API new9")
 
   Geocoding.init(GOOGLE_MAPS_API_KEY);
   const getAddressFromCoords = async (latitude, longitude) => {
@@ -444,9 +445,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   marker: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: 15,
+    height: 15,
+    borderRadius:100,
     backgroundColor: "red",
     position: "absolute",
   },
