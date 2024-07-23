@@ -10,7 +10,7 @@ import {
 import { API_URL } from "@env";
 import { Avatar, Button, Icon, Overlay } from "@rneui/themed";
 import { SpeedDial } from "@rneui/themed";
-import Entypo from "@expo/vector-icons/Entypo";
+
 
 const Category = () => {
   const [categories, setCategories] = useState([]);

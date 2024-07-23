@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Avatar, Button, Overlay } from "@rneui/themed";
 import axios from "axios";
 import { API_URL } from "@env";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TextInput } from "react-native-paper";
 import { CheckBox } from "@rneui/themed";
 import { LinearGradient } from 'expo-linear-gradient';

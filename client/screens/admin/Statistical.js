@@ -9,7 +9,6 @@ const UserListScreen = () => {
     console.log(API_URL);
 
     useEffect(() => {
-        // Fetch all users when the component mounts
         fetchUsers();
     }, []);
 

@@ -2,7 +2,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Pressable,
   TouchableOpacity,
   Image,
 } from "react-native";
@@ -25,7 +24,6 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { Avatar } from "@rneui/themed";
 
 const AddRes = () => {
   const navigation = useNavigation();
@@ -47,17 +45,13 @@ const AddRes = () => {
   }, [image]);
 
   const CustomCallout = ({ title, description, image }) => {
-    // console.log("Displaying image URL in CustomCallout:", image); // Kiểm tra URL ảnh
     return (
       <View style={styles.calloutContainer}>
         <Text style={styles.calloutTitle}>{title}</Text>
         {image ? (
           <Text>
-         
             <Image
               source={{ uri: image }}
-              // width={200}
-              // height={250}
               style={styles.calloutImage}
               resizeMode="cover"
             />

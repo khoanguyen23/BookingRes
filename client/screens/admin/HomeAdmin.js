@@ -28,11 +28,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Calendar from "../../components/Calendar";
 import BottomSheet, {
   BottomSheetBackdrop,
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import PopUp from "../../components/PopUp";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 const HomeAdmin = () => {
