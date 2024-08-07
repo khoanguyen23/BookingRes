@@ -17,6 +17,7 @@ import screenStyles from "../constants/screenStyles";
 import { useNavigation } from "@react-navigation/native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import Octicons from "@expo/vector-icons/Octicons";
+import ImageView from "react-native-image-viewing";
 
 const FirstRoute = ({ item, handlePresentModalPress }) => {
   const navigation = useNavigation();
@@ -113,24 +114,45 @@ const SecondRoute = ({ item }) => (
     <View className="bg-[#E0E0E0] w-full h-3"></View>
   </ScrollView>
 );
-const ThirdRoute = ({ item }) => (
-  <ScrollView>
-    <View style={{ flex: 1, backgroundColor: "#ffffff", padding: 15 }}>
-      <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-        {item.album.map((menuImage, index) => (
-          <View key={index} style={{ width: "50%", padding: 5 }}>
-            <Image
-              source={{ uri: menuImage.image }}
-              style={{ width: "100%", height: 120, marginBottom: 10 }}
-            />
-          </View>
-        ))}
+const ThirdRoute = ({ item }) => {
+  const images = [
+    {
+      uri: "https://images.unsplash.com/photo-1571501679680-de32f1e7aad4",
+    },
+    {
+      uri: "https://images.unsplash.com/photo-1573273787173-0eb81a833b34",
+    },
+    {
+      uri: "https://images.unsplash.com/photo-1569569970363-df7b6160d111",
+    },
+  ];
+  const [visible, setIsVisible] = React.useState(false);
+
+  return (
+    <ScrollView>
+      <View style={{ flex: 1, backgroundColor: "#ffffff", padding: 15 }}>
+        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+          {/* {item.album.map((menuImage, index) => (
+            <View key={index} style={{ width: "50%", padding: 5 }}>
+              <Image
+                source={{ uri: menuImage.image }}
+                style={{ width: "100%", height: 120, marginBottom: 10 }}
+              />
+            </View>
+          ))} */}
+          <ImageView
+            images={images}
+            imageIndex={0}
+            visible={visible}
+            onRequestClose={() => setIsVisible(false)}
+          />
+        </View>
       </View>
-    </View>
-    {/* divider */}
-    <View className="bg-[#E0E0E0] w-full h-3"></View>
-  </ScrollView>
-);
+      {/* divider */}
+      <View className="bg-[#E0E0E0] w-full h-3"></View>
+    </ScrollView>
+  );
+};
 const FourRoute = ({ item }) => {
   const { coordinates } = item.location;
   return (
@@ -146,7 +168,7 @@ const FourRoute = ({ item }) => {
           chia sẻ vị trí cho mọi người{")"}
         </Text>
         <View className="mt-4 p-4">
-        <MapView
+          <MapView
             style={styles.map}
             initialRegion={{
               latitude: coordinates[1],
