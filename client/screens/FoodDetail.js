@@ -185,8 +185,8 @@ const FoodDetail = ({route}) => {
        
           <View className="p-4">
             <View className="flex flex-row space-x-4">
-              <FontAwesome6 name="location-dot" size={24} color="black" />
-              <Text className="text-base">
+            <Ionicons name="location-sharp" size={24} color="red" />
+            <Text className="text-base">
                 <Text className="font-bold">Đặt chỗ</Text> (Để có chỗ trước khi
                 đến)
               </Text>

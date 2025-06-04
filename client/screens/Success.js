@@ -11,7 +11,7 @@ const Success = () => {
   return (
     <View style={styles.container}>
       <LottieView
-        style={{ width: 200, height: 200, marginTop: 100 }}
+        style={{ width: 200, height: 200, marginTop: 70 }}
         source={require("../assets/lottie/orders1.json")}
         autoPlay={true}
         loop={true}

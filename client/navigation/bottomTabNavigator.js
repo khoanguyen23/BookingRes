@@ -157,7 +157,7 @@ const BottomTabNavigator = () => {
                 <Icon.Search
                   style={{
                     position: "absolute",
-                    left: 60,
+                    left: 80,
                     zIndex: 2,
                   }}
                   height="20"
