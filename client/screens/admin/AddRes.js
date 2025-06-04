@@ -18,12 +18,8 @@ import { TextInput } from "react-native-paper";
 import MapView, { Marker, Callout } from "react-native-maps";
 import axios from "axios";
 import BottomSheet from "@gorhom/bottom-sheet";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import Feather from "@expo/vector-icons/Feather";
-import Entypo from "@expo/vector-icons/Entypo";
+import { AntDesign, Feather, Entypo, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const AddRes = () => {
   const navigation = useNavigation();

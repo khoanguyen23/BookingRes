@@ -23,7 +23,7 @@ import Animated, {
 import Colors from "../constants/Colors";
 import { defaultStyles } from "../constants/Styles";
 import { useNavigation } from "@react-navigation/native";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { FontAwesome6 } from "@expo/vector-icons";
 import SectionList from "react-native-tabs-section-list";
 
 const { width } = Dimensions.get("window");

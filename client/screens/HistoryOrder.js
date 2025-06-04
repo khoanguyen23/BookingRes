@@ -30,7 +30,7 @@ const HistoryOrder = () => {
   const [restaurants, setRestaurants] = useState({});
   const { user } = useContext(UserType);
   const [filteredOrders, setFilteredOrders] = useState([]);
-  const userId = user._id;
+  const userId = user?._id;
   const [selectedContentType, setSelectedContentType] = useState("status");
   const [selectedStatus, setSelectedStatus] = useState("Tất cả");
   const status = [
@@ -44,38 +44,86 @@ const HistoryOrder = () => {
   useEffect(() => {
     const fetchUserOrders = async () => {
       try {
+        if (!userId) {
+          console.log("UserId not available yet");
+          return;
+        }
+        
+        if (!API_URL) {
+          console.error("API_URL is not configured");
+          return;
+        }
+        
+        console.log("Fetching orders from:", `${API_URL}/api/orders/${userId}`);
         const response = await fetch(`${API_URL}/api/orders/${userId}`);
-        const data = await response.json();
-        if (response.ok) {
+        
+        // Check if response is ok before parsing JSON
+        if (!response.ok) {
+          console.error("API response not ok:", response.status, response.statusText);
+          return;
+        }
+        
+        // Get response text first to check if it's valid JSON
+        const responseText = await response.text();
+        
+        if (!responseText) {
+          console.error("Empty response from server");
+          return;
+        }
+        
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error("JSON Parse Error:", parseError.message);
+          console.error("Response text:", responseText);
+          return;
+        }
+        
+        if (data && data.orders && Array.isArray(data.orders)) {
           setOrders(data.orders);
           setFilteredOrders(data.orders);
+          
           const restaurantIds = Array.from(
-            new Set(data.orders.map((order) => order.restaurant))
+            new Set(data.orders.map((order) => order.restaurant).filter(id => id))
           );
+          
           const restaurantPromises = restaurantIds.map(async(restaurantId) => {
-            const restaurantResponse = await fetch(
-              `${API_URL}/restaurants/${restaurantId}`
-            );
-            const restaurantData = await restaurantResponse.json();
-            if (restaurantResponse.ok) {
-              setRestaurants((prevRestaurants) => ({
-                ...prevRestaurants,
-                [restaurantId]: restaurantData.restaurant,
-              }));
-            } else {
-              console.error(
-                "khong lay duoc id nha hang",
-                restaurantData.message
+            try {
+              const restaurantResponse = await fetch(
+                `${API_URL}/restaurants/${restaurantId}`
               );
+              
+              if (!restaurantResponse.ok) {
+                console.error("Restaurant API response not ok:", restaurantResponse.status);
+                return;
+              }
+              
+              const restaurantText = await restaurantResponse.text();
+              if (!restaurantText) {
+                console.error("Empty restaurant response");
+                return;
+              }
+              
+              const restaurantData = JSON.parse(restaurantText);
+              if (restaurantData && restaurantData.restaurant) {
+                setRestaurants((prevRestaurants) => ({
+                  ...prevRestaurants,
+                  [restaurantId]: restaurantData.restaurant,
+                }));
+              }
+            } catch (restaurantError) {
+              console.error("Error fetching restaurant:", restaurantId, restaurantError.message);
             }
           });
 
           await Promise.all(restaurantPromises);
         } else {
-          console.error("khong lay duoc order cua user", data.message);
+          console.error("Invalid data structure received:", data);
         }
       } catch (error) {
-        console.error("loi fetch data:", error.message);
+        console.error("Error in fetchUserOrders:", error.message);
+        console.error("Stack trace:", error.stack);
       }
     };
 
@@ -93,7 +141,7 @@ const HistoryOrder = () => {
   };
 
   const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ["25%", "55%"], []);
+  const snapPoints = useMemo(() => ["25%", "55%","50%"], []);
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
   }, []);
@@ -132,7 +180,7 @@ const HistoryOrder = () => {
       />
 
       <ScrollView className="mt-2">
-        {filteredOrders.map((order) => (
+        {filteredOrders && filteredOrders.length > 0 ? filteredOrders.map((order) => (
           <View
             key={order._id}
             style={{
@@ -208,7 +256,13 @@ const HistoryOrder = () => {
               </Text>
             </View>
           </View>
-        ))}
+        )) : (
+          <View style={{ padding: 20, alignItems: 'center' }}>
+            <Text style={{ fontSize: 16, color: '#666' }}>
+              {!userId ? 'Loading user data...' : 'No orders found'}
+            </Text>
+          </View>
+        )}
       </ScrollView>
 
       <BottomSheet

@@ -90,7 +90,7 @@ const OnboardingScreen = ({ navigation }) => {
       </View>
       <View style={styles.center}>
         <LottieView
-          style={{ width: 300, height: 420, marginTop: 70 }}
+          style={{ width: 300, height: 420, marginTop: 0 }}
           source={require("../assets/lottie/food-onboard.json")}
           autoPlay={true}
           loop={true}
@@ -106,7 +106,7 @@ const OnboardingScreen = ({ navigation }) => {
         />
         <Text style={styles.logan}>
           Top nhà hàng ngon, ấm cúng & có ưu đãi hấp dẫn gợi ý mùa Giáng Sinh
-          2023
+          2025
         </Text>
         <MaterialCommunityIcons
           style={styles.quoteRight}

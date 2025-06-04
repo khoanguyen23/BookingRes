@@ -16,7 +16,7 @@ import Colors from "../constants/Colors";
 import screenStyles from "../constants/screenStyles";
 import { useNavigation } from "@react-navigation/native";
 import MapView, { Marker, Callout } from "react-native-maps";
-import Octicons from "@expo/vector-icons/Octicons";
+import { Octicons } from "@expo/vector-icons";
 import ImageView from "react-native-image-viewing";
 
 const FirstRoute = ({ item, handlePresentModalPress }) => {

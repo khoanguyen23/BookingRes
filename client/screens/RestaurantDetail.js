@@ -14,13 +14,11 @@ import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import MenuTab from "./MenuTab";
 import NetworkImage from "../components/NetworkImage";
-import {  SIZES } from "../constants/theme";
+import { SIZES } from "../constants/theme";
 import PopUp from "../components/PopUp";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import  {
-  useAnimatedRef,
-} from "react-native-reanimated";
+import { useAnimatedRef } from "react-native-reanimated";
 import Colors from "../constants/Colors";
 import { UserType } from "../UserContext";
 import axios from "axios";
@@ -186,7 +184,7 @@ export default function RestaurantDetail() {
           }}
         ></View>
 
-        <View style={{ flex: 1}}>
+        <View style={{ flex: 1 }}>
           <MenuTab
             item={item}
             handlePresentModalPress={handlePresentModalPress}

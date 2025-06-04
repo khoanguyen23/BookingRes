@@ -64,11 +64,14 @@ const FeatureScreen = () => {
         </TouchableOpacity>
       ),
       headerTitle: () => (
-        <Animated.Text style={[headerTitleAnimatedStyle, styles.headerTitle]}numberOfLines={1} ellipsizeMode="tail" >
+        <Animated.Text
+          style={[headerTitleAnimatedStyle, styles.headerTitle]}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
           {title}
         </Animated.Text>
       ),
-      
     });
   }, []);
 
@@ -103,13 +106,17 @@ const FeatureScreen = () => {
 
   const headerTitleAnimatedStyle = useAnimatedStyle(() => {
     return {
-      opacity: interpolate(scrollOffset.value, [IMG_HEIGHT / 2, IMG_HEIGHT], [0, 1]),
+      opacity: interpolate(
+        scrollOffset.value,
+        [IMG_HEIGHT / 2, IMG_HEIGHT],
+        [0, 1], {extrapolateRight:"clamp"}
+      ),
       transform: [
         {
           translateY: interpolate(
             scrollOffset.value,
             [IMG_HEIGHT / 2, IMG_HEIGHT],
-            [20, 0]
+            [20, 0],{extrapolateRight:"clamp"}
           ),
         },
       ],
@@ -132,12 +139,8 @@ const FeatureScreen = () => {
         />
 
         <View style={styles.infoContainer}>
-          <Text style={styles.name}>
-            {title}
-          </Text>
-          <Text style={styles.desc}>
-           {subTitle}
-          </Text>
+          <Text style={styles.name}>{title}</Text>
+          <Text style={styles.desc}>{subTitle}</Text>
           <View className="mt-2 flex-row justify-between items-center">
             <Text style={styles.rooms}>Bởi : Thanhdao</Text>
             <Text>Cập nhật : 28/12/2023</Text>
@@ -338,7 +341,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#fff",
-    // width: width * 0.6,
+    width: width * 0.55,
   },
 });
 

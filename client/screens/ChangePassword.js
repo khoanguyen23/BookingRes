@@ -46,7 +46,7 @@ const ChangePassword = ({ navigation }) => {
 
 
   return (
-    <View className="flex bg-white p-4 mt-2 justify-between h-full">
+    <View className="flex bg-white p-4 justify-between h-full mb-20">
       <View>
         {/* Input Old Password */}
         <View className="mb-5">

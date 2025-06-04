@@ -14,7 +14,7 @@ import Customers from "../screens/admin/Customers";
 import { useNavigation } from "@react-navigation/native";
 import OrdersStackNavigator from "./ordersStackNavigator";
 import ResAdminStackNavigator from "./resAdminStackNavigator";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { MaterialIcons } from '@expo/vector-icons';
 import Category from "../screens/admin/Category";
 
 

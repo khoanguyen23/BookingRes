@@ -18,18 +18,16 @@ import { useNavigation } from "@react-navigation/native";
 import HomeAdminCard from "../../components/HomeAdminCard";
 import { UserType } from "../../UserContext";
 import { API_URL } from "@env";
-import Entypo from "@expo/vector-icons/Entypo";
+import { Entypo, Ionicons, AntDesign } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Avatar } from "@rneui/themed";
 import { LineChart } from "react-native-gifted-charts";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import Calendar from "../../components/Calendar";
 import BottomSheet, {
   BottomSheetBackdrop,
 } from "@gorhom/bottom-sheet";
-import AntDesign from "@expo/vector-icons/AntDesign";
 
 const HomeAdmin = () => {
   const { userId, setUserId, user, updateUser } = useContext(UserType);
