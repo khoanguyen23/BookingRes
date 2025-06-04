@@ -184,7 +184,7 @@ export default function RestaurantDetail() {
           }}
         ></View>
 
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1,  }}>
           <MenuTab
             item={item}
             handlePresentModalPress={handlePresentModalPress}
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   },
   popupContainer: {
     position: "absolute",
-    top: 80,
+    top: 90,
     backgroundColor: "white",
     borderTopColor: "#ccc",
     borderTopWidth: 1,

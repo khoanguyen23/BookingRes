@@ -311,31 +311,36 @@ const MenuTab = ({ item }) => {
   }));
 
   return (
-    <TabbedHeaderList
-      backgroundColor={Colors.white}
-      titleStyle={screenStyles.text}
-      parallaxHeight={0}
-      foregroundImage={{
-        uri: item.image,
-      }}
-      tabs={routes.map(({ title }) => ({ title }))}
-      tabTextStyle={screenStyles.text}
-      sections={sections}
-      tabTextContainerActiveStyle={{
-        backgroundColor: Colors.activeOrange,
-      }}
-      tabTextActiveStyle={{ color: "#fff", fontSize: 17, fontWeight: "bold" }}
-      renderItem={({ item, section }) => renderScene({ route: section, item })}
-      showsVerticalScrollIndicator={false}
-      headerHeight={0}
-      stickyTabs
-      tabsContainerHorizontalPadding={1}
-      // renderSectionHeader={({ section }) => (
-      //   <View style={{ backgroundColor: Colors.coralPink, padding: 15 }}>
-      //     <Text style={screenStyles.text}>{section.title}</Text>
-      //   </View>
-      // )}
-    />
+    
+      <TabbedHeaderList
+        backgroundColor={Colors.white}
+        titleStyle={screenStyles.text}
+        parallaxHeight={0}
+        foregroundImage={{
+          uri: item.image,
+        }}
+        tabs={routes.map(({ title }) => ({ title }))}
+        tabTextStyle={screenStyles.text}
+        sections={sections}
+        tabTextContainerActiveStyle={{
+          backgroundColor: Colors.activeOrange,
+        }}
+        tabTextActiveStyle={{ color: "#fff", fontSize: 17, fontWeight: "bold" }}
+        renderItem={({ item, section }) =>
+          renderScene({ route: section, item })
+        }
+        showsVerticalScrollIndicator={false}
+        headerHeight={0}
+        stickyTabs
+        containerStyle={{ flex: 1, marginTop: -60 }}
+        tabsContainerHorizontalPadding={1}
+        // renderSectionHeader={({ section }) => (
+        //   <View style={{ backgroundColor: Colors.coralPink, padding: 15 }}>
+        //     <Text style={screenStyles.text}>{section.title}</Text>
+        //   </View>
+        // )}
+      />
+ 
   );
 };
 
